@@ -15,6 +15,8 @@
 
 //palabras reservadas
 id = [a-zA-Z]{1}[a-zA-Z0-9]*:
+idProc = [a-zA-Z]{1}[a-zA-Z0-9]*
+idFunc = [a-zA-Z]{1}[a-zA-Z0-9]*"("
 abort = abort	
 else = else	
 new = new
@@ -85,47 +87,62 @@ mod = mod
 requeue = requeue 
 xor = xor
 
+dataTypes = Integer|Natural|Positive|Long"_"Integer|Short"_"Integer|Float|Short"_"Float|Long"_"Float|Boolean|Character|Wide"_"Character|Unsigned"_"Integer|Byte"_"Integer|Unsigned"_"Byte"_"Integer|Word"_"Integer|Unsigned"_"Word"_"Integer|Dword"_"Integer|Unsigned"_"Dword"_"Integer|Qword"_"Integer|Byte"_"Boolean|Word"_"Boolean|Dword"_"Boolean
+
 arrow = "=>"
 doubd = ".." 
 doubaps = "**" 
 assign = ":=" 
 noteq = "/=" 
-maseq = ">=" 
-lesseq = "<=" 
-llb = "<<" 
-rlb = ">>" 
+// maseq = ">="
+// lesseq = "<=" 
+llb = "<<"
+rlb = ">>"
 box = "<>"
 
 qm = \"
 ns = "#"
 am = &
-ap =\'
+ap = \'
 lp = "("
 rp = ")"
-aps = "*" 
-plus = "+" 
-coma = "," 
-dash = "-" 
-punto = "." 
-pleca = "/" 
 
+op = ["*""+""-""/"]
+// aps = "*" 
+// plus = "+" 
+// dash = "-" 
+// pleca = "/"
+coma = ","
+punto = "."
+
+
+oprel = ["<"">""="">=""<="]
 dos = ":" 
 pc = ";" 
-less = "<" 
-eql = "=" 
-mas= ">" 
+// less = "<" 
+// eql = "=" 
+// mas= ">" 
 guinb = "_" 
 vertical = "|" 
-lsqb = "[" 
-rsqb = "]" 
-lcb = "{" 
-rcb = "}"     
+lsqb = "["
+rsqb = "]"
+lcb = "{"
+rcb = "}"
 
-exp = [a-zA-Z]+
+comment = "-""-".*(\n|\r)
+
+exp = \".*\" //[a-zA-Z]+
 %state STRING
+%state IMPORTS
+%state PROC
+%state ENDPROC
+%state COMMENT
 %%
 <YYINITIAL>{
-    {id} {System.out.println("ID: "+yytext());}
+    {id} {System.out.println("ID: " + yytext());}
+    {dataTypes} {System.out.println("Tipo de datos: " + yytext());}
+    {comment} {}
+    {exp} {System.out.println("String: " + yytext());}
     {abort} {System.out.println("Palabra reservada: "+yytext());}	
     {else} 	{System.out.println("Palabra reservada: "+yytext());}
     {new} {System.out.println("Palabra reservada: "+yytext());}
@@ -154,7 +171,7 @@ exp = [a-zA-Z]+
     {for} {System.out.println("Palabra reservada: "+yytext());}	
     {out} {System.out.println("Palabra reservada: "+yytext());}		
     {array} {System.out.println("Palabra reservada: "+yytext());}	
-    {function} {System.out.println("Palabra reservada: "+yytext());}			
+    // {function} {System.out.println("Palabra reservada: "+yytext());}			
     {at} {System.out.println("Palabra reservada: "+yytext());}		
     {tagged} {System.out.println("Palabra reservada: "+yytext());}	
     {generic} {System.out.println("Palabra reservada: "+yytext());}
@@ -168,7 +185,8 @@ exp = [a-zA-Z]+
     {private}	{System.out.println("Palabra reservada: "+yytext());}
     {then} {System.out.println("Palabra reservada: "+yytext());}
     {if} {System.out.println("Palabra reservada: "+yytext());}
-    {procedure} {System.out.println("Palabra reservada: "+yytext());}	
+    {procedure} {System.out.println("Palabra reservada: "+yytext()); yybegin(PROC);}	
+    {function} {System.out.println("Palabra reservada: "+yytext()); yybegin(PROC);}	
     {type} {System.out.println("Palabra reservada: "+yytext());}
     {case} 	{System.out.println("Palabra reservada: "+yytext());}
     {in} {System.out.println("Palabra reservada: "+yytext());}
@@ -177,7 +195,7 @@ exp = [a-zA-Z]+
     {until}  {System.out.println("Palabra reservada: "+yytext());}	
     {is} {System.out.println("Palabra reservada: "+yytext());}
     {raise} {System.out.println("Palabra reservada: "+yytext());}	
-    {use} {System.out.println("Palabra reservada: "+yytext());}
+    // {use} {System.out.println("Palabra reservada: "+yytext());}
     {declare} {System.out.println("Palabra reservada: "+yytext());}		
     {range} {System.out.println("Palabra reservada: "+yytext());}		
     {delay} {System.out.println("Palabra reservada: "+yytext());}	
@@ -190,7 +208,7 @@ exp = [a-zA-Z]+
     {while} {System.out.println("Palabra reservada: "+yytext());}	
     {digits} {System.out.println("Palabra reservada: "+yytext());}
     {renames} {System.out.println("Palabra reservada: "+yytext());} 	
-    {with} {System.out.println("Palabra reservada: "+yytext());}
+    // {with} {System.out.println("Palabra reservada: "+yytext());}
     {do} {System.out.println("Palabra reservada: "+yytext());}
     {mod} {System.out.println("Palabra reservada: "+yytext());}
     {requeue} {System.out.println("Palabra reservada: "+yytext());}
@@ -198,43 +216,64 @@ exp = [a-zA-Z]+
 	{arrow} {System.out.println(yytext());}
     {doubd} {System.out.println(yytext());}
     {doubaps} {System.out.println(yytext());}
-    {assign} {System.out.println(yytext());}
+    {assign} {System.out.println("Asignacion: " + yytext());}
     {noteq} {System.out.println(yytext());}
-    {maseq} {System.out.println(yytext());}
-    {lesseq} {System.out.println(yytext());}
+    // {maseq} {System.out.println(yytext());}
+    // {lesseq} {System.out.println(yytext());}
     {llb} {System.out.println(yytext());}
     {rlb} {System.out.println(yytext());}
     {box} {System.out.println(yytext());}
-    {qm} {yybegin(STRING);}
+    {lp} {System.out.println(yytext());}
+    {rp} {System.out.println(yytext());}
+    // {qm} {System.out.print("String: \""); yybegin(STRING);}
     {ns} {System.out.println(yytext());}
     {am} {System.out.println(yytext());}
     {ap} {System.out.println(yytext());}
-    {lp} {System.out.println(yytext());}
-    {rp} {System.out.println(yytext());}
-    {aps}  {System.out.println(yytext());}
-    {mas}  {System.out.println(yytext());}
+    // {aps}  {System.out.println(yytext());}
+    // {mas}  {System.out.println(yytext());}
     {coma} {System.out.println(yytext());}
-    {dash}  {System.out.println(yytext());}
+    // {dash}  {System.out.println(yytext());}
     {punto} {System.out.println(yytext());}
-    {pleca}  {System.out.println(yytext());}
+    // {pleca}  {System.out.println(yytext());}
     {dos}  {System.out.println(yytext());}
     {pc}  {System.out.println(yytext());}
-    {less} {System.out.println(yytext());}
-    {eql}  {System.out.println(yytext());}
-    {mas}  {System.out.println(yytext());}
+    // {less} {System.out.println(yytext());}
+    // {eql}  {System.out.println(yytext());}
+    // {mas}  {System.out.println(yytext());}
     {guinb}  {System.out.println(yytext());}
     {vertical} {System.out.println(yytext());}
     {lsqb} {System.out.println(yytext());}
     {rsqb}  {System.out.println(yytext());}
     {lcb} {System.out.println(yytext());}
     {rcb} {System.out.println(yytext());}
-    {plus} {System.out.println(yytext());}
+    {op} {System.out.println("Operador: " + yytext());}
+    {oprel} {System.out.println("Operador relacional: " + yytext());}
+    {idFunc} {System.out.println("IDFunc: " + yytext());}
+    {with} {yybegin(IMPORTS);}
+    {use} {yybegin(IMPORTS);}
+    // {plus} {System.out.println(yytext());}
     . {}
 }
 
 <STRING>{
-    {exp} {System.out.println(yytext());}
-    {qm} {yybegin(YYINITIAL);}
+    \" {System.out.println("\""); yybegin(YYINITIAL);}
+    {exp} {System.out.print(yytext());}
     . {}
 }
 
+<IMPORTS>{
+    {pc} {yybegin(YYINITIAL);}
+    . {}
+}
+
+<PROC>{
+    // {is} {System.out.println("Palabra reservada: "+yytext()); yybegin(YYINITIAL);}
+    {idProc} {System.out.println("Procedimiento: " + yytext()); yybegin(YYINITIAL);}
+    . {}
+}
+
+<ENDPROC>{
+    {pc} {System.out.println(yytext()); yybegin(YYINITIAL);}
+    {idProc} {System.out.println("Procedimiento: " + yytext());}
+    . {}
+}

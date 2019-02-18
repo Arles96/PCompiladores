@@ -6,6 +6,7 @@
 %column
 %int
 %standalone
+%ignorecase
 
 %{
 %}
@@ -14,7 +15,7 @@
 %eof}
 
 //palabras reservadas
-id = [a-zA-Z]{1}[a-zA-Z0-9]*:
+id = [a-zA-Z]{1}[a-zA-Z0-9]*
 idProc = [a-zA-Z]{1}[a-zA-Z0-9]*
 idFunc = [a-zA-Z]{1}[a-zA-Z0-9]*"("
 abort = abort	
@@ -87,7 +88,7 @@ mod = mod
 requeue = requeue 
 xor = xor
 
-dataTypes = Integer|Natural|Positive|Long"_"Integer|Short"_"Integer|Float|Short"_"Float|Long"_"Float|Boolean|Character|Wide"_"Character|Unsigned"_"Integer|Byte"_"Integer|Unsigned"_"Byte"_"Integer|Word"_"Integer|Unsigned"_"Word"_"Integer|Dword"_"Integer|Unsigned"_"Dword"_"Integer|Qword"_"Integer|Byte"_"Boolean|Word"_"Boolean|Dword"_"Boolean
+dataTypes = Integer|Natural|Positive|Long"_"Integer|Short"_"Integer|Float|Short"_"Float|Long"_"Float|Boolean|Character|Wide"_"Character|Unsigned"_"Integer|Byte"_"Integer|Unsigned"_"Byte"_"Integer|Word"_"Integer|Unsigned"_"Word"_"Integer|Dword"_"Integer|Unsigned"_"Dword"_"Integer|Qword"_"Integer|Byte"_"Boolean|Word"_"Boolean|Dword"_"Boolean|String"("{id}|[0-9]".""."{id}|[0-9]")"
 
 arrow = "=>"
 doubd = ".." 
@@ -139,9 +140,8 @@ exp = \".*\" //[a-zA-Z]+
 %state COMMENT
 %%
 <YYINITIAL>{
-    {id} {System.out.println("ID: " + yytext());}
     {dataTypes} {System.out.println("Tipo de datos: " + yytext());}
-    {comment} {}
+    {comment} {System.out.println("Comentario: " + yytext());}
     {exp} {System.out.println("String: " + yytext());}
     {abort} {System.out.println("Palabra reservada: "+yytext());}	
     {else} 	{System.out.println("Palabra reservada: "+yytext());}
@@ -251,6 +251,7 @@ exp = \".*\" //[a-zA-Z]+
     {idFunc} {System.out.println("IDFunc: " + yytext());}
     {with} {yybegin(IMPORTS);}
     {use} {yybegin(IMPORTS);}
+    {id} {System.out.println("ID: " + yytext());}
     // {plus} {System.out.println(yytext());}
     . {}
 }

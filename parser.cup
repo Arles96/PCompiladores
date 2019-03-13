@@ -1,0 +1,32 @@
+import java_cup.runtime.*;
+
+/*Palabras reservadas*/
+terminal abort, else, new, return, abs, elsif, not;
+terminal reverse, abstract, end, null, accept, entry;
+terminal select, access, exception, of, separate;
+terminal aliased, exit, or, all, others, subtype, and;
+terminal for, out, array, function, at, tagged, generic;
+terminal package, task, begin, goto, pragma, terminate;
+terminal body, private, then, if, procedure, type, case;
+terminal in, protected, constant, until, is, raise, use;
+terminal declare, range, delay, limited, record, when;
+terminal delta, loop, rem, while, digits, renames, with;
+terminal do, mod, requeue, xor;
+
+/* Tipo de datos */
+terminal dataTypes;
+
+/* Operadores */
+terminal arrow, doubd, doubdaps, assign, noteq;
+terminal llb, rlb, box, qm, ns, am, ap, lp, rp, op;
+terminal coma, punto, oprel, dos, pc;
+terminal vertical, lsqb, rsqb, lcb, rcb;
+
+/* Observacion con el guinb*/
+terminal guinb;
+
+/* Funcion predefinidas */
+terminal get, put;
+
+/* id para variables, procedimientos y funciones */
+terminal id, idProc, idFunc;

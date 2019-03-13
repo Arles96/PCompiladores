@@ -18,6 +18,9 @@
 id = [a-zA-Z]{1}[a-zA-Z0-9]*
 idProc = [a-zA-Z]{1}[a-zA-Z0-9]*
 idFunc = [a-zA-Z]{1}[a-zA-Z0-9]*"("
+num = [0-9]("."[0-9])?
+true = true
+false = false
 abort = abort
 else = else
 new = new

@@ -8,9 +8,10 @@ terminal aliased, exit, or, all, others, subtype, and;
 terminal for, out, array, function, at, tagged, generic;
 terminal package, task, begin, goto, pragma, terminate;
 terminal body, private, then, if, procedure, type, case;
-terminal in, protected, constant, until, is, raise, use;
+terminal in, protected, constant, until, is, raise;
+/* terminal use, with; */
 terminal declare, range, delay, limited, record, when;
-terminal delta, loop, rem, while, digits, renames, with;
+terminal delta, loop, rem, while, digits, renames;
 terminal do, mod, requeue, xor;
 
 /* Tipo de datos */
@@ -30,3 +31,16 @@ terminal get, put;
 
 /* id para variables, procedimientos y funciones */
 terminal id, idProc, idFunc;
+
+/* Sección de no terminales */
+
+/* no terminales de importaciones */
+non terminal String A;
+
+/* Inicio e importaciones */
+A :=  with
+
+
+
+
+/* Contenedores de terminales */

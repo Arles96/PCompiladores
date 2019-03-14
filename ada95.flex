@@ -69,7 +69,7 @@ constant = constant
 until = until
 is = is
 raise = raise
-use = use
+/* use = use */
 declare	= declare
 range = range
 delay = delay
@@ -82,7 +82,7 @@ rem = rem
 while = while
 digits = digits
 renames = renames
-with = with
+/* with = with */
 do = do
 mod = mod
 requeue = requeue
@@ -253,8 +253,8 @@ exp = \".*\" //[a-zA-Z]+
     {op} {return new Symbol(sym.op, yycolumn, yyline, yytext());}
     {oprel} {return new Symbol(sym.oprel, yycolumn, yyline, yytext());}
     {idFunc} {return new Symbol(sym.idFunc, yycolumn, yyline, yytext());}
-    {with} {yybegin(IMPORTS);}
-    {use} {yybegin(IMPORTS);}
+    /* {with} {yybegin(IMPORTS);}
+    {use} {yybegin(IMPORTS);} */
     {id} {return new Symbol(sym.id, yycolumn, yyline, yytext());}
     // {plus} {return new Symbol(sym.id, 0, 0);}
     . {}
@@ -266,10 +266,10 @@ exp = \".*\" //[a-zA-Z]+
     . {}
 }
 
-<IMPORTS>{
+/* <IMPORTS>{
     {pc} {yybegin(YYINITIAL);}
     . {}
-}
+} */
 
 <PROC>{
     // {is} {}

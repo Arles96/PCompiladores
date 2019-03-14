@@ -14,6 +14,9 @@ terminal declare, range, delay, limited, record, when;
 terminal delta, loop, rem, while, digits, renames;
 terminal do, mod, requeue, xor;
 
+/* terminal de valores */
+terminal num;
+
 /* Tipo de datos */
 terminal dataTypes;
 
@@ -34,13 +37,49 @@ terminal id, idProc, idFunc;
 
 /* Sección de no terminales */
 
-/* no terminales de importaciones */
-non terminal String A;
+/* no terminales de procedimientos y funciones */
+non terminal String F, G;
 
-/* Inicio e importaciones */
-A :=  with
+/* no terminales de terminales de ids*/
+non terminal String X, X2, X3;
+
+/*no terminales de tipos de datos*/
+non terminal String Z;
+
+/* no terminales de valores */
+non terminal String N;
+
+/* no terminales de declaración de tipos */
+non terminal String C, D;
+
+/* no terminales de declaracion con tipos */
+non terminal String
+
+/* Procedimientos y Funciones */
+F   :=  procedure X:x is G   {: :}
+    ;
+G   :=
 
 
+/* Contenedores de terminales id*/
+X   :=  idProc:idp    {: RETURN = idp :}
+    ;
+X2  :=  idFunc:idf    {: RETURN = idf :}
+    ;
+X3  :=  id:i          {: RETURN = i :}
+    ;
 
+/* Contenedores de tipos de datos */
+Z   :=  dataTypes:dt  {: RETURN = d :}
+    ;
 
-/* Contenedores de terminales */
+/* Contenedores de valores */
+N   :=  num:n          {: RETURN = n :}
+    ;
+
+/* Declaración de Tipos */
+C   :=  X3:x dos Z:z D {: :}
+    ;
+D   :=  assign N:n pc  {: :}
+    |   pc
+    ;

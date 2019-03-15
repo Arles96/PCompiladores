@@ -9,6 +9,7 @@ terminal for, out, array, function, at, tagged, generic;
 terminal package, task, begin, goto, pragma, terminate;
 terminal body, private, then, if, procedure, type, case;
 terminal in, protected, constant, until, is, raise;
+
 /* terminal use, with; */
 terminal declare, range, delay, limited, record, when;
 terminal delta, loop, rem, while, digits, renames;
@@ -38,7 +39,7 @@ terminal id, idProc, idFunc;
 /* Sección de no terminales */
 
 /* no terminales de procedimientos y funciones */
-non terminal String F, G;
+non terminal String F, G, H, I;
 
 /* no terminales de terminales de ids*/
 non terminal String X, X2, X3;
@@ -47,18 +48,36 @@ non terminal String X, X2, X3;
 non terminal String Z;
 
 /* no terminales de valores */
-non terminal String N;
+non terminal String N, N1;
 
 /* no terminales de declaración de tipos */
 non terminal String C, D;
 
-/* no terminales de declaracion con tipos */
-non terminal String
+/* no terminales de las condicionales */
+non terminal String L, L2, L4;
+
+/* no terminales del cuerpo de expresiones */
+non terminal String E;
+
+/* no terminales de iteraciones */
+non terminal String M, M1;
+
+/* no terminales de comparacion */
+non terminal String L1, L3;
 
 /* Procedimientos y Funciones */
 F   :=  procedure X:x is G   {: :}
     ;
-G   :=
+G   :=  C:c G                         {: :}
+    |   function X2:x return is H     {: :}
+    ;
+H   :=  C H                           {: :}
+    |   begin I                       {: :}
+    ;
+I   :=  L I                           {: :}
+    |   M I                           {: :}
+
+
 
 
 /* Contenedores de terminales id*/
@@ -76,10 +95,50 @@ Z   :=  dataTypes:dt  {: RETURN = d :}
 /* Contenedores de valores */
 N   :=  num:n          {: RETURN = n :}
     ;
+N1  :=  num doubd num  {:  :}
+    ;
 
 /* Declaración de Tipos */
 C   :=  X3:x dos Z:z D {: :}
     ;
 D   :=  assign N:n pc  {: :}
-    |   pc
+    |   pc             {: :}
+    ;
+
+/* Condicionales */
+L   :=  if L1 then L2     {:  :}
+    ;
+L2  :=  L L2              {:  :}
+    |   E L2              {:  :}
+    |   M L2              {:  :}
+    |   else L4           {:  :}
+    |   elsif L1 then L4  {:  :}
+    |   end if            {:  :}
+    ;
+L4  :=  E L4              {:  :}
+    |   L L4              {:  :}
+    |   M L4              {:  :}
+    |   end if            {:  :}
+    ;
+
+/* Asignaciones */
+E   :=  X assign N        {:  :}
+    ;
+
+/* Iteraciones */
+M   :=  loop M1               {:  :}
+    |   for N in N1 loop M1   {:  :}
+    |   while L1 loop M1      {:  :}
+    ;
+M1  :=  M M1                  {:  :}
+    |   E M1                  {:  :}
+    |   L M1                  {:  :}
+    |   end loop
+    ;
+
+/* Comparaciones */
+L1  :=  L3 oprel L3      {:  :}
+    ;
+L3  :=  N:n              {: RETURN = n :}
+    |   X3:x             {: RETURN = x :}
     ;

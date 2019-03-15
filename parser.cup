@@ -34,7 +34,7 @@ terminal guinb;
 terminal get, put;
 
 /* id para variables, procedimientos y funciones */
-terminal id, idProc, idFunc;
+terminal id;
 
 /* Sección de no terminales */
 
@@ -42,7 +42,7 @@ terminal id, idProc, idFunc;
 non terminal String F, G, H, I;
 
 /* no terminales de terminales de ids*/
-non terminal String X, X2, X3;
+non terminal String X;
 
 /*no terminales de tipos de datos*/
 non terminal String Z;
@@ -66,26 +66,23 @@ non terminal String M, M1;
 non terminal String L1, L3;
 
 /* Procedimientos y Funciones */
-F   :=  procedure X:x is G   {: :}
+F   :=  procedure X:x is G            {: :}
     ;
 G   :=  C:c G                         {: :}
-    |   function X2:x return is H     {: :}
+    |   function X:x return is H      {: :}
+    |   begin I                       {: :}
     ;
 H   :=  C H                           {: :}
     |   begin I                       {: :}
     ;
 I   :=  L I                           {: :}
     |   M I                           {: :}
-
-
-
+    |   E I                           {: :}
+    | end X                           {: :}
+    ;
 
 /* Contenedores de terminales id*/
-X   :=  idProc:idp    {: RETURN = idp :}
-    ;
-X2  :=  idFunc:idf    {: RETURN = idf :}
-    ;
-X3  :=  id:i          {: RETURN = i :}
+X  :=  id:i          {: RETURN = i :}
     ;
 
 /* Contenedores de tipos de datos */
@@ -99,7 +96,7 @@ N1  :=  num doubd num  {:  :}
     ;
 
 /* Declaración de Tipos */
-C   :=  X3:x dos Z:z D {: :}
+C   :=  X:x dos Z:z D {: :}
     ;
 D   :=  assign N:n pc  {: :}
     |   pc             {: :}
@@ -140,5 +137,5 @@ M1  :=  M M1                  {:  :}
 L1  :=  L3 oprel L3      {:  :}
     ;
 L3  :=  N:n              {: RETURN = n :}
-    |   X3:x             {: RETURN = x :}
+    |   X:x             {: RETURN = x :}
     ;

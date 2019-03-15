@@ -16,8 +16,6 @@
 
 //palabras reservadas
 id = [a-zA-Z]{1}[a-zA-Z0-9]*
-idProc = [a-zA-Z]{1}[a-zA-Z0-9]*
-idFunc = [a-zA-Z]{1}[a-zA-Z0-9]*"("
 num = [0-9]("."[0-9])?
 true = true
 false = false
@@ -255,7 +253,7 @@ exp = \".*\" //[a-zA-Z]+
     {rcb} {return new Symbol(sym.rcb, yycolumn, yyline, yytext());}
     {op} {return new Symbol(sym.op, yycolumn, yyline, yytext());}
     {oprel} {return new Symbol(sym.oprel, yycolumn, yyline, yytext());}
-    {idFunc} {return new Symbol(sym.idFunc, yycolumn, yyline, yytext());}
+    // {idFunc} {return new Symbol(sym.idFunc, yycolumn, yyline, yytext());}
     /* {with} {yybegin(IMPORTS);}
     {use} {yybegin(IMPORTS);} */
     {id} {return new Symbol(sym.id, yycolumn, yyline, yytext());}

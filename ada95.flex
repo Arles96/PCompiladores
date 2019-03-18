@@ -272,7 +272,7 @@ exp = \".*\" //[a-zA-Z]+
     . {}
 } */
 
-<PROC>{
+/* <PROC>{
     // {is} {}
     {idProc} {return new Symbol(sym.idProc, yycolumn, yyline, yytext());yybegin(YYINITIAL);}
     . {}
@@ -282,4 +282,4 @@ exp = \".*\" //[a-zA-Z]+
     {pc} {return new Symbol(sym.pc, yycolumn, yyline, yytext());yybegin(YYINITIAL);}
     {idProc} {return new Symbol(sym.idProc, yycolumn, yyline, yytext());}
     . {}
-}
+} */

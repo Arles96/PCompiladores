@@ -1391,7 +1391,7 @@ class Ada95 implements java_cup.runtime.Scanner {
             }
           case 153: break;
           case 52: 
-            { return new Symbol(sym.COMMENT, yycolumn, yyline, yytext());
+            { /* return new Symbol(sym.COMMENT, yycolumn, yyline, yytext()); */
             }
           case 154: break;
           case 53: 

@@ -1,5 +1,5 @@
 procedure Hello is
-  hola, hola2: Integer;
+  hola, hola2: Integer; -- hola
 begin
   hola := hola2 + 23 / 24;
   put(hola);

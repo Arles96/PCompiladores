@@ -1,5 +1,32 @@
 import java_cup.runtime.*;
 
+/* Codigo para el manejo de errores */
+parser code
+{:
+  // Metodo al se llama automaticamente ante algun error sintactico
+  public void syntax_error (Symbol s) {
+    String lexema = s.value.toString();
+    int fila = s.right;
+    int columna = s.left;
+    System.out.println("!!! Error sintactico recuperado !!!!");
+    System.out.println("Lexema " + lexema);
+    System.out.println("Fila " + fila);
+    System.out.println("Columna " + columna);
+  }
+
+  // Metodo al que se llama en el momento en que ya no es posible una recuperacion de errores
+  public void unrecover_syntax_error(Symbol s) {
+    String lexema = s.value.toString();
+    int fila = s.right;
+    int columna = s.left;
+    System.out.println("!!! Error sintactico recuperado !!!!");
+    System.out.println("Lexema " + lexema);
+    System.out.println("Fila " + fila);
+    System.out.println("Columna " + columna);
+  }
+
+:}
+
 /*Palabras reservadas*/
 terminal ABORT, ELSE, NEW, RETURN, ABS, ELSIF, NOT;
 terminal REVERSE, ABSTRACT, END, NULL, ACCEPT, ENTRY;

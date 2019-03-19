@@ -326,6 +326,31 @@ public class parser extends java_cup.runtime.lr_parser {
   public int error_sym() {return 1;}
 
 
+
+  // Metodo al se llama automaticamente ante algun error sintactico
+  public void syntax_error (Symbol s) {
+    String lexema = s.value.toString();
+    int fila = s.right;
+    int columna = s.left;
+    System.out.println("!!! Error sintactico recuperado !!!!");
+    System.out.println("Lexema " + lexema);
+    System.out.println("Fila " + fila);
+    System.out.println("Columna " + columna);
+  }
+
+  // Metodo al que se llama en el momento en que ya no es posible una recuperacion de errores
+  public void unrecover_syntax_error(Symbol s) {
+    String lexema = s.value.toString();
+    int fila = s.right;
+    int columna = s.left;
+    System.out.println("!!! Error sintactico recuperado !!!!");
+    System.out.println("Lexema " + lexema);
+    System.out.println("Fila " + fila);
+    System.out.println("Columna " + columna);
+  }
+
+
+
 /** Cup generated class to encapsulate user supplied action code.*/
 @SuppressWarnings({"rawtypes", "unchecked", "unused"})
 class CUP$parser$actions {

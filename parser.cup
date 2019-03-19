@@ -15,14 +15,20 @@ terminal DECLARE, RANGE, DELAY, LIMITED, RECORD, WHEN;
 terminal DELTA, LOOP, REM, WHILE, DIGITS, RENAMES;
 terminal DO, MOD, REQUEUE, XOR;
 
+/*terminal de comentarios*/
+terminal COMMENT;
+
+/*terminales de booleanos*/
+terminal TRUE, FALSE;
+
 /* terminal de valores */
 terminal NUM;
 
 /* Tipo de datos */
-terminal DATATYPES;
+terminal DATATYPES, SUBTYPE;
 
 /* Operadores */
-terminal ARROW, DOUBD, DOUBDAPS, ASSIGN, NOTEQ;
+terminal ARROW, DOUBD, DOUBAPS, ASSIGN, NOTEQ;
 terminal LLB, RLB, BOX, QM, NS, AM, AP, LP, RP, OP;
 terminal COMA, PUNTO, OPREL, DOS, PC;
 terminal VERTICAL, LSQB, RSQB, LCB, RCB;
@@ -89,7 +95,7 @@ I   ::=  L I                           {: :}
     |   M I                           {: :}
     |   E I                           {: :}
     |   P I                           {: :}
-    | END X                           {: :}
+    | END X PC                          {: :}
     ;
 
 /* Contenedores de terminales id*/

@@ -1,7 +1,7 @@
 #! /bin/bash
 
 rm *.class
-rm ada95.java
+rm Ada95.java
 rm parser.java
 rm sym.java
 

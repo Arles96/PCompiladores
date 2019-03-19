@@ -1,11 +1,12 @@
+import java_cup.runtime.*;
 %%
 
 %unicode
-%class ada95
+%class Ada95
 %line
 %column
 %int
-%standalone
+%cup
 %ignorecase
 
 %{
@@ -51,7 +52,7 @@ FUNCTION = function
 AT = at
 TAGGED = tagged
 GENERIC	= generic
-PACKAGE = package
+/* PACKAGEA = package */
 TASK = task
 BEGIN = begin
 GOTO = goto
@@ -89,7 +90,7 @@ MOD = mod
 REQUEUE = requeue
 XOR = xor
 
-DATATYPES = Integer|Natural|Positive|Long"_"Integer|Short"_"Integer|Float|Short"_"Float|Long"_"Float|Boolean|Character|Wide"_"Character|Unsigned"_"Integer|Byte"_"Integer|Unsigned"_"Byte"_"Integer|Word"_"Integer|Unsigned"_"Word"_"Integer|Dword"_"Integer|Unsigned"_"Dword"_"Integer|Qword"_"Integer|Byte"_"Boolean|Word"_"Boolean|Dword"_"Boolean|String"("{id}|[0-9]".""."{id}|[0-9]")"
+DATATYPES = Integer|Natural|Positive|Long"_"Integer|Short"_"Integer|Float|Short"_"Float|Long"_"Float|Boolean|Character|Wide"_"Character|Unsigned"_"Integer|Byte"_"Integer|Unsigned"_"Byte"_"Integer|Word"_"Integer|Unsigned"_"Word"_"Integer|Dword"_"Integer|Unsigned"_"Dword"_"Integer|Qword"_"Integer|Byte"_"Boolean|Word"_"Boolean|Dword"_"Boolean|String"("{ID}|[0-9]".""."{ID}|[0-9]")"
 
 ARROW = "=>"
 DOUBD = ".."
@@ -180,7 +181,7 @@ EXP = \".*\" //[a-zA-Z]+
     {AT} {return new Symbol(sym.AT, yycolumn, yyline, yytext());}
     {TAGGED} {return new Symbol(sym.TAGGED, yycolumn, yyline, yytext());}
     {GENERIC} {return new Symbol(sym.GENERIC, yycolumn, yyline, yytext());}
-    {PACKAGE} {return new Symbol(sym.PACKAGE, yycolumn, yyline, yytext());}
+    /* {PACKAGEA} {return new Symbol(sym.PACKAGEA, yycolumn, yyline, yytext());} */
     {TASK} {return new Symbol(sym.TASK, yycolumn, yyline, yytext());}
     {BEGIN} {return new Symbol(sym.BEGIN, yycolumn, yyline, yytext());}
     {GOTO} {return new Symbol(sym.GOTO, yycolumn, yyline, yytext());}

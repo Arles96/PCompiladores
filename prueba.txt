@@ -1,4 +1,5 @@
 procedure Hello is
+  hola, hola2: Boolean;
 begin
-
+  hola := 1.1;
 end Hello;

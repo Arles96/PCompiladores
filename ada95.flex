@@ -148,6 +148,7 @@ EXP = \".*\" //[a-zA-Z]+
 <YYINITIAL>{
     {DATATYPES} {return new Symbol(sym.DATATYPES, yycolumn, yyline, yytext());}
     {SALTO}     {  }
+    {NUM}       {return new Symbol(sym.NUM, yycolumn, yyline, yytext());}
     {COMMENT} {return new Symbol(sym.COMMENT, yycolumn, yyline, yytext());}
     {EXP} {return new Symbol(sym.EXP, yycolumn, yyline, yytext());}
     {ABORT} {return new Symbol(sym.ABORT, yycolumn, yyline, yytext());}

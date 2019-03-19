@@ -53,7 +53,7 @@ non terminal A;
 non terminal String F, G, H, I;
 
 /* no terminales de terminales de ids*/
-non terminal String X;
+non terminal String X, X2;
 
 /*no terminales de tipos de datos*/
 non terminal String Z;
@@ -101,9 +101,11 @@ I   ::=  L I                           {: :}
     ;
 
 /* Contenedores de terminales id*/
-X  ::=  ID:i          {: /* RETURN = i; */ :}
+X   ::=  ID:i           {: /* RETURN = i; */ :}
     ;
-
+X2  ::= X COMA X2      {:  :}
+    |   X
+    ;
 /* Contenedores de tipos de datos */
 Z   ::=  DATATYPES:dt  {: /* RETURN = d; */ :}
     ;
@@ -115,7 +117,7 @@ N1  ::=  NUM DOUBD NUM  {:  :}
     ;
 
 /* Declaración de Tipos */
-C   ::=  X:x DOS Z:z D {: :}
+C   ::=  X2 DOS Z:z D {: :}
     ;
 D   ::=  ASSIGN N:n PC  {: :}
     |   PC             {: :}
@@ -139,6 +141,8 @@ L4  ::=  E L4              {:  :}
 
 /* Asignaciones */
 E   ::=  X ASSIGN N PC        {:  :}
+    |    X ASSIGN TRUE PC     {:  :}
+    |    X ASSIGN FALSE PC    {:  :}
     ;
 
 /* Iteraciones */

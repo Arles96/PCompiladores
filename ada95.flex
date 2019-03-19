@@ -17,7 +17,7 @@ import java_cup.runtime.*;
 
 //palabras reservadas
 ID = [a-zA-Z]{1}[a-zA-Z0-9]*
-NUM = [0-9]("."[0-9])?
+NUM = [0-9]+("."[0-9]+)?
 TRUE = true
 FALSE = false
 ABORT = abort
@@ -119,7 +119,7 @@ COMA = ","
 PUNTO = "."
 
 
-OPREL = ["<"">""="">=""<="]
+OPREL = ["<"">""="">=""<=""/="]
 DOS = ":"
 PC = ";"
 // less = "<"

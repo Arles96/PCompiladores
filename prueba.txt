@@ -1,5 +1,7 @@
 procedure Hello is
-  hola, hola2: Boolean;
+  hola, hola2: Integer;
 begin
-  hola := 1.1;
+  while hola = 2 AND hola > 1 loop
+    hola := 12 ;
+  end loop;
 end Hello;

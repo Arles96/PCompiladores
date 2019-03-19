@@ -76,7 +76,13 @@ non terminal String M, M1;
 /* no terminales de comparacion */
 non terminal String L1, L3;
 
-/* not terminales de obtener e imprimir valores */
+/* no terminales de grupo de comparaciones para condicionales*/
+non terminal String L5;
+
+/* no terminales de grupo de comparaciones para mientras */
+non terminal String L6;
+
+/* non terminales de obtener e imprimir valores */
 non terminal String P, P1, P2;
 
 start with A;
@@ -106,6 +112,7 @@ X   ::=  ID:i           {: /* RETURN = i; */ :}
 X2  ::= X COMA X2      {:  :}
     |   X
     ;
+
 /* Contenedores de tipos de datos */
 Z   ::=  DATATYPES:dt  {: /* RETURN = d; */ :}
     ;
@@ -124,43 +131,58 @@ D   ::=  ASSIGN N:n PC  {: :}
     ;
 
 /* Condicionales */
-L   ::=  IF L1 THEN L2     {:  :}
+L   ::=  IF L5 L2         {:  :}
     ;
-L2  ::=  L L2              {:  :}
+L2  ::=  L L2             {:  :}
     |   E L2              {:  :}
     |   M L2              {:  :}
     |   ELSE L4           {:  :}
-    |   ELSIF L1 THEN L4  {:  :}
-    |   END IF            {:  :}
+    |   ELSIF L5 L4       {:  :}
+    |   END IF PC         {:  :}
     ;
 L4  ::=  E L4              {:  :}
     |   L L4              {:  :}
     |   M L4              {:  :}
-    |   END IF            {:  :}
+    |   END IF PC         {:  :}
     ;
 
 /* Asignaciones */
 E   ::=  X ASSIGN N PC        {:  :}
     |    X ASSIGN TRUE PC     {:  :}
     |    X ASSIGN FALSE PC    {:  :}
+    |    X ASSIGN L3 OP L3 PC   {:  :}
     ;
 
 /* Iteraciones */
 M   ::=  LOOP M1               {:  :}
     |   FOR N IN N1 LOOP M1   {:  :}
-    |   WHILE L1 LOOP M1      {:  :}
+    |   WHILE L6 M1      {:  :}
     ;
 M1  ::=  M M1                  {:  :}
     |   E M1                  {:  :}
     |   L M1                  {:  :}
-    |   END LOOP
+    |   END LOOP PC           {:  :}
     ;
 
 /* Comparaciones */
-L1  ::=  L3 OPREL L3      {:  :}
+L1  ::=  L3 OPREL L3   {:  :}
     ;
 L3  ::=  N:n              {: /* RETURN = n */ :}
-    |   X:x             {: /* RETURN = x */ :}
+    |   X:x               {: /* RETURN = x */ :}
+    ;
+
+/* Grupo de condicionales para condicionales */
+L5  ::= L1 L5                 {:  :}
+    |   AND L1 L5             {:  :}
+    |   OR L1 L5              {:  :}
+    |   THEN                  {:  :}
+    ;
+
+/* Grupo de condicionales para mientras */
+L6  ::= L1 L6                 {:  :}
+    |   AND L1 L6             {:  :}
+    |   OR L1 L6              {:  :}
+    |   LOOP                  {:  :}
     ;
 
 /* Imprimir o leer valores */

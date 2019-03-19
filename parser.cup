@@ -70,6 +70,9 @@ non terminal String L, L2, L4;
 /* no terminales del cuerpo de expresiones */
 non terminal String E;
 
+/* no terminales de las operaciones */
+non terminal String E2;
+
 /* no terminales de iteraciones */
 non terminal String M, M1;
 
@@ -88,21 +91,21 @@ non terminal String P, P1, P2;
 start with A;
 
 /* Procedimientos y Funciones */
-A   ::=  F                             {: :}
+A   ::=  F                              {: :}
     ;
-F   ::=  PROCEDURE X:x IS G            {: :}
+F   ::=  PROCEDURE X:x IS G             {: :}
     ;
-G   ::=  C:c G                         {: :}
-    |   FUNCTION X:x RETURN IS H      {: :}
-    |   BEGIN I                       {: :}
+G   ::=  C:c G                          {: :}
+    |   FUNCTION X:x RETURN IS H        {: :}
+    |   BEGIN I                         {: :}
     ;
-H   ::=  C H                           {: :}
-    |   BEGIN I                       {: :}
+H   ::=  C H                            {: :}
+    |   BEGIN I                         {: :}
     ;
-I   ::=  L I                           {: :}
-    |   M I                           {: :}
-    |   E I                           {: :}
-    |   P I                           {: :}
+I   ::=  L I                            {: :}
+    |   M I                             {: :}
+    |   E I                             {: :}
+    |   P I                             {: :}
     | END X PC                          {: :}
     ;
 
@@ -124,10 +127,10 @@ N1  ::=  NUM DOUBD NUM  {:  :}
     ;
 
 /* Declaración de Tipos */
-C   ::=  X2 DOS Z:z D {: :}
+C   ::=  X2 DOS Z:z D   {: :}
     ;
 D   ::=  ASSIGN N:n PC  {: :}
-    |   PC             {: :}
+    |   PC              {: :}
     ;
 
 /* Condicionales */
@@ -140,32 +143,37 @@ L2  ::=  L L2             {:  :}
     |   ELSIF L5 L4       {:  :}
     |   END IF PC         {:  :}
     ;
-L4  ::=  E L4              {:  :}
+L4  ::=  E L4             {:  :}
     |   L L4              {:  :}
     |   M L4              {:  :}
     |   END IF PC         {:  :}
     ;
 
 /* Asignaciones */
-E   ::=  X ASSIGN N PC        {:  :}
-    |    X ASSIGN TRUE PC     {:  :}
-    |    X ASSIGN FALSE PC    {:  :}
-    |    X ASSIGN L3 OP L3 PC   {:  :}
+E   ::=  X ASSIGN E2            {:  :}
+    |    X ASSIGN TRUE PC       {:  :}
+    |    X ASSIGN FALSE PC      {:  :}
+    ;
+
+/* Operaciones */
+E2  ::= L3 E2                   {:  :}
+    |   OP L3 E2                {:  :}
+    |   PC                      {:  :}
     ;
 
 /* Iteraciones */
-M   ::=  LOOP M1               {:  :}
-    |   FOR N IN N1 LOOP M1   {:  :}
-    |   WHILE L6 M1      {:  :}
+M   ::=  LOOP M1                {:  :}
+    |   FOR N IN N1 LOOP M1     {:  :}
+    |   WHILE L6 M1             {:  :}
     ;
-M1  ::=  M M1                  {:  :}
-    |   E M1                  {:  :}
-    |   L M1                  {:  :}
-    |   END LOOP PC           {:  :}
+M1  ::=  M M1                   {:  :}
+    |   E M1                    {:  :}
+    |   L M1                    {:  :}
+    |   END LOOP PC             {:  :}
     ;
 
 /* Comparaciones */
-L1  ::=  L3 OPREL L3   {:  :}
+L1  ::=  L3 OPREL L3      {:  :}
     ;
 L3  ::=  N:n              {: /* RETURN = n */ :}
     |   X:x               {: /* RETURN = x */ :}
@@ -186,12 +194,12 @@ L6  ::= L1 L6                 {:  :}
     ;
 
 /* Imprimir o leer valores */
-P   ::=  GET LP P1 RP PC   {:  :}
-    |   PUT LP P2 RP PC   {:  :}
+P   ::=  GET LP P1 RP PC    {:  :}
+    |   PUT LP P2 RP PC     {:  :}
     ;
-P1  ::=  ID                {:  :}
+P1  ::=  ID                 {:  :}
     ;
-P2  ::=  ID                {:  :}
-    |   EXP               {:  :}
-    |   NUM               {:  :}
+P2  ::=  ID                 {:  :}
+    |   EXP                 {:  :}
+    |   NUM                 {:  :}
     ;

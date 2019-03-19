@@ -1,7 +1,6 @@
 procedure Hello is
   hola, hola2: Integer;
 begin
-  while hola = 2 AND hola > 1 loop
-    hola := 12 ;
-  end loop;
+  hola := hola2 + 23 / 24;
+  put(hola);
 end Hello;

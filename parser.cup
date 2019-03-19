@@ -79,6 +79,8 @@ non terminal String L1, L3;
 /* not terminales de obtener e imprimir valores */
 non terminal String P, P1, P2;
 
+start with A;
+
 /* Procedimientos y Funciones */
 A   ::=  F                             {: :}
     ;

@@ -134,6 +134,8 @@ RCB = "}"
 GET = "GET" | "get"
 PUT = "PUT" | "put"
 
+SALTO = \n
+
 COMMENT = "-""-".*(\n|\r)
 
 EXP = \".*\" //[a-zA-Z]+
@@ -145,6 +147,7 @@ EXP = \".*\" //[a-zA-Z]+
 %%
 <YYINITIAL>{
     {DATATYPES} {return new Symbol(sym.DATATYPES, yycolumn, yyline, yytext());}
+    {SALTO}     {  }
     {COMMENT} {return new Symbol(sym.COMMENT, yycolumn, yyline, yytext());}
     {EXP} {return new Symbol(sym.EXP, yycolumn, yyline, yytext());}
     {ABORT} {return new Symbol(sym.ABORT, yycolumn, yyline, yytext());}

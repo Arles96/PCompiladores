@@ -100,6 +100,9 @@ non terminal String E;
 /* no terminales de las operaciones */
 non terminal String E2;
 
+/*no terminales de los retornos*/
+non terminal String E3;
+
 /* no terminales de iteraciones */
 non terminal String M, M1;
 
@@ -123,17 +126,18 @@ A   ::=  F                              {: :}
 F   ::=  PROCEDURE X:x IS G             {: :}
     ;
 G   ::=  C:c G                          {: :}
-    |   FUNCTION X:x RETURN IS H        {: :}
+    |   FUNCTION X:x RETURN Z IS H      {: :}
     |   BEGIN I                         {: :}
     ;
 H   ::=  C H                            {: :}
-    |   BEGIN I                         {: :}
+    |   BEGIN I G                       {: :}
     ;
 I   ::=  L I                            {: :}
     |   M I                             {: :}
     |   E I                             {: :}
     |   P I                             {: :}
-    | END X PC                          {: :}
+    |   E3 I                            {: :}
+    |   END X PC                        {: :}
     ;
 
 /* Contenedores de terminales id*/
@@ -186,6 +190,10 @@ E   ::=  X ASSIGN E2            {:  :}
 E2  ::= L3 E2                   {:  :}
     |   OP L3 E2                {:  :}
     |   PC                      {:  :}
+    ;
+/* Retornos */
+E3  ::= RETURN E3               {:  :}
+    |   E2                      {:  :}
     ;
 
 /* Iteraciones */

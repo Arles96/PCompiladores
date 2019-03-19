@@ -98,7 +98,7 @@ non terminal String L, L2, L4;
 non terminal String E;
 
 /* no terminales de las operaciones */
-non terminal String E2, E5, E6;
+non terminal String E2, E5, E6, E7;
 
 /*no terminales de los retornos*/
 non terminal String E3;
@@ -107,10 +107,7 @@ non terminal String E3;
 non terminal String M, M1;
 
 /* no terminales de comparacion */
-non terminal String L1, L3, VL, VL2;
-
-/* no terminales de grupo de comparaciones para condicionales*/
-non terminal String L5;
+non terminal String L1, L3;
 
 /* no terminales de grupo de comparaciones para mientras */
 non terminal String L6;
@@ -172,14 +169,14 @@ D   ::=  ASSIGN N:n PC  {: :}
     ;
 
 /* Condicionales */
-L   ::=  IF L5 L2         {:  :}
+L   ::=  IF L1 L2         {:  :}
     ;
 L2  ::=  L L2             {:  :}
     |   E L2              {:  :}
     |   M L2              {:  :}
     |   P L2              {:  :}
     |   ELSE L4           {:  :}
-    |   ELSIF L5 L4       {:  :}
+    |   ELSIF L1 L4       {:  :}
     |   END IF PC         {:  :}
     ;
 L4  ::=  E L4             {:  :}
@@ -190,10 +187,11 @@ L4  ::=  E L4             {:  :}
     ;
 
 /* Asignaciones */
-E   ::=  X ASSIGN E2            {:  :}
-    |    X ASSIGN TRUE PC       {:  :}
-    |    X ASSIGN FALSE PC      {:  :}
-    |    X ASSIGN E4 PC         {:  :}
+E   ::=  X ASSIGN E2 PC           {:  :}
+    ;
+E2  ::=  TRUE        {:  :}
+    |    FALSE       {:  :}
+    |    E5          {:  :}
     ;
 
 /* Ejecucion de Funciones */
@@ -209,21 +207,20 @@ PA2 ::= L3 COMA PA2              {:  :}
     ;
 
 /* Operaciones */
-E2  ::= L3 E5                   {:  :}
-    |   LP L3 E6                {:  :}
+E5  ::= E6 OP E6 E7               {:  :}
+    |   E6 MOD E6 E7              {:  :}
+    |   E6                        {:  :}
     ;
-E5  ::= OP L3 E5                {:  :}
-    |   MOD L3 E5               {: :}
-    |   PC                      {:  :}
+E6  ::= L3                      {:  :}
+    |   E4                      {:  :}
+    |   LP E5 RP                {:  :}
     ;
-E6  ::= OP L3 E6                {:  :}
-    |   MOD L3 E6               {: :}
-    |   RP PC                   {:  :}
+E7  ::= OP E6                   {:  :}
+    |   MOD E6                  {:  :}
+    |                           {:  :}
     ;
-
 /* Retornos */
-E3  ::= RETURN E3               {:  :}
-    |   E2                      {:  :}
+E3  ::= RETURN E5               {:  :}
     ;
 
 /* Iteraciones */
@@ -239,27 +236,12 @@ M1  ::=  M M1                   {:  :}
     ;
 
 /* Comparaciones */
-L1  ::=  VL OPREL VL      {:  :}
+L1  ::=  E5 OPREL E5 AND L1    {:  :}
+    |  E5 OPREL E5 OR  L1    {:  :}
+    |  E5 OPREL E5 THEN      {:  :}
     ;
 L3  ::=  N:n              {: /* RETURN = n */ :}
     |   X:x               {: /* RETURN = x */ :}
-    ;
-
-/* valores para comparaciones */
-VL  ::= L3 VL2              {:  :}
-    |   LP L3 VL2           {:  :}
-    ;
-VL2 ::= OP L3 VL2           {:  :}
-    |   MOD L3 VL2          {:  :}
-    |   RP                  {:  :}
-    |                       {:  :}
-    ;
-
-/* Grupo de condicionales para condicionales */
-L5  ::= L1 L5                 {:  :}
-    |   AND L1 L5             {:  :}
-    |   OR L1 L5              {:  :}
-    |   THEN                  {:  :}
     ;
 
 /* Grupo de condicionales para mientras */

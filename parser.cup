@@ -1,43 +1,43 @@
 import java_cup.runtime.*;
 
 /*Palabras reservadas*/
-terminal abort, else, new, return, abs, elsif, not;
-terminal reverse, abstract, end, null, accept, entry;
-terminal select, access, exception, of, separate;
-terminal aliased, exit, or, all, others, subtype, and;
-terminal for, out, array, function, at, tagged, generic;
-terminal packageA, task, begin, goto, pragma, terminate;
-terminal body, private, then, if, procedure, type, case;
-terminal in, protected, constant, until, is, raise;
+terminal ABORT, ELSE, NEW, RETURN, ABS, ELSIF, NOT;
+terminal REVERSE, ABSTRACT, END, NULL, ACCEPT, ENTRY;
+terminal SELECT, ACCESS, EXCEPTION, OF, SEPARATE;
+terminal ALIASED, EXIT, OR, ALL, OTHERS, SUBPROCEDURE, AND;
+terminal FOR, OUT, ARRAY, FUNCTION, AT, TAGGED, GENERIC;
+terminal PACKAGEA, TASK, BEGIN, GOTO, PRAGMA, TERMINATE;
+terminal BODY, PRIVATE, THEN, IF, PROCEDURE, TYPE, CASE;
+terminal IN, PROTECTED, CONSTANT, UNTIL, IS, RAISE;
 
 /* terminal use, with; */
-terminal declare, range, delay, limited, record, when;
-terminal delta, loop, rem, while, digits, renames;
-terminal do, mod, requeue, xor;
+terminal DECLARE, RANGE, DELAY, LIMITED, RECORD, WHEN;
+terminal DELTA, LOOP, REM, WHILE, DIGITS, RENAMES;
+terminal DO, MOD, REQUEUE, XOR;
 
 /* terminal de valores */
-terminal num;
+terminal NUM;
 
 /* Tipo de datos */
-terminal dataTypes;
+terminal DATATYPES;
 
 /* Operadores */
-terminal arrow, doubd, doubdaps, assign, noteq;
-terminal llb, rlb, box, qm, ns, am, ap, lp, rp, op;
-terminal coma, punto, oprel, dos, pc;
-terminal vertical, lsqb, rsqb, lcb, rcb;
+terminal ARROW, DOUBD, DOUBDAPS, ASSIGN, NOTEQ;
+terminal LLB, RLB, BOX, QM, NS, AM, AP, LP, RP, OP;
+terminal COMA, PUNTO, OPREL, DOS, PC;
+terminal VERTICAL, LSQB, RSQB, LCB, RCB;
 
 /* String */
-terminal exp;
+terminal EXP;
 
 /* Observacion con el guinb*/
-terminal guinb;
+terminal GUINB;
 
 /* Funcion predefinidas */
-terminal get, put;
+terminal GET, PUT;
 
 /* id para variables, procedimientos y funciones */
-terminal id;
+terminal ID;
 
 /* Sección de no terminales */
 
@@ -76,88 +76,88 @@ non terminal String P, P1, P2;
 /* Procedimientos y Funciones */
 A   ::=  F                             {: :}
     ;
-F   ::=  procedure X:x is G            {: :}
+F   ::=  PROCEDURE X:x IS G            {: :}
     ;
 G   ::=  C:c G                         {: :}
-    |   function X:x return is H      {: :}
-    |   begin I                       {: :}
+    |   FUNCTION X:x RETURN IS H      {: :}
+    |   BEGIN I                       {: :}
     ;
 H   ::=  C H                           {: :}
-    |   begin I                       {: :}
+    |   BEGIN I                       {: :}
     ;
 I   ::=  L I                           {: :}
     |   M I                           {: :}
     |   E I                           {: :}
     |   P I                           {: :}
-    | end X                           {: :}
+    | END X                           {: :}
     ;
 
 /* Contenedores de terminales id*/
-X  ::=  id:i          {: /* RETURN = i; */ :}
+X  ::=  ID:i          {: /* RETURN = i; */ :}
     ;
 
 /* Contenedores de tipos de datos */
-Z   ::=  dataTypes:dt  {: /* RETURN = d; */ :}
+Z   ::=  DATATYPES:dt  {: /* RETURN = d; */ :}
     ;
 
 /* Contenedores de valores */
-N   ::=  num:n          {: /* RETURN = n; */ :}
+N   ::=  NUM:n          {: /* RETURN = n; */ :}
     ;
-N1  ::=  num doubd num  {:  :}
+N1  ::=  NUM DOUBD NUM  {:  :}
     ;
 
 /* Declaración de Tipos */
-C   ::=  X:x dos Z:z D {: :}
+C   ::=  X:x DOS Z:z D {: :}
     ;
-D   ::=  assign N:n pc  {: :}
-    |   pc             {: :}
+D   ::=  ASSIGN N:n PC  {: :}
+    |   PC             {: :}
     ;
 
 /* Condicionales */
-L   ::=  if L1 then L2     {:  :}
+L   ::=  IF L1 THEN L2     {:  :}
     ;
 L2  ::=  L L2              {:  :}
     |   E L2              {:  :}
     |   M L2              {:  :}
-    |   else L4           {:  :}
-    |   elsif L1 then L4  {:  :}
-    |   end if            {:  :}
+    |   ELSE L4           {:  :}
+    |   ELSIF L1 THEN L4  {:  :}
+    |   END IF            {:  :}
     ;
 L4  ::=  E L4              {:  :}
     |   L L4              {:  :}
     |   M L4              {:  :}
-    |   end if            {:  :}
+    |   END IF            {:  :}
     ;
 
 /* Asignaciones */
-E   ::=  X assign N        {:  :}
+E   ::=  X ASSIGN N PC        {:  :}
     ;
 
 /* Iteraciones */
-M   ::=  loop M1               {:  :}
-    |   for N in N1 loop M1   {:  :}
-    |   while L1 loop M1      {:  :}
+M   ::=  LOOP M1               {:  :}
+    |   FOR N IN N1 LOOP M1   {:  :}
+    |   WHILE L1 LOOP M1      {:  :}
     ;
 M1  ::=  M M1                  {:  :}
     |   E M1                  {:  :}
     |   L M1                  {:  :}
-    |   end loop
+    |   END LOOP
     ;
 
 /* Comparaciones */
-L1  ::=  L3 oprel L3      {:  :}
+L1  ::=  L3 OPREL L3      {:  :}
     ;
 L3  ::=  N:n              {: /* RETURN = n */ :}
     |   X:x             {: /* RETURN = x */ :}
     ;
 
 /* Imprimir o leer valores */
-P   ::=  get lp P1 rp pc   {:  :}
-    |   put lp P2 rp pc   {:  :}
+P   ::=  GET LP P1 RP PC   {:  :}
+    |   PUT LP P2 RP PC   {:  :}
     ;
-P1  ::=  id                {:  :}
+P1  ::=  ID                {:  :}
     ;
-P2  ::=  id                {:  :}
-    |   exp               {:  :}
-    |   num               {:  :}
+P2  ::=  ID                {:  :}
+    |   EXP               {:  :}
+    |   NUM               {:  :}
     ;

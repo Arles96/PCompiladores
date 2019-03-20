@@ -1,11 +1,12 @@
+import java_cup.runtime.*;
 %%
 
 %unicode
-%class ada95
+%class Ada95
 %line
 %column
 %int
-%standalone
+%cup
 %ignorecase
 
 %{
@@ -16,7 +17,7 @@
 
 //palabras reservadas
 ID = [a-zA-Z]{1}[a-zA-Z0-9]*
-NUM = [0-9]("."[0-9])?
+NUM = [0-9]+("."[0-9]+)?
 TRUE = true
 FALSE = false
 ABORT = abort
@@ -51,7 +52,7 @@ FUNCTION = function
 AT = at
 TAGGED = tagged
 GENERIC	= generic
-PACKAGE = package
+/* PACKAGEA = package */
 TASK = task
 BEGIN = begin
 GOTO = goto
@@ -89,7 +90,7 @@ MOD = mod
 REQUEUE = requeue
 XOR = xor
 
-DATATYPES = Integer|Natural|Positive|Long"_"Integer|Short"_"Integer|Float|Short"_"Float|Long"_"Float|Boolean|Character|Wide"_"Character|Unsigned"_"Integer|Byte"_"Integer|Unsigned"_"Byte"_"Integer|Word"_"Integer|Unsigned"_"Word"_"Integer|Dword"_"Integer|Unsigned"_"Dword"_"Integer|Qword"_"Integer|Byte"_"Boolean|Word"_"Boolean|Dword"_"Boolean|String"("{id}|[0-9]".""."{id}|[0-9]")"
+DATATYPES = Integer|Boolean|Float|Double|String
 
 ARROW = "=>"
 DOUBD = ".."
@@ -118,7 +119,7 @@ COMA = ","
 PUNTO = "."
 
 
-OPREL = ["<"">""="">=""<="]
+OPREL = ["<"">""="">=""<=""/="]
 DOS = ":"
 PC = ";"
 // less = "<"
@@ -133,6 +134,8 @@ RCB = "}"
 GET = "GET" | "get"
 PUT = "PUT" | "put"
 
+SALTO = \n
+
 COMMENT = "-""-".*(\n|\r)
 
 EXP = \".*\" //[a-zA-Z]+
@@ -144,7 +147,9 @@ EXP = \".*\" //[a-zA-Z]+
 %%
 <YYINITIAL>{
     {DATATYPES} {return new Symbol(sym.DATATYPES, yycolumn, yyline, yytext());}
-    {COMMENT} {return new Symbol(sym.COMMENT, yycolumn, yyline, yytext());}
+    {SALTO}     {  }
+    {NUM}       {return new Symbol(sym.NUM, yycolumn, yyline, yytext());}
+    {COMMENT} {/* return new Symbol(sym.COMMENT, yycolumn, yyline, yytext()); */}
     {EXP} {return new Symbol(sym.EXP, yycolumn, yyline, yytext());}
     {ABORT} {return new Symbol(sym.ABORT, yycolumn, yyline, yytext());}
     {ELSE} 	{return new Symbol(sym.ELSE, yycolumn, yyline, yytext());}
@@ -180,7 +185,7 @@ EXP = \".*\" //[a-zA-Z]+
     {AT} {return new Symbol(sym.AT, yycolumn, yyline, yytext());}
     {TAGGED} {return new Symbol(sym.TAGGED, yycolumn, yyline, yytext());}
     {GENERIC} {return new Symbol(sym.GENERIC, yycolumn, yyline, yytext());}
-    {PACKAGE} {return new Symbol(sym.PACKAGE, yycolumn, yyline, yytext());}
+    /* {PACKAGEA} {return new Symbol(sym.PACKAGEA, yycolumn, yyline, yytext());} */
     {TASK} {return new Symbol(sym.TASK, yycolumn, yyline, yytext());}
     {BEGIN} {return new Symbol(sym.BEGIN, yycolumn, yyline, yytext());}
     {GOTO} {return new Symbol(sym.GOTO, yycolumn, yyline, yytext());}
@@ -274,7 +279,7 @@ EXP = \".*\" //[a-zA-Z]+
     . {}
 } */
 
-<PROC>{
+/* <PROC>{
     // {is} {}
     {IDPROC} {return new Symbol(sym.idProc, yycolumn, yyline, yytext());yybegin(YYINITIAL);}
     . {}
@@ -284,4 +289,4 @@ EXP = \".*\" //[a-zA-Z]+
     {PC} {return new Symbol(sym.pc, yycolumn, yyline, yytext());yybegin(YYINITIAL);}
     {IDPROC} {return new Symbol(sym.idProc, yycolumn, yyline, yytext());}
     . {}
-}
+} */

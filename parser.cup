@@ -126,10 +126,10 @@ start with A;
 /* Procedimientos y Funciones */
 A   ::=  F                              {: :}
     ;
-F   ::=  PROCEDURE X:x IS G             {: :}
+F   ::=  PROCEDURE X:x IS G             {: /*procedure(G)*/ :}
     ;
 G   ::=  C:c G                          {: :}
-    |   FUNCTION X:x RETURN Z IS H      {: :}
+    |   FUNCTION X:x RETURN Z IS H G    {: :}
     |   BEGIN I                         {: :}
     ;
 H   ::=  C H                            {: :}
@@ -147,7 +147,7 @@ I   ::=  L I                            {: :}
 /* Contenedores de terminales id*/
 X   ::=  ID:i           {: /* RETURN = i; */ :}
     ;
-X2  ::= X COMA X2      {:  :}
+X2  ::= X COMA X2      {: /**/ :}
     |   X
     ;
 
@@ -236,9 +236,9 @@ M1  ::=  M M1                   {:  :}
     ;
 
 /* Comparaciones */
-L1  ::=  E5 OPREL E5 AND L1    {:  :}
-    |  E5 OPREL E5 OR  L1    {:  :}
-    |  E5 OPREL E5 THEN      {:  :}
+L1  ::=  E5 OPREL E5 AND L1    {: /* result = AND (OPREL(e5,e5), L1)*/ :}
+    |  E5 OPREL E5 OR  L1    {:  /*result = OR (OPREL(e5,e5), L1)*/:}
+    |  E5 OPREL E5 THEN      {:  /* result = oprel(e5, e5)*/:}
     ;
 L3  ::=  N:n              {: /* RETURN = n */ :}
     |   X:x               {: /* RETURN = x */ :}

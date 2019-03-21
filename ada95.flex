@@ -265,7 +265,7 @@ EXP = \".*\" //[a-zA-Z]+
     {USE} {yybegin(IMPORTS);} */
     {ID} {return new Symbol(sym.ID, yycolumn, yyline, yytext());}
     // {plus} {return new Symbol(SYM.id, 0, 0);}
-    . {}
+    . {System.out.println("No se reconoce: " + yytext());}
 }
 
 <STRING>{

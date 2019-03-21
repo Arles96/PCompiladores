@@ -11,10 +11,10 @@ procedure Hello is
     end if;
   end test;
 begin
-  X := 2+2;
-  Y := FALSE;
+  X := 2+2
+  Y := FALSE
   if 2 < 3 Then
-  Z:= TRUE;
-  test(3,4);
+    Z:= TRUE;
+  test(3,4)
   end if;
 end Hello;

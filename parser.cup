@@ -239,6 +239,7 @@ G   ::=  C:hijo1 G:hijo2                {:/*result = nodo(C, G)*/
                                                       RESULT = tem;
                                                     :}
     |                                               {:RESULT = null;:}
+    | error G
 
     ;
 CUERPO ::= BEGIN I:hijo1 END X:hijo2 PC    {:/*result = body(I)*/
@@ -318,6 +319,7 @@ I   ::=  L:hijo1 I:hijo2                {:
                                           RESULT = tem;
                                         :}
     |                                   {:RESULT = null;:}
+    |   error I                         {: :}
     ;
 
 /* Contenedores de terminales id*/

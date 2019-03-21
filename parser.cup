@@ -468,6 +468,16 @@ L2  ::=  L:hijo1 L2:hijo2  {:/*result = arreglo(L+L2)*/
                             }
                             RESULT = tem;
                           :}
+    |   E3:hijo1 PC L2:hijo2  {:
+                                Nodo tem = new Nodo();
+                                tem.addHijo((Nodo)hijo1);
+                                if(hijo2 != null){
+                                  for(int i=0; i < ((Nodo)hijo2).hijos.size();i++){
+                                    tem.addHijo(((Nodo)hijo2).hijos.get(i));
+                                  }
+                                }
+                                RESULT = tem;
+                              :}
     |   C:hijo1 L2:hijo2    {:
                               Nodo tem = new Nodo();
                               tem.addHijo((Nodo)hijo1);
@@ -563,6 +573,16 @@ L4  ::=  E:hijo1 L4:hijo2 {: /*result = arreglo(E+L2)*/
                               RESULT = tem;
                             :}
     |   E4:hijo1 PC L4:hijo2 {:
+                                Nodo tem = new Nodo();
+                                tem.addHijo((Nodo)hijo1);
+                                if(hijo2 != null){
+                                  for(int i=0; i < ((Nodo)hijo2).hijos.size();i++){
+                                    tem.addHijo(((Nodo)hijo2).hijos.get(i));
+                                  }
+                                }
+                                RESULT = tem;
+                              :}
+    |   E3:hijo1 PC L4:hijo2  {:
                                 Nodo tem = new Nodo();
                                 tem.addHijo((Nodo)hijo1);
                                 if(hijo2 != null){
@@ -828,14 +848,15 @@ P   ::=  GET:g LP P1:hijo RP PC     {:
                                       Nodo tem = new Nodo("Get",hijo);
                                       RESULT =  tem;
                                     :}
-    |   PUT:p LP P2:hijo RP PC      {:
-                                      Nodo tem = new Nodo("Put",hijo);
+    |   PUT:p LP:lp E2:hijo RP PC      {:
+                                      Nodo tem = new Nodo("Put", lp);
+                                      tem.addHijo(hijo);
                                       RESULT =  tem;
                                     :}
     ;
 P1  ::=  ID:i                 {: RESULT = i; :}
     ;
-P2  ::=  ID:i                 {: RESULT = i; :}
+/* P2  ::=  ID:i                 {: RESULT = i; :}
     |   EXP:i                 {: RESULT = i; :}
     |   NUM:i                 {: RESULT = i; :}
-    ;
+    ; */

@@ -13,10 +13,12 @@ end loop;
 end if;
 end test;
 begin
-X := 2+2;
+X := id();
 Y := FALSE;
 if 2 < 3 Then
 Z:= TRUE;
-test(3,4);
+test();
+else
+X := TRUE;
 end if;
 end Hello;

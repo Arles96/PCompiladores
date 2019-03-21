@@ -307,7 +307,7 @@ I   ::=  L:hijo1 I:hijo2                {:
                                           }
                                           RESULT = tem;
                                         :}
-    |   E4:hijo1 I:hijo2                {:
+    |   E4:hijo1 PC I:hijo2                {:
                                           Nodo tem = new Nodo();
                                           tem.addHijo((Nodo)hijo1);
                                           if(hijo2 != null){
@@ -430,7 +430,7 @@ L2  ::=  L:hijo1 L2:hijo2  {:/*result = arreglo(L+L2)*/
                             }
                             RESULT = tem;
                           :}
-    |   E4:hijo1 L2:hijo2 {:
+    |   E4:hijo1 PC L2:hijo2 {:
                             Nodo tem = new Nodo();
                             tem.addHijo((Nodo)hijo1);
                             if(hijo2 != null){
@@ -448,7 +448,7 @@ L4  ::=  E L4             {:  :}
     |   L L4              {:  :}
     |   M L4              {:  :}
     |   P L4              {:  :}
-    |   E4 L4             {:  :}
+    |   E4 PC L4             {:  :}
     ;
 
 /* Asignaciones */
@@ -477,7 +477,7 @@ E4  ::= X:hijo1 PA:hijo2          {:/*result = ejec(X, PA)*/
     ;
 
 /* Parametros */
-PA  ::= LP PA2:hijo PC                {: /*result = pa2*/
+PA  ::= LP PA2:hijo                   {: /*result = pa2*/
                                         RESULT = hijo != null ? (Nodo)hijo : null;
                                       :}
     ;
@@ -528,12 +528,12 @@ E6  ::= N:hijo                      {: /*result = l3*/ RESULT = (Nodo)hijo;:}
     |   LP E5:hijo RP               {: /*result = E5*/ RESULT = (Nodo)hijo;:}
     |   X:hijo                      {: /*result = E5*/ RESULT = (Nodo)hijo;:}
     ;
-E7  ::= OP:t E6:hijo            {: /*result = arreglo(op,E6)*/ 
+E7  ::= OP:t E6:hijo            {: /*result = arreglo(op,E6)*/
                                   Nodo tem = new Nodo("OP",t);
                                   tem.addHijo((Nodo)hijo);
                                   RESULT = tem;
                                 :}
-    |   MOD:t E6:hijo           {: /*result = arreglo(mod,E6)*/ 
+    |   MOD:t E6:hijo           {: /*result = arreglo(mod,E6)*/
                                   Nodo tem = new Nodo("MOD",t);
                                   tem.addHijo((Nodo)hijo);
                                   RESULT = tem;
@@ -541,10 +541,10 @@ E7  ::= OP:t E6:hijo            {: /*result = arreglo(op,E6)*/
     |                           {: /*result = null*/ RESULT = null;:}
     ;
 /* Retornos */
-E3  ::= RETURN E5:hijo          {: 
+E3  ::= RETURN E5:hijo          {:
                                   Nodo tem = new Nodo("Return","0");
                                   tem.addHijo((Nodo)hijo);
-                                  RESULT = tem;  
+                                  RESULT = tem;
                                 :}
     ;
 
@@ -589,7 +589,7 @@ M   ::=  LOOP M1:hijo END LOOP PC            {:
                                                             RESULT = tem;
                                                         :}
     ;
-M1  ::=  M:hijo1 M1:hijo2                   {:  
+M1  ::=  M:hijo1 M1:hijo2                   {:
                                               Nodo tem = new Nodo();
                                               tem.addHijo((Nodo)hijo1);
                                               if(hijo2 != null){
@@ -599,7 +599,7 @@ M1  ::=  M:hijo1 M1:hijo2                   {:
                                               }
                                               RESULT = (Nodo)tem;
                                             :}
-    |   E:hijo1 M1:hijo2                    {:  
+    |   E:hijo1 M1:hijo2                    {:
                                               Nodo tem = new Nodo();
                                               tem.addHijo((Nodo)hijo1);
                                               if(hijo2 != null){
@@ -609,7 +609,7 @@ M1  ::=  M:hijo1 M1:hijo2                   {:
                                               }
                                               RESULT = (Nodo)tem;
                                             :}
-    |   L:hijo1 M1:hijo2                    {:  
+    |   L:hijo1 M1:hijo2                    {:
                                               Nodo tem = new Nodo();
                                               tem.addHijo((Nodo)hijo1);
                                               if(hijo2 != null){
@@ -619,7 +619,7 @@ M1  ::=  M:hijo1 M1:hijo2                   {:
                                               }
                                               RESULT = (Nodo)tem;
                                             :}
-    |   P:hijo1 M1:hijo2                    {:  
+    |   P:hijo1 M1:hijo2                    {:
                                               Nodo tem = new Nodo();
                                               tem.addHijo((Nodo)hijo1);
                                               if(hijo2 != null){
@@ -673,7 +673,7 @@ L6  ::= E5:hijo1 OPREL:t E5:hijo2           {:
                                                     res.addHijo((Nodo)tem);
                                                     RESULT = (Nodo)res;
                                                    :}
-    |   E5:hijo1 OPREL:t E5:hijo2 OR L6:hijo3     {: /*result = l1*/ 
+    |   E5:hijo1 OPREL:t E5:hijo2 OR L6:hijo3     {: /*result = l1*/
                                                     Nodo tem = new Nodo();
                                                     tem.setTag("OR");
                                                     Nodo tem2 = new Nodo("OPREL",t);

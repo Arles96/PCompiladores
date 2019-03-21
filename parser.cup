@@ -24,10 +24,11 @@ parser code
     }
     if (info instanceof java_cup.runtime.Symbol) {
       java_cup.runtime.Symbol s = ((java_cup.runtime.Symbol) info);
-      if (s.left >= 0) {
-        message += ": en linea " + (s.left + 1);
-        if (s.right >= 0) {
-          message += ", columna " + (s.right + 1);
+      if (s.right >= 0) {
+        System.out.println(s.right);
+        message += ": en linea " + (s.right + 1);
+        if (s.left >= 0) {
+          message += ", columna " + (s.left + 1);
         }
         if(getScanner() instanceof Ada95) {
           message += "; no se esperaba '" + ((Ada95)getScanner()).getCurrentText()+"'";
@@ -186,6 +187,7 @@ I   ::=  L I                            {: :}
     |   P I                             {: :}
     |   E3 I                            {: :}
     |   E4 I                            {: :}
+    |   error I
     |   END X PC                        {: :}
     ;
 
@@ -209,8 +211,8 @@ N1  ::=  NUM DOUBD NUM  {:  :}
 /* Declaración de Tipos */
 C   ::=  X2 DOS Z:z D   {: :}
     ;
-D   ::=  ASSIGN N:n error PC  {: :}
-    |   error PC              {: :}
+D   ::=  ASSIGN N:n PC  {: :}
+    |    PC              {: :}
     ;
 
 /* Condicionales */
@@ -232,7 +234,7 @@ L4  ::=  E L4             {:  :}
     ;
 
 /* Asignaciones */
-E   ::=  X ASSIGN E2 error PC           {:  :}
+E   ::=  X ASSIGN E2 PC          {:  :}
     ;
 E2  ::=  TRUE        {:  :}
     |    FALSE       {:  :}

@@ -24,3 +24,5 @@ hs_err_pid*
 
 *.sh
 *.bat
+make.bat
+jflex*

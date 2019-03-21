@@ -1,4 +1,5 @@
 import java_cup.runtime.*;
+import java.util.*;
 %%
 
 %unicode
@@ -11,6 +12,7 @@ import java_cup.runtime.*;
 
 %{
   private String currentText="";
+  public static LinkedList<String> msgErrores = new LinkedList<String>();
   public String getCurrentText(){return currentText;}
 %}
 
@@ -136,7 +138,7 @@ RCB = "}"
 GET = "GET" | "get"
 PUT = "PUT" | "put"
 
-SALTO = \n | \r
+SALTO = \n|\r|\t|\f|" "
 
 COMMENT = "-""-".*(\n|\r)
 
@@ -267,7 +269,7 @@ EXP = \".*\" //[a-zA-Z]+
     {USE} {yybegin(IMPORTS);} */
     {ID} {currentText=yytext(); return new Symbol(sym.ID, yycolumn, yyline, yytext());}
     // {plus} {currentText=yytext(); return new Symbol(SYM.id, 0, 0);}
-    . {/* System.out.println("No se reconoce: " + yytext()); */}
+    . {msgErrores.add("Error Lexico: en linea " + (yyline + 1) + ", columna " + (yycolumn + 1) + "; no se reconoce: '" +yytext()+"'");}
 }
 
 <STRING>{

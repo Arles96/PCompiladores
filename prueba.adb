@@ -14,11 +14,10 @@ end if;
 end test;
 begin
 X := id();
-Y := FALSE;
-if 2 < 3 Then
+Y := FALSE; $
+if 2 < 3 Then $
 Z:= TRUE;
 test();
-else
 X := TRUE;
 end if;
 end Hello;

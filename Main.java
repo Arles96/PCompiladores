@@ -4,10 +4,15 @@ public class Main {
   static public void main(String argv[]) {
     /* Start the parser */
     try {
-      parser p = new parser(new Ada95(new FileReader(argv[0])));
+      Ada95 lexico = new Ada95(new FileReader(argv[0]));
+      parser p = new parser(lexico);
       p.parse();
       if (p.msgErrores.size() > 0) {
         for(String errores : p.msgErrores){
+          System.out.println(errores);
+        }
+      } else if (lexico.msgErrores.size() > 0) {
+        for(String errores : lexico.msgErrores){
           System.out.println(errores);
         }
       } else {

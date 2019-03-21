@@ -156,6 +156,7 @@ EXPINC = \".*
     {NUM}       {currentText=yytext(); return new Symbol(sym.NUM, yycolumn, yyline, yytext());}
     {COMMENT} {/* currentText=yytext(); return new Symbol(sym.COMMENT, yycolumn, yyline, yytext()); */}
     {EXP} {currentText=yytext(); return new Symbol(sym.EXP, yycolumn, yyline, yytext());}
+    {EXPINC} {msgErrores.add("Error Lexico: en linea " + (yyline + 1) + ", columna " + (yycolumn + 1) + "; no se cerro la cadena'" +yytext()+"'");}
     {ABORT} {currentText=yytext(); return new Symbol(sym.ABORT, yycolumn, yyline, yytext());}
     {ELSE} 	{currentText=yytext(); return new Symbol(sym.ELSE, yycolumn, yyline, yytext());}
     {TRUE} {currentText=yytext(); return new Symbol(sym.TRUE, yycolumn, yyline, yytext());}

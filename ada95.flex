@@ -143,6 +143,7 @@ SALTO = \n|\r|\t|\f|" "
 COMMENT = "-""-".*(\n|\r)
 
 EXP = \".*\" //[a-zA-Z]+
+EXPINC = \".*
 %state STRING
 %state IMPORTS
 %state PROC

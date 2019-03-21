@@ -47,7 +47,7 @@ terminal String DO, MOD, REQUEUE, XOR;
 terminal COMMENT;
 
 /*terminales de booleanos*/
-terminal TRUE, FALSE;
+terminal String TRUE, FALSE;
 
 /* terminal de valores */
 terminal String NUM;
@@ -480,12 +480,24 @@ E6  ::= N:hijo                      {: /*result = l3*/ RESULT = (Nodo)hijo;:}
     |   E4:hijo                     {: /*result = E4*/ RESULT = (Nodo)hijo;:}
     |   LP E5:hijo RP               {: /*result = E5*/ RESULT = (Nodo)hijo;:}
     ;
-E7  ::= OP E6                   {: /*result = arreglo(op,E6)*/ :}
-    |   MOD E6                  {: /*result = arreglo(mod,E6)*/ :}
+E7  ::= OP:t E6:hijo            {: /*result = arreglo(op,E6)*/ 
+                                  Nodo tem = new Nodo("OP",t);
+                                  tem.addHijo((Nodo)hijo);
+                                  RESULT = tem;
+                                :}
+    |   MOD:t E6:hijo           {: /*result = arreglo(mod,E6)*/ 
+                                  Nodo tem = new Nodo("MOD",t);
+                                  tem.addHijo((Nodo)hijo);
+                                  RESULT = tem;
+                                :}
     |                           {: /*result = null*/ RESULT = null;:}
     ;
 /* Retornos */
-E3  ::= RETURN E5               {:  :}
+E3  ::= RETURN E5:hijo          {: 
+                                  Nodo tem = new Nodo("Return","0");
+                                  tem.addHijo((Nodo)hijo);
+                                  RESULT = tem;  
+                                :}
     ;
 
 /* Iteraciones */
@@ -529,10 +541,46 @@ M   ::=  LOOP M1:hijo END LOOP PC            {:
                                                             RESULT = tem;
                                                         :}
     ;
-M1  ::=  M:hijo1 M1:hijo2                   {:  :}
-    |   E:hijo1 M1:hijo2                    {:  :}
-    |   L M1                    {:  :}
-    |   P M1                    {:  :}
+M1  ::=  M:hijo1 M1:hijo2                   {:  
+                                              Nodo tem = new Nodo();
+                                              tem.addHijo((Nodo)hijo1);
+                                              if(hijo2 != null){
+                                                for(int i=0; i < ((Nodo)hijo2).hijos.size();i++){
+                                                  tem.addHijo(((Nodo)hijo2).hijos.get(i));
+                                                }
+                                              }
+                                              RESULT = (Nodo)tem;
+                                            :}
+    |   E:hijo1 M1:hijo2                    {:  
+                                              Nodo tem = new Nodo();
+                                              tem.addHijo((Nodo)hijo1);
+                                              if(hijo2 != null){
+                                                for(int i=0; i < ((Nodo)hijo2).hijos.size();i++){
+                                                  tem.addHijo(((Nodo)hijo2).hijos.get(i));
+                                                }
+                                              }
+                                              RESULT = (Nodo)tem;
+                                            :}
+    |   L:hijo1 M1:hijo2                    {:  
+                                              Nodo tem = new Nodo();
+                                              tem.addHijo((Nodo)hijo1);
+                                              if(hijo2 != null){
+                                                for(int i=0; i < ((Nodo)hijo2).hijos.size();i++){
+                                                  tem.addHijo(((Nodo)hijo2).hijos.get(i));
+                                                }
+                                              }
+                                              RESULT = (Nodo)tem;
+                                            :}
+    |   P:hijo1 M1:hijo2                    {:  
+                                              Nodo tem = new Nodo();
+                                              tem.addHijo((Nodo)hijo1);
+                                              if(hijo2 != null){
+                                                for(int i=0; i < ((Nodo)hijo2).hijos.size();i++){
+                                                  tem.addHijo(((Nodo)hijo2).hijos.get(i));
+                                                }
+                                              }
+                                              RESULT = (Nodo)tem;
+                                            :}
     |                           {: RESULT = null; :}
     ;
 
@@ -555,9 +603,21 @@ L3  ::=  N:n              {: /* RETURN = n */
     ;
 
 /* Grupo de condicionales para mientras */
-L6  ::= L1 L6                 {: /*result = l1*/ :}
-    |   AND L1 L6             {: /*result = l1*/ :}
-    |   OR L1 L6              {: /*result = l1*/ :}
+L6  ::= E5:hijo1 OPREL:t E5:hijo2           {:
+                                              Nodo tem = new Nodo();
+                                              tem.setTag("Condicion");
+                                              Nodo tem2 = new Nodo("OPREL",t);
+                                              tem2.addHijo((Nodo)hijo1);
+                                              tem2.addHijo((Nodo)hijo2);
+                                              tem.addHijo((Nodo)tem2);
+                                              RESULT = tem;
+                                            :}
+    |   E5:hijo1 OPREL:t E5:hijo2 AND L6:hijo3     {: /*result = l1*/
+                                                    
+                                                   :}
+    |   E5:hijo1 OPREL:t E5:hijo2 OR L6:hijo3    {: /*result = l1*/ :}
+    |   TRUE:t                  {:RESULT = new Nodo("TRUE","1");:}
+    |   FALSE:t                 {:RESULT = new Nodo("FALSE","0");:}
     ;
 
 /* Imprimir o leer valores */

@@ -8,6 +8,9 @@ end interna;
 begin
 if 3 > 4 Then
 S:=FALSE;
+for I in 1..3 loop
+D:=4;
+end loop;
 end if;
 end test;
 begin

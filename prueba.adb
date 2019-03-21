@@ -1,6 +1,20 @@
 procedure Hello is
+  X,Y: Integer := TRUE;
+  function test return Integer is
+    z,w: Integer := FALSE;
+    function interna return Boolean is
+    begin
+    end interna;
+  begin
+    if 3 > 4 Then
+      S:=FALSE;
+    end if;
+  end test;
 begin
-  hola := 2 + 2
-  hola := 2
-  hola :=
+  X := 2+2;
+  Y := FALSE;
+  if 2 < 3 Then
+  Z:= TRUE;
+  test(3,4);
+  end if;
 end Hello;

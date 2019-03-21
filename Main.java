@@ -10,10 +10,33 @@ public class Main {
         for(String errores : p.msgErrores){
           System.out.println(errores);
         }
+      } else {
+        printTree(p.raiz,0);
       }
     } catch (Exception e) {
       e.printStackTrace();
     }
+
+  }
+  static public void printTree(Nodo n,int nivel){
+
+    int tem = nivel;
+
+    for(int i=0;i<nivel;i++){
+      System.out.print("-");
+    }
+    System.out.println(n.getInfo());
+
+    //System.out.print("")
+    nivel++;
+    for (int i=0; i<n.hijos.size();i++){
+      //System.out.println("Hijo de: "+n.getInfo());
+      //System.out.print("--");
+      printTree(n.hijos.get(i),nivel);
+
+    }
+    nivel = tem;
+    //System.out.print("--");
 
   }
 }

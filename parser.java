@@ -416,12 +416,11 @@ public class parser extends java_cup.runtime.lr_parser {
     if (message.equalsIgnoreCase("Syntax error")) {
       message = "Error Sintactico";
     } else if (message.equalsIgnoreCase("Couldn't repair and continue parse")) {
-      message = "Error";
+      message = "Error Fatal";
     }
     if (info instanceof java_cup.runtime.Symbol) {
       java_cup.runtime.Symbol s = ((java_cup.runtime.Symbol) info);
       if (s.right >= 0) {
-        System.out.println(s.right);
         message += ": en linea " + (s.right + 1);
         if (s.left >= 0) {
           message += ", columna " + (s.left + 1);

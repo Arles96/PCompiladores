@@ -134,7 +134,7 @@ RCB = "}"
 GET = "GET" | "get"
 PUT = "PUT" | "put"
 
-SALTO = \n
+SALTO = \n | \r
 
 COMMENT = "-""-".*(\n|\r)
 

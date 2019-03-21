@@ -1,13 +1,31 @@
-import java.util.ArrayLis;
+import java.util.ArrayList;
 
-public class Node{
+public class Nodo{
     
-    public Node parent;
-    public String label = "";
-    public ArrayList<Node> children;
+    public String tag;
+    public String valor;
+    public Nodo padre;
+    public ArrayList<Nodo>hijos = new ArrayList<Nodo>();
 
-    public Node(String label, ArrayList<Node>children){
-        this.label = label;
-        this.children = children;
+    public Nodo(){
+
+    }
+    public Nodo(String tag,String valor){
+        this.tag = tag;
+        this.valor = valor;
+    }
+    public void addHijo(Nodo n){
+        hijos.add(n);
+    }
+    
+    public void setTag(String s){
+        this.tag = s;
+    }
+    public void setValor(String s){
+        this.valor = s;
+    }
+
+    public String getInfo(){
+        return this.tag;
     }
 }

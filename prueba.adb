@@ -1,16 +1,20 @@
 procedure Hello is
-
-function hola return Integer is
-  hello2 : Integer;
-  begin
-    hello2 := 2;
-  end hola;
-  hello3 : Integer;
-
+X,Y: Integer := TRUE;
+function test return Integer is
+z,w: Integer := FALSE;
+function interna return Boolean is
 begin
-  hola := id();
-  if  0 = (id mod 2 + 2) then
-    put(hola);
-  end if;
-  put(hola);
+end interna;
+begin
+if 3 > 4 Then
+S:=FALSE;
+end if;
+end test;
+begin
+X := 2+2;
+Y := FALSE;
+if 2 < 3 Then
+Z:= TRUE;
+test(3,4);
+end if;
 end Hello;

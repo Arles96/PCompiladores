@@ -1,22 +1,13 @@
-procedure Hello is
-X,Y: Integer := TRUE;
-function test return Integer is
-z,w: Integer := FALSE;
-function interna return Boolean is
+procedure Numbers is
+   Mike, Alice: Integer;
+   JohnSmith: Integer;
+   F: Float := 1.0;
 begin
-end interna;
-begin
-if 3 > 4 Then
-S:=FALSE;
-while B > A AND True loop
-end loop;
-end if;
-end test;
-begin
-X := 2+2;
-Y := FALSE;
-if 2 < 3 Then
-Z:= TRUE;
-test(3,4);
-end if;
-end Hello;
+Put("Enter a number Mike: ");
+Get(Mike);
+Put("Enter a number Alice: ");
+Get(Alice);
+JohnSmith := 3 + 2 + 2;
+Put("3*Mike + 2*Alice + 11 is ");
+Put(JohnSmith);
+end Numbers;

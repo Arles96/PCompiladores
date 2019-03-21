@@ -107,7 +107,7 @@ terminal String COMA, PUNTO, OPREL, DOS, PC;
 terminal VERTICAL, LSQB, RSQB, LCB, RCB;
 
 /* String */
-terminal EXP;
+terminal String EXP;
 
 /* Observacion con el guinb*/
 terminal GUINB;
@@ -165,7 +165,8 @@ non terminal Nodo E4;
 non terminal Nodo PA, PA2;
 
 /* non terminales de obtener e imprimir valores */
-non terminal Nodo P, P1, P2;
+non terminal Nodo P;
+non terminal String P1, P2;
 
 non terminal Nodo CUERPO;
 
@@ -360,6 +361,7 @@ D   ::=  ASSIGN N:n PC  {:/*result = num*/
                           Nodo tem = new Nodo();
                           tem.setTag("ASSIGN");
                           tem.addHijo((Nodo)n);
+                          RESULT = tem;
                         :}
     |   ASSIGN TRUE PC  {:/*result = true*/
                           RESULT = new Nodo("ASSIGN","TRUE");
@@ -633,13 +635,33 @@ M1  ::=  M:hijo1 M1:hijo2                   {:
     ;
 
 /* Comparaciones */
-L1  ::=  E5 OPREL E5 AND L1    {: /* result = AND (OPREL(e5,e5), L1)*/ :}
-    |  E5 OPREL E5 OR  L1    {:  /*result = OR (OPREL(e5,e5), L1)*/:}
+L1  ::=  E5:hijo1 OPREL:t E5:hijo2 AND L1:hijo3     {: /* result = AND (OPREL(e5,e5), L1)*/ 
+                                                      Nodo tem = new Nodo();
+                                                      tem.setTag("AND");
+                                                      Nodo tem2 = new Nodo("OPREL",t);
+                                                      tem2.addHijo((Nodo)hijo1);
+                                                      tem2.addHijo((Nodo)hijo2);
+                                                      tem.addHijo((Nodo)tem2);
+                                                      tem.addHijo((Nodo)hijo3);
+                                                      
+                                                      RESULT = (Nodo)tem;
+                                                    :}
+    |  E5:hijo1 OPREL:t E5:hijo2 OR L1:hijo3    {:  /*result = OR (OPREL(e5,e5), L1)*/
+                                                    Nodo tem = new Nodo();
+                                                    tem.setTag("OR");
+                                                    Nodo tem2 = new Nodo("OPREL",t);
+                                                    tem2.addHijo((Nodo)hijo1);
+                                                    tem2.addHijo((Nodo)hijo2);
+                                                    tem.addHijo((Nodo)tem2);
+                                                    tem.addHijo((Nodo)hijo3);
+                                                      
+                                                    RESULT = (Nodo)tem;
+                                                :}
     |  E5:hijo1 OPREL:t E5:hijo2 THEN      {:  /* result = oprel(e5, e5)*/
                                 Nodo tem = new Nodo("OPREL",t);
                                 tem.addHijo((Nodo)hijo1);
                                 tem.addHijo((Nodo)hijo2);
-                                RESULT = tem;
+                                RESULT = (Nodo)tem;
                               :}
     ;
 L3  ::=  N:n              {: /* RETURN = n */
@@ -652,13 +674,10 @@ L3  ::=  N:n              {: /* RETURN = n */
 
 /* Grupo de condicionales para mientras */
 L6  ::= E5:hijo1 OPREL:t E5:hijo2           {:
-                                              Nodo tem = new Nodo();
-                                              tem.setTag("Condicion");
                                               Nodo tem2 = new Nodo("OPREL",t);
                                               tem2.addHijo((Nodo)hijo1);
                                               tem2.addHijo((Nodo)hijo2);
-                                              tem.addHijo((Nodo)tem2);
-                                              RESULT = tem;
+                                              RESULT = tem2;
                                             :}
     |   E5:hijo1 OPREL:t E5:hijo2 AND L6:hijo3     {: /*result = l1*/
                                                     Nodo tem = new Nodo();
@@ -668,10 +687,7 @@ L6  ::= E5:hijo1 OPREL:t E5:hijo2           {:
                                                     tem2.addHijo((Nodo)hijo2);
                                                     tem.addHijo((Nodo)tem2);
                                                     tem.addHijo((Nodo)hijo3);
-                                                    Nodo res = new Nodo();
-                                                    res.setTag("Condicion");
-                                                    res.addHijo((Nodo)tem);
-                                                    RESULT = (Nodo)res;
+                                                    RESULT = (Nodo)tem;
                                                    :}
     |   E5:hijo1 OPREL:t E5:hijo2 OR L6:hijo3     {: /*result = l1*/ 
                                                     Nodo tem = new Nodo();
@@ -681,22 +697,23 @@ L6  ::= E5:hijo1 OPREL:t E5:hijo2           {:
                                                     tem2.addHijo((Nodo)hijo2);
                                                     tem.addHijo((Nodo)tem2);
                                                     tem.addHijo((Nodo)hijo3);
-                                                    Nodo res = new Nodo();
-                                                    res.setTag("Condicion");
-                                                    res.addHijo((Nodo)tem);
-                                                    RESULT = (Nodo)res;
+                                                    RESULT = (Nodo)tem;
                                                   :}
-    |   TRUE:t                  {:RESULT = new Nodo("TRUE","1");:}
-    |   FALSE:t                 {:RESULT = new Nodo("FALSE","0");:}
+     
     ;
-
 /* Imprimir o leer valores */
-P   ::=  GET LP P1 RP PC    {:  :}
-    |   PUT LP P2 RP PC     {:  :}
+P   ::=  GET:g LP P1:hijo RP PC     {:
+                                      Nodo tem = new Nodo("Get",hijo);
+                                      RESULT =  tem;  
+                                    :}
+    |   PUT:p LP P2:hijo RP PC      {:  
+                                      Nodo tem = new Nodo("Put",hijo);
+                                      RESULT =  tem; 
+                                    :}
     ;
-P1  ::=  ID                 {:  :}
+P1  ::=  ID:i                 {: RESULT = i; :}
     ;
-P2  ::=  ID                 {:  :}
-    |   EXP                 {:  :}
-    |   NUM                 {:  :}
+P2  ::=  ID:i                 {: RESULT = i; :}
+    |   EXP:i                 {: RESULT = i; :}
+    |   NUM:i                 {: RESULT = i; :}
     ;

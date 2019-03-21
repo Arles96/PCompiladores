@@ -8,9 +8,9 @@ function hola return Integer is
   hello3 : Integer;
 
 begin
-  hola := id();
+  hola := 2
   if  0 = (id mod 2 + 2) then
     put(hola);
   end if;
-  put(hola);
+  put(hola)
 end Hello;

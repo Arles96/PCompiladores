@@ -1,21 +1,65 @@
 import java_cup.runtime.*;
+import java.util.*;
 
 /* Codigo para el manejo de errores */
 parser code
 {:
-  // Metodo al se llama automaticamente ante algun error sintactico
-  public void syntax_error (Symbol s) {
-    String lexema = s.value.toString();
-    int fila = s.right;
-    int columna = s.left;
-    System.out.println("!!! Error sintactico recuperado !!!!");
-    System.out.println("Lexema " + lexema);
-    System.out.println("Fila " + fila);
-    System.out.println("Columna " + columna);
+
+  public static LinkedList<String> msgErrores = new LinkedList<String>();
+
+  public void report_error (String message, Object info) {
+    /* if (s != null) {
+      Symbol s2 = (Symbol) s;
+      int fila = s2.right;
+      int columna = s2.left;
+      String currentToken = "Hola";
+      System.out.println(message + " fila: " + fila + " columna: " + columna +
+        " token inesperado " + currentToken);
+    } */
+
+    if (message.equalsIgnoreCase("Syntax error")) {
+      message = "Error Sintactico";
+    } else if (message.equalsIgnoreCase("Couldn't repair and continue parse")) {
+      message = "Error";
+    }
+    if (info instanceof java_cup.runtime.Symbol) {
+      java_cup.runtime.Symbol s = ((java_cup.runtime.Symbol) info);
+      if (s.left >= 0) {
+        message += ": en linea " + (s.left + 1);
+        if (s.right >= 0) {
+          message += ", columna " + (s.right + 1);
+        }
+        if(getScanner() instanceof Ada95) {
+          message += "; no se esperaba '" + ((Ada95)getScanner()).getCurrentText()+"'";
+        }
+      }
+    }
+    msgErrores.add(message);
   }
 
+  public void report_fatal_error (String message, Object info) {
+    /* Symbol s2 = (Symbol) s;
+    int fila = s2.right;
+    int columna = s2.left;
+    String currentToken = s2.value.toString();
+    System.out.println(message + " fila: " + fila + " columna: " + columna +
+      " token inesperado " + currentToken); */
+    /* System.out.println("Error Sintactico"); */
+    report_error(message, info);
+  }
+
+  // Metodo al se llama automaticamente ante algun error sintactico
+  /* public void syntax_error (Symbol s) {
+    int fila = s.right;
+    int columna = s.left;
+    String currentToken = s.value.toString();
+    System.out.println("Error Sintactico " + " fila: " + fila + " columna: " + columna +
+      " token inesperado " + currentToken);
+    report_error("Error Sintactico", s);
+  } */
+
   // Metodo al que se llama en el momento en que ya no es posible una recuperacion de errores
-  public void unrecover_syntax_error(Symbol s) {
+  /* public void unrecover_syntax_error(Symbol s) {
     String lexema = s.value.toString();
     int fila = s.right;
     int columna = s.left;
@@ -23,7 +67,8 @@ parser code
     System.out.println("Lexema " + lexema);
     System.out.println("Fila " + fila);
     System.out.println("Columna " + columna);
-  }
+    report_fatal_error("Error fatal en la Sintaxis", s);
+  } */
 
 :}
 
@@ -164,8 +209,8 @@ N1  ::=  NUM DOUBD NUM  {:  :}
 /* Declaración de Tipos */
 C   ::=  X2 DOS Z:z D   {: :}
     ;
-D   ::=  ASSIGN N:n PC  {: :}
-    |   PC              {: :}
+D   ::=  ASSIGN N:n error PC  {: :}
+    |   error PC              {: :}
     ;
 
 /* Condicionales */
@@ -187,7 +232,7 @@ L4  ::=  E L4             {:  :}
     ;
 
 /* Asignaciones */
-E   ::=  X ASSIGN E2 PC           {:  :}
+E   ::=  X ASSIGN E2 error PC           {:  :}
     ;
 E2  ::=  TRUE        {:  :}
     |    FALSE       {:  :}

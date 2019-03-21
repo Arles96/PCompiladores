@@ -196,6 +196,7 @@ F   ::=  PROCEDURE X:hijo1 IS G:hijo2  CUERPO:hijo3 {: /*procedure(G)*/
                                           nod.addHijo((Nodo)hijo3);
                                           RESULT = nod;
                                         :}
+    | error G
     ;
 G   ::=  C:hijo1 G:hijo2                {:/*result = nodo(C, G)*/
                                           Nodo tem = new Nodo();
@@ -467,6 +468,16 @@ L2  ::=  L:hijo1 L2:hijo2  {:/*result = arreglo(L+L2)*/
                             }
                             RESULT = tem;
                           :}
+    |   E3:hijo1 PC L2:hijo2  {:
+                                Nodo tem = new Nodo();
+                                tem.addHijo((Nodo)hijo1);
+                                if(hijo2 != null){
+                                  for(int i=0; i < ((Nodo)hijo2).hijos.size();i++){
+                                    tem.addHijo(((Nodo)hijo2).hijos.get(i));
+                                  }
+                                }
+                                RESULT = tem;
+                              :}
     |   ELSE L4:hijo          {:/**/
                                   Nodo tem = new Nodo();
                                   Nodo tem2 = new Nodo();
@@ -541,7 +552,17 @@ L4  ::=  E:hijo1 L4:hijo2 {: /*result = arreglo(E+L2)*/
                               }
                               RESULT = tem;
                             :}
-    |   E4:hijo1 PC L4:hijo2 {: 
+    |   E4:hijo1 PC L4:hijo2 {:
+                                Nodo tem = new Nodo();
+                                tem.addHijo((Nodo)hijo1);
+                                if(hijo2 != null){
+                                  for(int i=0; i < ((Nodo)hijo2).hijos.size();i++){
+                                    tem.addHijo(((Nodo)hijo2).hijos.get(i));
+                                  }
+                                }
+                                RESULT = tem;
+                              :}
+    |   E3:hijo1 PC L4:hijo2  {:
                                 Nodo tem = new Nodo();
                                 tem.addHijo((Nodo)hijo1);
                                 if(hijo2 != null){
@@ -736,7 +757,7 @@ M1  ::=  M:hijo1 M1:hijo2                   {:
     ;
 
 /* Comparaciones */
-L1  ::=  E5:hijo1 OPREL:t E5:hijo2 AND L1:hijo3     {: /* result = AND (OPREL(e5,e5), L1)*/ 
+L1  ::=  E5:hijo1 OPREL:t E5:hijo2 AND L1:hijo3     {: /* result = AND (OPREL(e5,e5), L1)*/
                                                       Nodo tem = new Nodo();
                                                       tem.setTag("AND");
                                                       Nodo tem2 = new Nodo("OPREL",t);
@@ -744,7 +765,7 @@ L1  ::=  E5:hijo1 OPREL:t E5:hijo2 AND L1:hijo3     {: /* result = AND (OPREL(e5
                                                       tem2.addHijo((Nodo)hijo2);
                                                       tem.addHijo((Nodo)tem2);
                                                       tem.addHijo((Nodo)hijo3);
-                                                      
+
                                                       RESULT = (Nodo)tem;
                                                     :}
     |  E5:hijo1 OPREL:t E5:hijo2 OR L1:hijo3    {:  /*result = OR (OPREL(e5,e5), L1)*/
@@ -755,7 +776,7 @@ L1  ::=  E5:hijo1 OPREL:t E5:hijo2 AND L1:hijo3     {: /* result = AND (OPREL(e5
                                                     tem2.addHijo((Nodo)hijo2);
                                                     tem.addHijo((Nodo)tem2);
                                                     tem.addHijo((Nodo)hijo3);
-                                                      
+
                                                     RESULT = (Nodo)tem;
                                                 :}
     |  E5:hijo1 OPREL:t E5:hijo2 THEN      {:  /* result = oprel(e5, e5)*/
@@ -800,21 +821,22 @@ L6  ::= E5:hijo1 OPREL:t E5:hijo2           {:
                                                     tem.addHijo((Nodo)hijo3);
                                                     RESULT = (Nodo)tem;
                                                   :}
-     
+
     ;
 /* Imprimir o leer valores */
 P   ::=  GET:g LP P1:hijo RP PC     {:
                                       Nodo tem = new Nodo("Get",hijo);
-                                      RESULT =  tem;  
+                                      RESULT =  tem;
                                     :}
-    |   PUT:p LP P2:hijo RP PC      {:  
-                                      Nodo tem = new Nodo("Put",hijo);
-                                      RESULT =  tem; 
+    |   PUT:p LP:lp E2:hijo RP PC      {:
+                                      Nodo tem = new Nodo("Put", lp);
+                                      tem.addHijo(hijo);
+                                      RESULT =  tem;
                                     :}
     ;
 P1  ::=  ID:i                 {: RESULT = i; :}
     ;
-P2  ::=  ID:i                 {: RESULT = i; :}
+/* P2  ::=  ID:i                 {: RESULT = i; :}
     |   EXP:i                 {: RESULT = i; :}
     |   NUM:i                 {: RESULT = i; :}
-    ;
+    ; */

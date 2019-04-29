@@ -20,7 +20,7 @@ import java.util.*;
 %eof}
 
 //palabras reservadas
-ID = [_a-zA-Z0-9]*
+ID = [_a-zA-Z0-9]+
 NUM = [0-9]+("."[0-9]+)?
 TRUE = true
 FALSE = false

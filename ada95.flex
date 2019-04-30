@@ -123,7 +123,7 @@ COMA = ","
 PUNTO = "."
 
 
-OPREL = ["<"">""="">=""<=""/="]
+OPREL = ">="|"<="|"/="|"<"|">"|"="
 DOS = ":"
 PC = ";"
 // less = "<"
@@ -156,8 +156,9 @@ EXPINC = \".*
     {NUM}       {currentText=yytext(); return new Symbol(sym.NUM, yycolumn, yyline, yytext());}
     {COMMENT} {/* currentText=yytext(); return new Symbol(sym.COMMENT, yycolumn, yyline, yytext()); */}
     {EXP} {currentText=yytext(); return new Symbol(sym.EXP, yycolumn, yyline, yytext());}
-    {EXPINC} {msgErrores.add("Error Lexico: en linea " + (yyline + 1) + ", columna " + (yycolumn + 1) + "; no se cerro la cadena'" +yytext()+"'");}
+    //{EXPINC} {msgErrores.add("Error Lexico: en linea " + (yyline + 1) + ", columna " + (yycolumn + 1) + "; no se cerro la cadena'" +yytext()+"'");}
     {ABORT} {currentText=yytext(); return new Symbol(sym.ABORT, yycolumn, yyline, yytext());}
+    {OPREL} {currentText=yytext(); System.out.println(yytext()); return new Symbol(sym.OPREL, yycolumn, yyline, yytext());}
     {ELSE} 	{currentText=yytext(); return new Symbol(sym.ELSE, yycolumn, yyline, yytext());}
     {TRUE} {currentText=yytext(); return new Symbol(sym.TRUE, yycolumn, yyline, yytext());}
     {FALSE} {currentText=yytext(); return new Symbol(sym.FALSE, yycolumn, yyline, yytext());}
@@ -265,7 +266,6 @@ EXPINC = \".*
     {LCB} {currentText=yytext(); return new Symbol(sym.LCB, yycolumn, yyline, yytext());}
     {RCB} {currentText=yytext(); return new Symbol(sym.RCB, yycolumn, yyline, yytext());}
     {OP} {currentText=yytext(); return new Symbol(sym.OP, yycolumn, yyline, yytext());}
-    {OPREL} {currentText=yytext(); return new Symbol(sym.OPREL, yycolumn, yyline, yytext());}
     // {idFunc} {currentText=yytext(); return new Symbol(sym.IDFUNC, yycolumn, yyline, yytext());}
     /* {with} {yybegin(IMPORTS);}
     {USE} {yybegin(IMPORTS);} */

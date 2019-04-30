@@ -6,5 +6,5 @@ procedure prueba is
     end if;
   end Minimo;
 begin
-  put(Minimo(1, 2))
-end prueba
+  put(Minimo(1, 2));
+end prueba;

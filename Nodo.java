@@ -26,6 +26,9 @@ public class Nodo{
     }
 
     public String getInfo(){
-        return this.tag;
+        if (valor != null)
+            return this.tag + ":" +this.valor/*tag*/;
+        else
+            return this.tag + ":nulo";
     }
 }

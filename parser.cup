@@ -49,6 +49,7 @@ parser code
   }
 
   public Nodo raiz;
+  public LinkedList<String[]> tablaSimbolos = new LinkedList();
   // Metodo al se llama automaticamente ante algun error sintactico
   /* public void syntax_error (Symbol s) {
     int fila = s.right;
@@ -330,15 +331,22 @@ X   ::=  ID:i           {: /* Result = ID(att:i) */
     ;
 X2  ::= X:hijo1 COMA X2:hijo2     {: /* result = declaracion (att: arreglo = X + X2.arreglo)*/
                                     RESULT = new Nodo("Declaracion","arreglo");
+                                    tablaSimbolos.add(new String[]{hijo1.valor, "", ""});
                                   :}
     |   X:hijo              {:/* result = X*/
                               RESULT = (Nodo)hijo;
+                              tablaSimbolos.add(new String[]{hijo.valor, "", ""});
                             :}
     ;
 
 /* Contenedores de tipos de datos */
 Z   ::=  DATATYPES:dt   {: /* result = dt; */
                           RESULT = new Nodo("DATA TYPE",dt);
+                          int sim = tablaSimbolos.size() - 1;
+                          while(sim >= 0 && tablaSimbolos.get(sim)[1] == ""){
+                            tablaSimbolos.set(sim, new String[]{tablaSimbolos.get(sim)[0], dt});
+                            sim--;
+                          }
                         :}
     ;
 
@@ -351,6 +359,12 @@ N1  ::=  NUM:n1 DOUBD:t NUM:n2  {: /* result = range(att: num1, num2)*/ RESULT =
 /* Declaración de Tipos */
 ARG::=  X2:hijo1 DOS Z:hijo2 ARG2:hijo3   {:/*result = Z(X2,D)*/
                                           ((Nodo)hijo2).addHijo((Nodo)hijo1);
+
+                                          /*int sim = tablaSimbolos.size() - 1;
+                                          while(sim >= 0 && tablaSimbolos.get(sim)[1] == ""){
+                                            tablaSimbolos.set(sim, new String[]{tablaSimbolos.get(sim)[0], hijo2.valor});
+                                            sim--;
+                                          }*/
                                           if(((Nodo)hijo3).getInfo().equals("nulo")){
                                           }else{
                                             ((Nodo)hijo2).addHijo((Nodo)hijo3);

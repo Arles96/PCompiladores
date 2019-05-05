@@ -1,5 +1,7 @@
 procedure prueba is
-  function Minimo (A, B: Integer) return Integer is
+  function Minimo (A, B: String) return Integer is
+  x,y:Integer;
+  z:String;
   begin
     if A > B then return B;
     else return A;

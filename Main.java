@@ -17,6 +17,14 @@ public class Main {
         }
       } else {
         printTree(p.raiz,0);
+        
+        System.out.println("Tabla de simbolos");
+        for(int i = 0; i < p.tablaSimbolos.size(); i++){
+          for(int j = 0; j < p.tablaSimbolos.get(i).length; j++){
+            System.out.print(p.tablaSimbolos.get(i)[j] + ",");
+          }
+          System.out.println();
+        }
       }
     } catch (Exception e) {
       e.printStackTrace();

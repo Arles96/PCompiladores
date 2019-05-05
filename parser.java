@@ -498,6 +498,7 @@ public class parser extends java_cup.runtime.lr_parser {
   }
 
   public Nodo raiz;
+  public LinkedList<String[]> tablaSimbolos = new LinkedList();
   // Metodo al se llama automaticamente ante algun error sintactico
   /* public void syntax_error (Symbol s) {
     int fila = s.right;
@@ -928,6 +929,7 @@ class CUP$parser$actions {
 		Nodo hijo2 = (Nodo)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		 /* result = declaracion (att: arreglo = X + X2.arreglo)*/
                                     RESULT = new Nodo("Declaracion","arreglo");
+                                    tablaSimbolos.add(new String[]{hijo1.valor, "", ""});
                                   
               CUP$parser$result = parser.getSymbolFactory().newSymbol("X2",6, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -942,6 +944,7 @@ class CUP$parser$actions {
 		Nodo hijo = (Nodo)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		/* result = X*/
                               RESULT = (Nodo)hijo;
+                              tablaSimbolos.add(new String[]{hijo.valor, "", ""});
                             
               CUP$parser$result = parser.getSymbolFactory().newSymbol("X2",6, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -956,6 +959,11 @@ class CUP$parser$actions {
 		String dt = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		 /* result = dt; */
                           RESULT = new Nodo("DATA TYPE",dt);
+                          int sim = tablaSimbolos.size() - 1;
+                          while(sim >= 0 && tablaSimbolos.get(sim)[1] == ""){
+                            tablaSimbolos.set(sim, new String[]{tablaSimbolos.get(sim)[0], dt});
+                            sim--;
+                          }
                         
               CUP$parser$result = parser.getSymbolFactory().newSymbol("Z",7, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -1006,6 +1014,12 @@ class CUP$parser$actions {
 		Nodo hijo3 = (Nodo)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		/*result = Z(X2,D)*/
                                           ((Nodo)hijo2).addHijo((Nodo)hijo1);
+
+                                          /*int sim = tablaSimbolos.size() - 1;
+                                          while(sim >= 0 && tablaSimbolos.get(sim)[1] == ""){
+                                            tablaSimbolos.set(sim, new String[]{tablaSimbolos.get(sim)[0], hijo2.valor});
+                                            sim--;
+                                          }*/
                                           if(((Nodo)hijo3).getInfo().equals("nulo")){
                                           }else{
                                             ((Nodo)hijo2).addHijo((Nodo)hijo3);

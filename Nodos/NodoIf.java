@@ -1,7 +1,11 @@
+package Nodos;
+
 class NodoIf extends Nodo {
 
-  @Override
-  public void generateCode () {
+  public NodoIf () {}
 
+  public NodoIf (String tag, String valor) {
+    super(tag, valor);
   }
+
 }

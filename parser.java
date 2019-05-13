@@ -497,8 +497,28 @@ public class parser extends java_cup.runtime.lr_parser {
     report_error(message, info);
   }
 
+  public boolean insertarSimbolo(String id, String tipo, String ambito){
+        for (String[] strings : tablaSimbolos) {
+            if(strings[0].compareToIgnoreCase(id) == 0)
+                return false;
+        }
+        tablaSimbolos.add(new String[]{id, tipo, ambito});
+        return true;
+  }
+
+  /*public boolean insertarFuncion(String id, String tipo, String[] parametros){
+        for (String[] strings : tablaSimbolos) {
+            if(strings[0].compareToIgnoreCase(id) == 0)
+                return false;
+        }
+
+        tablaSimbolos.add(new String[]{id, tipo, parametros});
+        return true;
+  }*/
+
   public Nodo raiz;
   public LinkedList<String[]> tablaSimbolos = new LinkedList();
+
   // Metodo al se llama automaticamente ante algun error sintactico
   /* public void syntax_error (Symbol s) {
     int fila = s.right;
@@ -594,6 +614,16 @@ class CUP$parser$actions {
                                           Nodo nod = new Nodo();
                                           nod.setTag("Procedure");
                                           nod.addHijo((Nodo)hijo1);
+
+                                          if (insertarSimbolo(hijo1.valor, "null", "")){
+                                            int simFun = tablaSimbolos.size() - 1;
+                                            while(simFun >= 0 && tablaSimbolos.get(simFun)[2] == ""){
+                                              tablaSimbolos.set(simFun, new String[]{tablaSimbolos.get(simFun)[0], tablaSimbolos.get(simFun)[1], hijo1.valor});
+                                              tablaSimbolos.set(tablaSimbolos.size() -1, new String[]{tablaSimbolos.get(tablaSimbolos.size() -1)[0], tablaSimbolos.get(tablaSimbolos.size() -1)[1], tablaSimbolos.get(tablaSimbolos.size() -1)[2] + ";" + tablaSimbolos.get(simFun)[0]});
+                                              simFun--;
+                                            }
+                                          }
+
                                           if(hijo2 != null){
                                             if(((Nodo)hijo2).getInfo().equals("tem")){
                                             for(int i = 0; i < ((Nodo)hijo2).hijos.size();i++){
@@ -688,6 +718,15 @@ class CUP$parser$actions {
                                                       }
 
                                                       tem.addHijo((Nodo)hijo4);
+
+                                                      if (insertarSimbolo(hijo1.valor, "null", "")){
+                                                        int simFun = tablaSimbolos.size() - 1;
+                                                        while(simFun >= 0 && tablaSimbolos.get(simFun)[2] == ""){
+                                                          tablaSimbolos.set(simFun, new String[]{tablaSimbolos.get(simFun)[0], tablaSimbolos.get(simFun)[1], hijo1.valor});
+                                                          tablaSimbolos.set(tablaSimbolos.size() -1, new String[]{tablaSimbolos.get(tablaSimbolos.size() -1)[0], tablaSimbolos.get(tablaSimbolos.size() -1)[1], tablaSimbolos.get(tablaSimbolos.size() -1)[2] + ";" + tablaSimbolos.get(simFun)[0]});
+                                                          simFun--;
+                                                        }
+                                                      }
                                                       //tem.addHijo((Nodo)hijo3);
                                                       RESULT = tem;
                                                     
@@ -929,7 +968,7 @@ class CUP$parser$actions {
 		Nodo hijo2 = (Nodo)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		 /* result = declaracion (att: arreglo = X + X2.arreglo)*/
                                     RESULT = new Nodo("Declaracion","arreglo");
-                                    tablaSimbolos.add(new String[]{hijo1.valor, "", ""});
+                                    insertarSimbolo(hijo1.valor, "", "0");
                                   
               CUP$parser$result = parser.getSymbolFactory().newSymbol("X2",6, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -944,7 +983,7 @@ class CUP$parser$actions {
 		Nodo hijo = (Nodo)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		/* result = X*/
                               RESULT = (Nodo)hijo;
-                              tablaSimbolos.add(new String[]{hijo.valor, "", ""});
+                              insertarSimbolo(hijo.valor, "", "0");
                             
               CUP$parser$result = parser.getSymbolFactory().newSymbol("X2",6, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -961,7 +1000,7 @@ class CUP$parser$actions {
                           RESULT = new Nodo("DATA TYPE",dt);
                           int sim = tablaSimbolos.size() - 1;
                           while(sim >= 0 && tablaSimbolos.get(sim)[1] == ""){
-                            tablaSimbolos.set(sim, new String[]{tablaSimbolos.get(sim)[0], dt});
+                            tablaSimbolos.set(sim, new String[]{tablaSimbolos.get(sim)[0], dt, ""});
                             sim--;
                           }
                         

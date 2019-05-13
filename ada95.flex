@@ -12,7 +12,7 @@ import java.util.*;
 
 %{
   private String currentText="";
-  public static LinkedList<String> msgErrores = new LinkedList<String>();
+  public static LinkedList<String> msgErroresLexico = new LinkedList<String>();
   public String getCurrentText(){return currentText;}
 %}
 
@@ -156,7 +156,7 @@ EXPINC = \".*
     {NUM}       {currentText=yytext(); return new Symbol(sym.NUM, yycolumn, yyline, yytext());}
     {COMMENT} {/* currentText=yytext(); return new Symbol(sym.COMMENT, yycolumn, yyline, yytext()); */}
     {EXP} {currentText=yytext(); return new Symbol(sym.EXP, yycolumn, yyline, yytext());}
-    //{EXPINC} {msgErrores.add("Error Lexico: en linea " + (yyline + 1) + ", columna " + (yycolumn + 1) + "; no se cerro la cadena'" +yytext()+"'");}
+    //{EXPINC} {msgErroresLexico.add("Error Lexico: en linea " + (yyline + 1) + ", columna " + (yycolumn + 1) + "; no se cerro la cadena'" +yytext()+"'");}
     {ABORT} {currentText=yytext(); return new Symbol(sym.ABORT, yycolumn, yyline, yytext());}
     {OPREL} {currentText=yytext(); System.out.println(yytext()); return new Symbol(sym.OPREL, yycolumn, yyline, yytext());}
     {ELSE} 	{currentText=yytext(); return new Symbol(sym.ELSE, yycolumn, yyline, yytext());}
@@ -271,7 +271,7 @@ EXPINC = \".*
     {USE} {yybegin(IMPORTS);} */
     {ID} {currentText=yytext(); return new Symbol(sym.ID, yycolumn, yyline, yytext());}
     // {plus} {currentText=yytext(); return new Symbol(SYM.id, 0, 0);}
-    . {msgErrores.add("Error Lexico: en linea " + (yyline + 1) + ", columna " + (yycolumn + 1) + "; no se reconoce: '" +yytext()+"'");}
+    . {msgErroresLexico.add("Error Lexico: en linea " + (yyline + 1) + ", columna " + (yycolumn + 1) + "; no se reconoce: '" +yytext()+"'");}
 }
 
 <STRING>{

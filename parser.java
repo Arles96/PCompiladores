@@ -5,6 +5,7 @@
 
 import java_cup.runtime.*;
 import java.util.*;
+import Nodos.*;
 import java_cup.runtime.XMLElement;
 
 /** CUP v0.11b 20160615 (GIT 4ac7450) generated parser.
@@ -454,18 +455,11 @@ public class parser extends java_cup.runtime.lr_parser {
 
 
 
-  public static LinkedList<String> msgErrores = new LinkedList<String>();
+  public static LinkedList<String> msgErroresSintactico = new LinkedList<String>();
+
+  public static LinkedList<String> msgErroresSemantico = new LinkedList<String>();
 
   public void report_error (String message, Object info) {
-    /* if (s != null) {
-      Symbol s2 = (Symbol) s;
-      int fila = s2.right;
-      int columna = s2.left;
-      String currentToken = "Hola";
-      System.out.println(message + " fila: " + fila + " columna: " + columna +
-        " token inesperado " + currentToken);
-    } */
-
     if (message.equalsIgnoreCase("Syntax error")) {
       message = "Error Sintactico";
     } else if (message.equalsIgnoreCase("Couldn't repair and continue parse")) {
@@ -483,17 +477,10 @@ public class parser extends java_cup.runtime.lr_parser {
         }
       }
     }
-    msgErrores.add(message);
+    msgErroresSintactico.add(message);
   }
 
   public void report_fatal_error (String message, Object info) {
-    /* Symbol s2 = (Symbol) s;
-    int fila = s2.right;
-    int columna = s2.left;
-    String currentToken = s2.value.toString();
-    System.out.println(message + " fila: " + fila + " columna: " + columna +
-      " token inesperado " + currentToken); */
-    /* System.out.println("Error Sintactico"); */
     report_error(message, info);
   }
 
@@ -541,6 +528,16 @@ public class parser extends java_cup.runtime.lr_parser {
     report_fatal_error("Error fatal en la Sintaxis", s);
   } */
 
+  public boolean isInteger (String value) {
+    if (value.indexOf(".") == 1) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  public Nodo raiz;
+  public LinkedList<String[]> tablaSimbolos = new LinkedList();
 
 
 /** Cup generated class to encapsulate user supplied action code.*/
@@ -1144,6 +1141,19 @@ class CUP$parser$actions {
                                           ((Nodo)hijo2).addHijo((Nodo)hijo1);
                                           if(((Nodo)hijo3).getInfo().equals("nulo")){
                                           }else{
+                                            if (hijo3.hijos.size() != 0) {
+                                              for (Nodo n: hijo3.hijos) {
+                                                for (int i = 0; i < tablaSimbolos.size(); i++) {
+                                                  String identificador = tablaSimbolos.get(i)[0];
+                                                  String tipo = tablaSimbolos.get(i)[1];
+                                                  if (identificador.equals(hijo1.valor)) {
+                                                    if (tipo.equalsIgnoreCase("Integer") && !isInteger(n.valor)) {
+                                                      System.out.println("Error Semantico");
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
                                             ((Nodo)hijo2).addHijo((Nodo)hijo3);
                                           }
                                           RESULT = (Nodo)hijo2;

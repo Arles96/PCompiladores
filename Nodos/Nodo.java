@@ -33,5 +33,4 @@ public class Nodo{
             return this.tag + ":nulo";
     }
 
-    public abstract generateCode ();
 }

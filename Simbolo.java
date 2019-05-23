@@ -40,4 +40,8 @@ public class Simbolo {
     public void setTipo(Tipo tipo) {
         this.tipo = tipo;
     }
+
+    public String toString(){
+        return id + ": " + tipo.nombre;
+    }
 }

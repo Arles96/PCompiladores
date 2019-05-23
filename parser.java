@@ -524,6 +524,7 @@ public class parser extends java_cup.runtime.lr_parser {
   }
 
   public Nodo raiz;
+  TablaSimbolos tablaFinal;
   public LinkedList<String[]> tablaSimbolos = new LinkedList();
 
 
@@ -576,6 +577,7 @@ class CUP$parser$actions {
                                           raiz = new Nodo();
                                           raiz.setTag("Nodo de inicio");
                                           raiz.addHijo(((Container)hijo).nodo);
+                                          tablaFinal = hijo.tablaMain;
                                         
               CUP$parser$result = parser.getSymbolFactory().newSymbol("A",0, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -619,7 +621,11 @@ class CUP$parser$actions {
                                           }
 
                                           nod.addHijo(((Container)hijo3).nodo);
-                                          RESULT = new Container(nod);
+
+                                          Container temp = new Container(nod);
+                                          temp.tablaMain = hijo2.tablaMain; 
+                                          System.out.println("F: " + temp.tablaMain.tabla.size());
+                                          RESULT = temp;
                                         
               CUP$parser$result = parser.getSymbolFactory().newSymbol("F",1, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -648,20 +654,39 @@ class CUP$parser$actions {
                                           Nodo tem = new Nodo();
                                           tem.setTag("tem");
                                           tem.addHijo(((Container)hijo1).nodo);
+
+                                          Container temp = new Container(tem);
                                           if(hijo2 == null){
 
-                                          }else{
-                                            if(((Container)hijo2).nodo.getInfo().equals("tem")){
+                                          } else {
+                                            if(((Container)hijo2).nodo.getInfo().equals("tem")) {
+                                              for(int i = 0; i < ((Container)hijo2).nodo.hijos.size(); i++) {
+                                                tem.addHijo(((Container)hijo2).nodo.hijos.get(i));
+                                              }
+                                              
+                                              //TODO: seguir aqui
+                                              System.out.println("antes del temp G");
+                                              temp.tablaMain = hijo2.tablaMain;
+                                              for (Simbolo sim : hijo1.tablaMain.tabla){
+                                                temp.tablaMain.addSymbol(sim);
+                                              }
+                                              System.out.println("G: " + temp.tablaMain.tabla.size());
 
-                                            for(int i = 0; i < ((Container)hijo2).nodo.hijos.size();i++){
-                                              tem.addHijo(((Container)hijo2).nodo.hijos.get(i));
+                                            } else {
+                                              tem.addHijo(((Container)hijo2).nodo);
+                                              //TODO: seguir aqui
+                                              System.out.println("antes del temp G");
+                                              temp.tablaMain = hijo2.tablaMain;
+                                              for (Simbolo sim : hijo1.tablaMain.tabla){
+                                                temp.tablaMain.addSymbol(sim);
+                                              }
+                                              System.out.println("G: " + temp.tablaMain.tabla.size());
                                             }
-                                          }else{
-                                            tem.addHijo(((Container)hijo2).nodo);
-                                          }
                                           }
 
-                                          RESULT = new Container(tem);
+                                          
+                                          
+                                          RESULT = temp;
                                         
               CUP$parser$result = parser.getSymbolFactory().newSymbol("G",2, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -712,7 +737,10 @@ class CUP$parser$actions {
                                                         }
                                                       }
                                                       //tem.addHijo((Nodo)hijo3);
-                                                      RESULT = new Container(tem);
+                                                      Container temp = new Container(tem);
+                                                      temp.tablaMain = hijo3.tablaMain;
+                                                      System.out.println("G (function): " + temp.tablaMain.tabla.size());
+                                                      RESULT = temp;
                                                     
               CUP$parser$result = parser.getSymbolFactory().newSymbol("G",2, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-10)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -934,7 +962,9 @@ class CUP$parser$actions {
 		int iright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String i = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		 /* Result = ID(att:i) */
-                          RESULT = new Container(new Nodo("ID",i));
+                          Container temp = new Container(new Nodo("ID",i));
+                          temp.tablaMain.addSymbol(new Simbolo(i, false, null));
+                          RESULT = temp;
                         
               CUP$parser$result = parser.getSymbolFactory().newSymbol("X",5, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -951,8 +981,11 @@ class CUP$parser$actions {
 		int hijo2right = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Container hijo2 = (Container)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		 /* result = declaracion (att: arreglo = X + X2.arreglo)*/
-                                    RESULT = new Container(new Nodo("Declaracion","arreglo"));
-                                    insertarSimbolo(hijo1.nodo.valor, "", "0");
+                                    Container temp = new Container(new Nodo("Declaracion","arreglo"));
+                                    temp.tablaMain = hijo2.tablaMain;
+                                    temp.tablaMain.addSymbol(hijo1.tablaMain.tabla.get(0));
+                                    System.out.println("X2: " + temp.tablaMain.tabla.size());
+                                    RESULT = temp;
                                   
               CUP$parser$result = parser.getSymbolFactory().newSymbol("X2",6, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -966,9 +999,10 @@ class CUP$parser$actions {
 		int hijoright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Container hijo = (Container)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		/* result = X*/
-                              RESULT = (Container)hijo;
-                              insertarSimbolo(hijo.nodo.valor, "", "0");
-                            
+                                    hijo.tablaMain.addSymbol(new Simbolo(hijo.nodo.valor, false, null));
+                                    System.out.println("X: " + hijo.tablaMain.tabla.size());
+                                    RESULT = (Container)hijo;
+                                  
               CUP$parser$result = parser.getSymbolFactory().newSymbol("X2",6, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -981,12 +1015,13 @@ class CUP$parser$actions {
 		int dtright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String dt = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		 /* result = dt; */
+
                           RESULT = new Container(new Nodo("DATA TYPE",dt));
-                          int sim = tablaSimbolos.size() - 1;
+                          /*int sim = tablaSimbolos.size() - 1;
                           while(sim >= 0 && tablaSimbolos.get(sim)[1] == ""){
                             tablaSimbolos.set(sim, new String[]{tablaSimbolos.get(sim)[0], dt, ""});
                             sim--;
-                          }
+                          }*/
                         
               CUP$parser$result = parser.getSymbolFactory().newSymbol("Z",7, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -1143,6 +1178,8 @@ class CUP$parser$actions {
                                             }
                                             ((Container)hijo2).nodo.addHijo(((Container)hijo3).nodo);
                                           }
+                                          hijo2.tablaMain = hijo1.tablaMain;
+                                          hijo2.tablaMain.asignarTipo(hijo2.nodo.valor);
                                           RESULT = (Container)hijo2;
                                         
               CUP$parser$result = parser.getSymbolFactory().newSymbol("C",10, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);

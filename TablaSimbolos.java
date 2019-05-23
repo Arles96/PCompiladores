@@ -1,5 +1,5 @@
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 /**
  *
@@ -7,29 +7,51 @@ import java.util.ArrayList;
  */
 public class TablaSimbolos {
     public TablaSimbolos parent;
-    public ArrayList<TablaSimbolos> children;
-    public ArrayList<Simbolo> tabla;
+    public LinkedList<TablaSimbolos> children;
+    public LinkedList<Simbolo> tabla;
 
     public TablaSimbolos() {
         this.parent = null;
-        this.children = new ArrayList();
-        this.tabla = new ArrayList();
+        this.children = new LinkedList();
+        this.tabla = new LinkedList();
     }
     
     public TablaSimbolos(TablaSimbolos padre) {
         this.parent = padre;
-        this.children = new ArrayList();
-        this.tabla = new ArrayList();
+        this.children = new LinkedList();
+        this.tabla = new LinkedList();
     }
 
-    public TablaSimbolos(TablaSimbolos padre, ArrayList<TablaSimbolos> hijos) {
+    public TablaSimbolos(TablaSimbolos padre, LinkedList<TablaSimbolos> hijos) {
         this.parent = padre;
         this.children = hijos;
-        this.tabla = new ArrayList();
+        this.tabla = new LinkedList();
     }
     
-    public void addChild(TablaSimbolos child){
+    public void addChild(TablaSimbolos child) { //TODO: agregar comprobacion
         child.parent = this;
         this.children.add(child);
+    }
+
+    public void addSymbol(Simbolo sym) {
+        this.tabla.addLast(sym);
+    }
+
+    public boolean asignarTipo(String tipo) {
+        for(int i = 0; i < tabla.size(); i++){
+            if(tabla.get(i).tipo == null) {
+                if(tipo.compareToIgnoreCase("integer") == 1)
+                    tabla.get(i).tipo = new TipoInteger();
+                else if(tipo.compareToIgnoreCase("float") == 1)
+                    tabla.get(i).tipo = new TipoFloat();
+                /*else if(tipo.compareToIgnoreCase("double"))
+                    tabla.get(i).tipo = new TipoDouble();*/
+                else if(tipo.compareToIgnoreCase("boolean") == 1)
+                    tabla.get(i).tipo = new TipoBoolean();
+                else 
+                    return false;
+            }
+        }
+        return true;
     }
 }

@@ -14,6 +14,7 @@ class Container {
 
   public Container (Nodo nodo) {
     this.nodo = nodo;
+    this.tablaMain = new TablaSimbolos();
   }
 
   public Container (TablaSimbolos tablaMain) {

@@ -8,6 +8,10 @@ procedure prueba is
     else return A;
     end if;
   end Minimo;
+  procedure prueba2 is
+  begin
+    put(2);
+  end prueba2;
 begin
   put(Minimo(1, 2));
 end prueba;

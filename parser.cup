@@ -44,28 +44,6 @@ parser code
         return true;
   }
 
-  // Metodo al se llama automaticamente ante algun error sintactico
-  /* public void syntax_error (Symbol s) {
-    int fila = s.right;
-    int columna = s.left;
-    String currentToken = s.value.toString();
-    System.out.println("Error Sintactico " + " fila: " + fila + " columna: " + columna +
-      " token inesperado " + currentToken);
-    report_error("Error Sintactico", s);
-  } */
-
-  // Metodo al que se llama en el momento en que ya no es posible una recuperacion de errores
-  /* public void unrecover_syntax_error(Symbol s) {
-    String lexema = s.value.toString();
-    int fila = s.right;
-    int columna = s.left;
-    System.out.println("!!! Error sintactico recuperado !!!!");
-    System.out.println("Lexema " + lexema);
-    System.out.println("Fila " + fila);
-    System.out.println("Columna " + columna);
-    report_fatal_error("Error fatal en la Sintaxis", s);
-  } */
-
   public boolean isInteger (String value) {
     if (value.indexOf(".") == 1) {
       return false;
@@ -77,6 +55,7 @@ parser code
   public Nodo raiz;
   TablaSimbolos tablaFinal;
   public LinkedList<String[]> tablaSimbolos = new LinkedList();
+
 :}
 
 /*Palabras reservadas*/
@@ -202,12 +181,12 @@ F   ::=  PROCEDURE X:hijo1 IS G:hijo2 CUERPO:hijo3 {: /*procedure(G)*/
 
                                           if(hijo2 != null){
                                             if(((Container)hijo2).nodo.getInfo().equals("tem")){
-                                            for(int i = 0; i < ((Container)hijo2).nodo.hijos.size();i++){
-                                              nod.addHijo(((Container)hijo2).nodo.hijos.get(i));
+                                              for(int i = 0; i < ((Container)hijo2).nodo.hijos.size();i++){
+                                                nod.addHijo(((Container)hijo2).nodo.hijos.get(i));
+                                              }
+                                            }else{
+                                              nod.addHijo(((Container)hijo2).nodo);
                                             }
-                                          }else{
-                                            nod.addHijo(((Container)hijo2).nodo);
-                                          }
                                           }
 
                                           nod.addHijo(((Container)hijo3).nodo);
@@ -256,6 +235,33 @@ G   ::=  C:hijo1 G:hijo2                {:/*result = nodo(C, G)*/
                                           
                                           
                                           RESULT = temp;
+                                        :}
+    |   PROCEDURE X:hijo1 IS G:hijo2  CUERPO:hijo3 {: /*procedure(G)*/
+                                          Nodo nod = new Nodo();
+                                          nod.setTag("Procedure");
+                                          nod.addHijo(((Container)hijo1).nodo);
+
+                                          if (insertarSimbolo(((Container)hijo1).nodo.valor, "null", "")){
+                                            int simFun = tablaSimbolos.size() - 1;
+                                            while(simFun >= 0 && tablaSimbolos.get(simFun)[2] == ""){
+                                              tablaSimbolos.set(simFun, new String[]{tablaSimbolos.get(simFun)[0], tablaSimbolos.get(simFun)[1], hijo1.nodo.valor});
+                                              tablaSimbolos.set(tablaSimbolos.size() -1, new String[]{tablaSimbolos.get(tablaSimbolos.size() -1)[0], tablaSimbolos.get(tablaSimbolos.size() -1)[1], tablaSimbolos.get(tablaSimbolos.size() -1)[2] + ";" + tablaSimbolos.get(simFun)[0]});
+                                              simFun--;
+                                            }
+                                          }
+
+                                          if(hijo2 != null){
+                                            if(((Container)hijo2).nodo.getInfo().equals("tem")){
+                                              for(int i = 0; i < ((Container)hijo2).nodo.hijos.size();i++){
+                                                nod.addHijo(((Container)hijo2).nodo.hijos.get(i));
+                                              }
+                                            }else{
+                                              nod.addHijo(((Container)hijo2).nodo);
+                                            }
+                                          }
+
+                                          nod.addHijo(((Container)hijo3).nodo);
+                                          RESULT = new Container(nod);
                                         :}
     |   FUNCTION X:hijo1 LP ARG RP RETURN Z:hijo2 IS G:hijo3  CUERPO:hijo4 G {:/*result = function(X,return(Z),H)*/
                                                       Nodo tem = new Nodo();

@@ -9,6 +9,10 @@ procedure prueba is
     end if;
   end Minimo;
   procedure prueba2 is
+    procedure prueba3 is
+    begin
+      put(2);
+    end prueba3;
   begin
     put(2);
   end prueba2;

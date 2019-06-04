@@ -610,8 +610,12 @@ class CUP$parser$actions {
                                           nod.addHijo(((Container)hijo3).nodo);
 
                                           Container temp = new Container(nod);
-                                          temp.tablaMain = hijo2.tablaMain; 
-                                          System.out.println("F: " + temp.tablaMain.tabla.size());
+                                          //Agregar simbolo de este procedimiento
+                                          //Agregar simbolos del hijo en esta tabla
+                                          //No hacer copia V
+                                          temp.tablaMain = hijo2.tablaMain;
+                                          System.out.println("F:");
+                                          System.out.println("Size: " + temp.tablaMain.children.size());
                                           RESULT = temp;
                                         
               CUP$parser$result = parser.getSymbolFactory().newSymbol("F",1, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -643,31 +647,32 @@ class CUP$parser$actions {
                                           tem.addHijo(((Container)hijo1).nodo);
 
                                           Container temp = new Container(tem);
+                                          
                                           if(hijo2 == null){
-
+                                            temp.tablaMain = hijo1.tablaMain;
                                           } else {
-                                            if(((Container)hijo2).nodo.getInfo().equals("tem")) {
+                                            if(((Container)hijo2).nodo.tag.equals("tem")) {
                                               for(int i = 0; i < ((Container)hijo2).nodo.hijos.size(); i++) {
                                                 tem.addHijo(((Container)hijo2).nodo.hijos.get(i));
                                               }
                                               
-                                              //TODO: seguir aqui
-                                              System.out.println("antes del temp G");
                                               temp.tablaMain = hijo2.tablaMain;
                                               for (Simbolo sim : hijo1.tablaMain.tabla){
                                                 temp.tablaMain.addSymbol(sim);
                                               }
-                                              System.out.println("G: " + temp.tablaMain.tabla.size());
-
-                                            } else {
+                                              
+                                            } else { //Viene de procedure o function
+                                              System.out.println("Es funcion o procedimiento");
+                                              System.out.println(((Container)hijo2).nodo.tag);
+                                              System.out.println("\t\t\thijo2.child " + hijo2.tablaMain.children.size());
+                                              System.out.println("\t\t\thijo1.child " + hijo1.tablaMain.children.size());
                                               tem.addHijo(((Container)hijo2).nodo);
+
+                                              temp.tablaMain.addChild(hijo2.tablaMain);
+                                              System.out.println("G hijo2");
+                                              System.out.println("Size: " + temp.tablaMain.children.size());
                                               //TODO: seguir aqui
-                                              System.out.println("antes del temp G");
-                                              temp.tablaMain = hijo2.tablaMain;
-                                              for (Simbolo sim : hijo1.tablaMain.tabla){
-                                                temp.tablaMain.addSymbol(sim);
-                                              }
-                                              System.out.println("G: " + temp.tablaMain.tabla.size());
+                                              //temp.tablaMain.addSymbol(hijo2.tablaMain.get(0)); //Agrega el simbolo de la funcion
                                             }
                                           }
 
@@ -706,18 +711,39 @@ class CUP$parser$actions {
                                             }
                                           }
 
+
+                                          Container temp = new Container(nod);
                                           if(hijo2 != null){
                                             if(((Container)hijo2).nodo.getInfo().equals("tem")){
                                               for(int i = 0; i < ((Container)hijo2).nodo.hijos.size();i++){
                                                 nod.addHijo(((Container)hijo2).nodo.hijos.get(i));
                                               }
+                                              temp.tablaMain = hijo2.tablaMain;
                                             }else{
                                               nod.addHijo(((Container)hijo2).nodo);
+                                              //temp.tablaMain.addSymbol(hijo2.tablaMain.tabla.get(0));
+                                              temp.tablaMain.addChild(hijo2.tablaMain);
                                             }
                                           }
 
                                           nod.addHijo(((Container)hijo3).nodo);
-                                          RESULT = new Container(nod);
+
+                                          
+                                          //temp.tablaMain = hijo2.tablaMain;
+
+                                          Simbolo thisFunction = hijo1.tablaMain.tabla.get(0);
+                                          thisFunction.setTipo(new TipoFuncion());
+                                          //TODO:agregar composicion
+                                          temp.tablaMain.addSymbolFirst(thisFunction);
+                                          
+                                          /*for(TablaSimbolos t: hijo5.tablaMain.children){
+                                            temp.tablaMain.addChild(t);*/
+
+                                          //System.out.println("Deberia ser xi o yi: ");
+                                          //System.out.print(temp.tablaMain.tabla.get(0));
+                                          System.out.println("G (procedure): " + temp.tablaMain.tabla.size());
+                                          System.out.println("\t\tSize: " + temp.tablaMain.children.size());
+                                          RESULT = temp;
                                         
               CUP$parser$result = parser.getSymbolFactory().newSymbol("G",2, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -739,6 +765,9 @@ class CUP$parser$actions {
 		int hijo4left = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
 		int hijo4right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		Container hijo4 = (Container)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
+		int hijo5left = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int hijo5right = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		Container hijo5 = (Container)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		/*result = function(X,return(Z),H)*/
                                                       Nodo tem = new Nodo();
                                                       tem.setTag("Function");
@@ -770,7 +799,17 @@ class CUP$parser$actions {
                                                       //tem.addHijo((Nodo)hijo3);
                                                       Container temp = new Container(tem);
                                                       temp.tablaMain = hijo3.tablaMain;
+                                                      //Agregando simbolo de la funcion en la tabla
+                                                      Simbolo thisFunction = hijo1.tablaMain.tabla.get(0);
+                                                      thisFunction.setTipo(new TipoFuncion(hijo2.nodo.valor));
+                                                      //TODO:agregar composicion
+
+                                                      temp.tablaMain.addSymbolFirst(thisFunction);
+                                                      for(TablaSimbolos t: hijo5.tablaMain.children){
+                                                        temp.tablaMain.addChild(t);
+                                                      }
                                                       System.out.println("G (function): " + temp.tablaMain.tabla.size());
+                                                      System.out.println("Size: " + temp.tablaMain.children.size());
                                                       RESULT = temp;
                                                     
               CUP$parser$result = parser.getSymbolFactory().newSymbol("G",2, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-10)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -1030,8 +1069,6 @@ class CUP$parser$actions {
 		int hijoright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Container hijo = (Container)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		/* result = X*/
-                                    hijo.tablaMain.addSymbol(new Simbolo(hijo.nodo.valor, false, null));
-                                    System.out.println("X: " + hijo.tablaMain.tabla.size());
                                     RESULT = (Container)hijo;
                                   
               CUP$parser$result = parser.getSymbolFactory().newSymbol("X2",6, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -1211,6 +1248,13 @@ class CUP$parser$actions {
                                           }
                                           hijo2.tablaMain = hijo1.tablaMain;
                                           hijo2.tablaMain.asignarTipo(hijo2.nodo.valor);
+
+                                          /*System.out.println("Imprimiendo en C");
+                                          for(Simbolo sim : hijo2.tablaMain.tabla){
+                                            System.out.println(sim.id);
+                                          }
+                                          System.out.println("fin en C");*/
+
                                           RESULT = (Container)hijo2;
                                         
               CUP$parser$result = parser.getSymbolFactory().newSymbol("C",10, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);

@@ -48,4 +48,8 @@ public abstract class Tipo {
     public void addComposicion(Tipo composicion) {
         this.composicion.add(composicion);
     }
+
+    public String toString(){
+        return this.nombre;
+    }
 }

@@ -42,6 +42,6 @@ public class Simbolo {
     }
 
     public String toString(){
-        return id + ": " + tipo.nombre;
+        return id + ": " + ((tipo == null)?"null":tipo);
     }
 }

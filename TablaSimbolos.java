@@ -37,16 +37,21 @@ public class TablaSimbolos {
         this.tabla.addLast(sym);
     }
 
+    public void addSymbolFirst(Simbolo sym) {
+        this.tabla.addFirst(sym);
+    }
+
     public boolean asignarTipo(String tipo) {
         for(int i = 0; i < tabla.size(); i++){
             if(tabla.get(i).tipo == null) {
-                if(tipo.compareToIgnoreCase("integer") == 1)
+                if(tipo.compareToIgnoreCase("integer") == 0){
                     tabla.get(i).tipo = new TipoInteger();
-                else if(tipo.compareToIgnoreCase("float") == 1)
+                }
+                else if(tipo.compareToIgnoreCase("float") == 0)
                     tabla.get(i).tipo = new TipoFloat();
                 /*else if(tipo.compareToIgnoreCase("double"))
                     tabla.get(i).tipo = new TipoDouble();*/
-                else if(tipo.compareToIgnoreCase("boolean") == 1)
+                else if(tipo.compareToIgnoreCase("boolean") == 0)
                     tabla.get(i).tipo = new TipoBoolean();
                 else 
                     return false;

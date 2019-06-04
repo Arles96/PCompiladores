@@ -18,15 +18,14 @@ public class Main {
         }
       } else {
         printTree(p.raiz, 0);
-        System.out.println("Imprimiendo Tabla: ");
-        System.out.println(p.tablaFinal.tabla.size());
-        System.out.println(p.tablaFinal.tabla.get(0).id);
-        System.out.println(p.tablaFinal.tabla.get(1).id);
-        System.out.println(p.tablaFinal.tabla.get(2).id);
-        /*System.out.println(p.tablaFinal.tabla.get(0).id);
-        System.out.println(p.tablaFinal.tabla.get(1).id);
-        System.out.println(p.tablaFinal.tabla.get(2).id);*/
-        // printTabla(p.tablaFinal, 0);
+        printTabla(p.tablaFinal, 0);
+        System.out.println("children: " + p.tablaFinal.children.size());
+        /*System.out.println("Imprimiendo Tabla: ");
+        for (Simbolo var : p.tablaFinal.tabla) {
+          System.out.println(var.id);  
+        }*/
+        
+
         /*System.out.println("Tabla de simbolos");
         for(int i = 0; i < p.tablaSimbolos.size(); i++){
           for(int j = 0; j < p.tablaSimbolos.get(i).length; j++){
@@ -66,10 +65,10 @@ public class Main {
   public static void printTabla(TablaSimbolos tabla, int nivel){
     int tem = nivel;
 
-    for(int i=0;i<nivel;i++){
-      System.out.print("-");
-    }
     for(int i = 0; i < tabla.tabla.size(); i++){
+      for(int j = 0;j < nivel; j++){
+        System.out.print(" ");
+      }
       System.out.println(tabla.tabla.get(i));
     }
 

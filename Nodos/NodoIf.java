@@ -2,6 +2,8 @@ package Nodos;
 
 class NodoIf extends Nodo {
 
+  public NodoExp expresion;
+
   public NodoIf () {}
 
   public NodoIf (String tag, String valor) {

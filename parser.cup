@@ -155,6 +155,9 @@ non terminal String P1;
 
 non terminal Container CUERPO;
 
+/* non terminales de Argumentos de funciones */
+non terminal Container ARGFUC;
+
 start with A;
 
 /* Procedimientos y Funciones */
@@ -162,10 +165,9 @@ A   ::=  F:hijo                         {:/*A.root = F*/
                                           raiz = new Nodo();
                                           raiz.setTag("Nodo de inicio");
                                           raiz.addHijo(((Container)hijo).nodo);
-                                          tablaFinal = hijo.tablaMain;
                                         :}
     ;
-F   ::=  PROCEDURE X:hijo1 IS G:hijo2 CUERPO:hijo3 {: /*procedure(G)*/
+F   ::=  PROCEDURE X:hijo1 IS G:hijo2  CUERPO:hijo3 {: /*procedure(G)*/
                                           Nodo nod = new Nodo();
                                           nod.setTag("Procedure");
                                           nod.addHijo(((Container)hijo1).nodo);
@@ -228,15 +230,16 @@ G   ::=  C:hijo1 G:hijo2                {:/*result = nodo(C, G)*/
                                             }
                                           }
 
-                                          
-                                          
-                                          RESULT = temp;
+                                          RESULT = new Container(tem);
                                         :}
-    |   PROCEDURE X:hijo1 IS G:hijo2  CUERPO:hijo3 {: /*procedure(G)*/
-                                          Nodo nod = new Nodo();
+    |   PROCEDURE X:hijo1 ARGFUC:hijo6 IS G:hijo2  CUERPO:hijo3 G:hijo5 {: /*procedure(G)*/
+                                          Nodo temporal = new Nodo("tem");
+                                          Nodo nod = new Nodo(); // nodo para el procedimiento
                                           nod.setTag("Procedure");
                                           nod.addHijo(((Container)hijo1).nodo);
-
+                                          if (hijo6 != null) {
+                                            nod.addHijo(hijo6.nodo);
+                                          }
                                           if (insertarSimbolo(((Container)hijo1).nodo.valor, "null", "")){
                                             int simFun = tablaSimbolos.size() - 1;
                                             while(simFun >= 0 && tablaSimbolos.get(simFun)[2] == ""){
@@ -247,7 +250,7 @@ G   ::=  C:hijo1 G:hijo2                {:/*result = nodo(C, G)*/
                                           }
 
 
-                                          Container temp = new Container(nod);
+                                          Container temp = new Container(temporal);
                                           if(hijo2 != null){
                                             if(((Container)hijo2).nodo.getInfo().equals("tem")){
                                               for(int i = 0; i < ((Container)hijo2).nodo.hijos.size();i++){
@@ -260,9 +263,18 @@ G   ::=  C:hijo1 G:hijo2                {:/*result = nodo(C, G)*/
                                               temp.tablaMain.addChild(hijo2.tablaMain);
                                             }
                                           }
-
                                           nod.addHijo(((Container)hijo3).nodo);
 
+                                          temporal.addHijo(nod);
+                                          if (hijo5 != null) {
+                                            if (hijo5.nodo.getInfo().equals("tem")) {
+                                              for (int i = 0; i < hijo5.nodo.hijos.size(); i++) {
+                                                temporal.addHijo(hijo5.nodo.hijos.get(i));
+                                              }
+                                            } else {
+                                              temporal.addHijo(hijo5.nodo);
+                                            }
+                                          }
                                           
                                           //temp.tablaMain = hijo2.tablaMain;
 
@@ -280,10 +292,14 @@ G   ::=  C:hijo1 G:hijo2                {:/*result = nodo(C, G)*/
                                           System.out.println("\t\tSize: " + temp.tablaMain.children.size());
                                           RESULT = temp;
                                         :}
-    |   FUNCTION X:hijo1 LP ARG RP RETURN Z:hijo2 IS G:hijo3  CUERPO:hijo4 G:hijo5 {:/*result = function(X,return(Z),H)*/
-                                                      Nodo tem = new Nodo();
+    |   FUNCTION X:hijo1 ARGFUC:hijo6 RETURN Z:hijo2 IS G:hijo3  CUERPO:hijo4 G:hijo5 {:/*result = function(X,return(Z),H)*/
+                                                      Nodo temporal = new Nodo("tem");// padre
+                                                      Nodo tem = new Nodo(); //  tem para la funcion
                                                       tem.setTag("Function");
                                                       tem.addHijo(((Container)hijo1).nodo);
+                                                      if (hijo6 != null) {
+                                                        tem.addHijo(hijo6.nodo);
+                                                      }
                                                       Nodo ret = new Nodo();
                                                       ret.setTag("Return");
                                                       ret.addHijo(((Container)hijo2).nodo);
@@ -309,7 +325,18 @@ G   ::=  C:hijo1 G:hijo2                {:/*result = nodo(C, G)*/
                                                         }
                                                       }
                                                       //tem.addHijo((Nodo)hijo3);
-                                                      Container temp = new Container(tem);
+                                                      temporal.addHijo(tem);
+                                                      if (hijo5 != null) {
+                                                        if (hijo5.nodo.getInfo().equals("tem")) {
+                                                          for(int i = 0; i < hijo5.nodo.hijos.size();i++){
+                                                            temporal.addHijo(hijo5.nodo.hijos.get(i));
+                                                          }
+                                                        } else {
+                                                          temporal.addHijo(hijo5.nodo);
+                                                        }
+                                                      }
+
+                                                      Container temp = new Container(temporal);
                                                       temp.tablaMain = hijo3.tablaMain;
                                                       //Agregando simbolo de la funcion en la tabla
                                                       Simbolo thisFunction = hijo1.tablaMain.tabla.get(0);
@@ -408,37 +435,45 @@ I   ::=  L:hijo1 I:hijo2                {:
     |   error I                         {: :}
     ;
 
+/* Argumentos de funciones y procedimientos */
+ARGFUC  ::=   LP ARG:hijo RP {:
+                RESULT = hijo;
+              :}
+        |     {: RESULT = null; :}
+        ;
+
 /* Contenedores de terminales id*/
 X   ::=  ID:i           {: /* Result = ID(att:i) */
-                          Container temp = new Container(new Nodo("ID",i));
-                          temp.tablaMain.addSymbol(new Simbolo(i, false, null));
-                          RESULT = temp;
+                          RESULT = new Container(new Nodo("ID",i));
                         :}
     ;
-
-//TODO: Deberia de guardar todo lo de X en X2
-
 X2  ::= X:hijo1 COMA X2:hijo2     {: /* result = declaracion (att: arreglo = X + X2.arreglo)*/
-                                    Container temp = new Container(new Nodo("Declaracion","arreglo"));
+                                    RESULT = (Container)hijo;
+                                    Nodo tempN = new Nodo("Declaracion", "Variables");
+                                    Container temp = new Container(tempN);
+
+                                    tempN.addHijo(hijo1.nodo);
+                                    tempN.addHijo(hijo2.nodo);
+                                    
                                     temp.tablaMain = hijo2.tablaMain;
                                     temp.tablaMain.addSymbol(hijo1.tablaMain.tabla.get(0));
                                     System.out.println("X2: " + temp.tablaMain.tabla.size());
                                     RESULT = temp;
                                   :}
-    |   X:hijo                    {:/* result = X*/
-                                    RESULT = (Container)hijo;
-                                  :}
+    |   X:hijo              {:/* result = X*/
+                              RESULT = (Container)hijo;
+                              insertarSimbolo(hijo.nodo.valor, "", "0");
+                            :}
     ;
 
 /* Contenedores de tipos de datos */
 Z   ::=  DATATYPES:dt   {: /* result = dt; */
-
                           RESULT = new Container(new Nodo("DATA TYPE",dt));
-                          /*int sim = tablaSimbolos.size() - 1;
+                          int sim = tablaSimbolos.size() - 1;
                           while(sim >= 0 && tablaSimbolos.get(sim)[1] == ""){
                             tablaSimbolos.set(sim, new String[]{tablaSimbolos.get(sim)[0], dt, ""});
                             sim--;
-                          }*/
+                          }
                         :}
     ;
 

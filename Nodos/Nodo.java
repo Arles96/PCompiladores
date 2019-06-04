@@ -15,6 +15,11 @@ public class Nodo{
         this.tag = tag;
         this.valor = valor;
     }
+
+    public Nodo (String tag) {
+      this.tag = tag;
+    }
+
     public void addHijo(Nodo n){
         hijos.add(n);
     }

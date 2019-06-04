@@ -154,6 +154,9 @@ non terminal String P1;
 
 non terminal Container CUERPO;
 
+/* non terminales de Argumentos de funciones */
+non terminal Container ARGFUC;
+
 start with A;
 
 /* Procedimientos y Funciones */
@@ -211,11 +214,14 @@ G   ::=  C:hijo1 G:hijo2                {:/*result = nodo(C, G)*/
 
                                           RESULT = new Container(tem);
                                         :}
-    |   PROCEDURE X:hijo1 IS G:hijo2  CUERPO:hijo3 {: /*procedure(G)*/
-                                          Nodo nod = new Nodo();
+    |   PROCEDURE X:hijo1 ARGFUC:hijo6 IS G:hijo2  CUERPO:hijo3 G:hijo5 {: /*procedure(G)*/
+                                          Nodo temporal = new Nodo("tem");
+                                          Nodo nod = new Nodo(); // nodo para el procedimiento
                                           nod.setTag("Procedure");
                                           nod.addHijo(((Container)hijo1).nodo);
-
+                                          if (hijo6 != null) {
+                                            nod.addHijo(hijo6.nodo);
+                                          }
                                           if (insertarSimbolo(((Container)hijo1).nodo.valor, "null", "")){
                                             int simFun = tablaSimbolos.size() - 1;
                                             while(simFun >= 0 && tablaSimbolos.get(simFun)[2] == ""){
@@ -234,14 +240,27 @@ G   ::=  C:hijo1 G:hijo2                {:/*result = nodo(C, G)*/
                                               nod.addHijo(((Container)hijo2).nodo);
                                             }
                                           }
-
                                           nod.addHijo(((Container)hijo3).nodo);
-                                          RESULT = new Container(nod);
+                                          temporal.addHijo(nod);
+                                          if (hijo5 != null) {
+                                            if (hijo5.nodo.getInfo().equals("tem")) {
+                                              for (int i = 0; i < hijo5.nodo.hijos.size(); i++) {
+                                                temporal.addHijo(hijo5.nodo.hijos.get(i));
+                                              }
+                                            } else {
+                                              temporal.addHijo(hijo5.nodo);
+                                            }
+                                          }
+                                          RESULT = new Container(temporal);
                                         :}
-    |   FUNCTION X:hijo1 LP ARG RP RETURN Z:hijo2 IS G:hijo3  CUERPO:hijo4 G {:/*result = function(X,return(Z),H)*/
-                                                      Nodo tem = new Nodo();
+    |   FUNCTION X:hijo1 ARGFUC:hijo6 RETURN Z:hijo2 IS G:hijo3  CUERPO:hijo4 G:hijo5 {:/*result = function(X,return(Z),H)*/
+                                                      Nodo temporal = new Nodo("tem");// padre
+                                                      Nodo tem = new Nodo(); //  tem para la funcion
                                                       tem.setTag("Function");
                                                       tem.addHijo(((Container)hijo1).nodo);
+                                                      if (hijo6 != null) {
+                                                        tem.addHijo(hijo6.nodo);
+                                                      }
                                                       Nodo ret = new Nodo();
                                                       ret.setTag("Return");
                                                       ret.addHijo(((Container)hijo2).nodo);
@@ -267,7 +286,17 @@ G   ::=  C:hijo1 G:hijo2                {:/*result = nodo(C, G)*/
                                                         }
                                                       }
                                                       //tem.addHijo((Nodo)hijo3);
-                                                      RESULT = new Container(tem);
+                                                      temporal.addHijo(tem);
+                                                      if (hijo5 != null) {
+                                                        if (hijo5.nodo.getInfo().equals("tem")) {
+                                                          for(int i = 0; i < hijo5.nodo.hijos.size();i++){
+                                                            temporal.addHijo(hijo5.nodo.hijos.get(i));
+                                                          }
+                                                        } else {
+                                                          temporal.addHijo(hijo5.nodo);
+                                                        }
+                                                      }
+                                                      RESULT = new Container(temporal);
                                                     :}
     |                                               {:RESULT = null;:}
     | error G
@@ -353,13 +382,23 @@ I   ::=  L:hijo1 I:hijo2                {:
     |   error I                         {: :}
     ;
 
+/* Argumentos de funciones y procedimientos */
+ARGFUC  ::=   LP ARG:hijo RP {:
+                RESULT = hijo;
+              :}
+        |     {: RESULT = null; :}
+        ;
+
 /* Contenedores de terminales id*/
 X   ::=  ID:i           {: /* Result = ID(att:i) */
                           RESULT = new Container(new Nodo("ID",i));
                         :}
     ;
 X2  ::= X:hijo1 COMA X2:hijo2     {: /* result = declaracion (att: arreglo = X + X2.arreglo)*/
-                                    RESULT = new Container(new Nodo("Declaracion","arreglo"));
+                                    Nodo temp = new Nodo("Declaracion", "Variables");
+                                    temp.addHijo(hijo1.nodo);
+                                    temp.addHijo(hijo2.nodo);
+                                    RESULT = new Container(temp);
                                     insertarSimbolo(hijo1.nodo.valor, "", "0");
                                   :}
     |   X:hijo              {:/* result = X*/

@@ -19,7 +19,7 @@ public class Main {
       } else {
         printTree(p.raiz, 0);
         printTabla(p.tablaFinal, 0);
-        System.out.println("children: " + p.tablaFinal.children.size());
+        //System.out.println("children: " + p.tablaFinal.children.size());
         /*System.out.println("Imprimiendo Tabla: ");
         for (Simbolo var : p.tablaFinal.tabla) {
           System.out.println(var.id);  
@@ -64,6 +64,9 @@ public class Main {
 
   public static void printTabla(TablaSimbolos tabla, int nivel){
     int tem = nivel;
+
+    if(tabla == null)
+      return;
 
     for(int i = 0; i < tabla.tabla.size(); i++){
       for(int j = 0;j < nivel; j++){

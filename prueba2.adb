@@ -1,14 +1,14 @@
 procedure prueba is
-x,y:boolean;
-z:Integer := 2.0;
-function Minimo (A, B: String) return Integer is
-  xi:Integer;
-  begin
-    y := 4;
-    if A > B then return B;
-    else return A;
-    end if;
-end Minimo;
+  a:Integer;
+  
+  procedure prueba3 is
+    xzi,yi:boolean;
+    zi:Integer := 2.0;
+    begin
+      put(2);
+    end prueba3;
+
+  x:Integer;
 begin
   put(Minimo(1, 2));
 end prueba;

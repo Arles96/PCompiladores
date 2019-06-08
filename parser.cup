@@ -35,15 +35,6 @@ parser code
     report_error(message, info);
   }
 
-  public boolean insertarSimbolo(String id, String tipo, String ambito){
-        for (String[] strings : tablaSimbolos) {
-            if(strings[0].compareToIgnoreCase(id) == 0)
-                return false;
-        }
-        tablaSimbolos.add(new String[]{id, tipo, ambito});
-        return true;
-  }
-
   public boolean isInteger (String value) {
     if (value.indexOf(".") == 1) {
       return false;
@@ -165,6 +156,7 @@ A   ::=  F:hijo                         {:/*A.root = F*/
                                           raiz = new Nodo();
                                           raiz.setTag("Nodo de inicio");
                                           raiz.addHijo(((Container)hijo).nodo);
+                                          tablaFinal = hijo.tablaMain;
                                         :}
     ;
 F   ::=  PROCEDURE X:hijo1 IS G:hijo2  CUERPO:hijo3 {: /*procedure(G)*/
@@ -172,25 +164,36 @@ F   ::=  PROCEDURE X:hijo1 IS G:hijo2  CUERPO:hijo3 {: /*procedure(G)*/
                                           nod.setTag("Procedure");
                                           nod.addHijo(((Container)hijo1).nodo);
 
+                                          Container temp = new Container(nod);
+
                                           if(hijo2 != null){
-                                            if(((Container)hijo2).nodo.getInfo().equals("tem")){
+                                            if(((Container)hijo2).nodo.tag.equals("tem")){
                                               for(int i = 0; i < ((Container)hijo2).nodo.hijos.size();i++){
                                                 nod.addHijo(((Container)hijo2).nodo.hijos.get(i));
                                               }
+
+                                              //Agregar simbolo de este procedimiento
+                                              //Agregar simbolos del hijo en esta tabla
+                                              //No hacer copia V
+                                              temp.tablaMain = hijo2.tablaMain;
+                                              System.out.println("F (lista):");
+                                              System.out.println("Size: " + temp.tablaMain.children.size());
                                             }else{
                                               nod.addHijo(((Container)hijo2).nodo);
+
+                                              //agregando procedimiento a hijo
+                                              temp.tablaMain.addSymbol(hijo2.tablaMain.tabla.get(0));
+                                              temp.tablaMain.addChild(hijo2.tablaMain);
                                             }
                                           }
 
+                                          Simbolo thisFunction = hijo1.tablaMain.tabla.get(0);
+                                          thisFunction.setTipo(new TipoFuncion());
+                                          //TODO:agregar composicion
+                                          temp.tablaMain.addSymbolFirst(thisFunction);
+
                                           nod.addHijo(((Container)hijo3).nodo);
 
-                                          Container temp = new Container(nod);
-                                          //Agregar simbolo de este procedimiento
-                                          //Agregar simbolos del hijo en esta tabla
-                                          //No hacer copia V
-                                          temp.tablaMain = hijo2.tablaMain;
-                                          System.out.println("F:");
-                                          System.out.println("Size: " + temp.tablaMain.children.size());
                                           RESULT = temp;
                                         :}
     | error G
@@ -223,32 +226,24 @@ G   ::=  C:hijo1 G:hijo2                {:/*result = nodo(C, G)*/
                                               tem.addHijo(((Container)hijo2).nodo);
 
                                               temp.tablaMain.addChild(hijo2.tablaMain);
+                                              //temp.tablaMain.addSymbol(hijo2.tablaMain.tabla.get(0));
                                               System.out.println("G hijo2");
                                               System.out.println("Size: " + temp.tablaMain.children.size());
-                                              //TODO: seguir aqui
                                               //temp.tablaMain.addSymbol(hijo2.tablaMain.get(0)); //Agrega el simbolo de la funcion
                                             }
                                           }
 
-                                          RESULT = new Container(tem);
+                                          RESULT = temp;
                                         :}
     |   PROCEDURE X:hijo1 ARGFUC:hijo6 IS G:hijo2  CUERPO:hijo3 G:hijo5 {: /*procedure(G)*/
                                           Nodo temporal = new Nodo("tem");
                                           Nodo nod = new Nodo(); // nodo para el procedimiento
+
                                           nod.setTag("Procedure");
                                           nod.addHijo(((Container)hijo1).nodo);
                                           if (hijo6 != null) {
                                             nod.addHijo(hijo6.nodo);
                                           }
-                                          if (insertarSimbolo(((Container)hijo1).nodo.valor, "null", "")){
-                                            int simFun = tablaSimbolos.size() - 1;
-                                            while(simFun >= 0 && tablaSimbolos.get(simFun)[2] == ""){
-                                              tablaSimbolos.set(simFun, new String[]{tablaSimbolos.get(simFun)[0], tablaSimbolos.get(simFun)[1], hijo1.nodo.valor});
-                                              tablaSimbolos.set(tablaSimbolos.size() -1, new String[]{tablaSimbolos.get(tablaSimbolos.size() -1)[0], tablaSimbolos.get(tablaSimbolos.size() -1)[1], tablaSimbolos.get(tablaSimbolos.size() -1)[2] + ";" + tablaSimbolos.get(simFun)[0]});
-                                              simFun--;
-                                            }
-                                          }
-
 
                                           Container temp = new Container(temporal);
                                           if(hijo2 != null){
@@ -259,7 +254,7 @@ G   ::=  C:hijo1 G:hijo2                {:/*result = nodo(C, G)*/
                                               temp.tablaMain = hijo2.tablaMain;
                                             }else{
                                               nod.addHijo(((Container)hijo2).nodo);
-                                              //temp.tablaMain.addSymbol(hijo2.tablaMain.tabla.get(0));
+                                              //TODO: temp.tablaMain.addSymbol(hijo2.tablaMain.tabla.get(0));
                                               temp.tablaMain.addChild(hijo2.tablaMain);
                                             }
                                           }
@@ -271,9 +266,18 @@ G   ::=  C:hijo1 G:hijo2                {:/*result = nodo(C, G)*/
                                               for (int i = 0; i < hijo5.nodo.hijos.size(); i++) {
                                                 temporal.addHijo(hijo5.nodo.hijos.get(i));
                                               }
+
+                                              for(Simbolo sim : hijo5.tablaMain.tabla){
+                                                temp.tablaMain.tabla.addSymbol(sim);
+                                              }
                                             } else {
                                               temporal.addHijo(hijo5.nodo);
+
+                                              hijo5.tablaMain.parent.addChild(temp.tablaMain);
                                             }
+                                          }else{
+                                            TablaSimbolos padre = new TablaSimbolos();
+                                            padre.addChild(temp.tablaMain);
                                           }
                                           
                                           //temp.tablaMain = hijo2.tablaMain;
@@ -283,11 +287,10 @@ G   ::=  C:hijo1 G:hijo2                {:/*result = nodo(C, G)*/
                                           //TODO:agregar composicion
                                           temp.tablaMain.addSymbolFirst(thisFunction);
                                           
+                                          
                                           /*for(TablaSimbolos t: hijo5.tablaMain.children){
                                             temp.tablaMain.addChild(t);*/
 
-                                          //System.out.println("Deberia ser xi o yi: ");
-                                          //System.out.print(temp.tablaMain.tabla.get(0));
                                           System.out.println("G (procedure): " + temp.tablaMain.tabla.size());
                                           System.out.println("\t\tSize: " + temp.tablaMain.children.size());
                                           RESULT = temp;
@@ -311,19 +314,11 @@ G   ::=  C:hijo1 G:hijo2                {:/*result = nodo(C, G)*/
                                                           }
                                                         }else{
                                                         tem.addHijo(((Container)hijo3).nodo);
-                                                      }
+                                                        }
                                                       }
 
                                                       tem.addHijo(((Container)hijo4).nodo);
 
-                                                      if (insertarSimbolo(hijo1.nodo.valor, "null", "")){
-                                                        int simFun = tablaSimbolos.size() - 1;
-                                                        while(simFun >= 0 && tablaSimbolos.get(simFun)[2] == ""){
-                                                          tablaSimbolos.set(simFun, new String[]{tablaSimbolos.get(simFun)[0], tablaSimbolos.get(simFun)[1], hijo1.nodo.valor});
-                                                          tablaSimbolos.set(tablaSimbolos.size() -1, new String[]{tablaSimbolos.get(tablaSimbolos.size() -1)[0], tablaSimbolos.get(tablaSimbolos.size() -1)[1], tablaSimbolos.get(tablaSimbolos.size() -1)[2] + ";" + tablaSimbolos.get(simFun)[0]});
-                                                          simFun--;
-                                                        }
-                                                      }
                                                       //tem.addHijo((Nodo)hijo3);
                                                       temporal.addHijo(tem);
                                                       if (hijo5 != null) {
@@ -444,11 +439,12 @@ ARGFUC  ::=   LP ARG:hijo RP {:
 
 /* Contenedores de terminales id*/
 X   ::=  ID:i           {: /* Result = ID(att:i) */
-                          RESULT = new Container(new Nodo("ID",i));
+                          Container temp = new Container(new Nodo("ID",i));
+                          temp.tablaMain.addSymbol(new Simbolo(i, false, null));
+                          RESULT = temp;
                         :}
     ;
 X2  ::= X:hijo1 COMA X2:hijo2     {: /* result = declaracion (att: arreglo = X + X2.arreglo)*/
-                                    RESULT = (Container)hijo;
                                     Nodo tempN = new Nodo("Declaracion", "Variables");
                                     Container temp = new Container(tempN);
 
@@ -462,18 +458,12 @@ X2  ::= X:hijo1 COMA X2:hijo2     {: /* result = declaracion (att: arreglo = X +
                                   :}
     |   X:hijo              {:/* result = X*/
                               RESULT = (Container)hijo;
-                              insertarSimbolo(hijo.nodo.valor, "", "0");
                             :}
     ;
 
 /* Contenedores de tipos de datos */
 Z   ::=  DATATYPES:dt   {: /* result = dt; */
                           RESULT = new Container(new Nodo("DATA TYPE",dt));
-                          int sim = tablaSimbolos.size() - 1;
-                          while(sim >= 0 && tablaSimbolos.get(sim)[1] == ""){
-                            tablaSimbolos.set(sim, new String[]{tablaSimbolos.get(sim)[0], dt, ""});
-                            sim--;
-                          }
                         :}
     ;
 

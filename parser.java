@@ -559,7 +559,7 @@ class CUP$parser$actions {
 		Container hijo = (Container)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		/*A.root = F*/
                                           raiz = new Nodo();
-                                          raiz.setTag("Nodo de inicio");
+                                          raiz.setTag(TagAbstract.INICIO);
                                           raiz.addHijo(((Container)hijo).nodo);
                                           tablaFinal = hijo.tablaMain;
                                         
@@ -582,13 +582,13 @@ class CUP$parser$actions {
 		Container hijo3 = (Container)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		 /*procedure(G)*/
                                           Nodo nod = new Nodo();
-                                          nod.setTag("Procedure");
+                                          nod.setTag(TagAbstract.PROCEDURE);
                                           nod.addHijo(((Container)hijo1).nodo);
 
                                           Container temp = new Container(nod);
 
                                           if(hijo2 != null){
-                                            if(((Container)hijo2).nodo.tag.equals("tem")){
+                                            if(((Container)hijo2).nodo.tag.equals(TagAbstract.TEM)){
                                               for(int i = 0; i < ((Container)hijo2).nodo.hijos.size();i++){
                                                 nod.addHijo(((Container)hijo2).nodo.hijos.get(i));
                                               }
@@ -642,24 +642,24 @@ class CUP$parser$actions {
 		Container hijo2 = (Container)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		/*result = nodo(C, G)*/
                                           Nodo tem = new Nodo();
-                                          tem.setTag("tem");
+                                          tem.setTag(TagAbstract.TEM);
                                           tem.addHijo(((Container)hijo1).nodo);
 
                                           Container temp = new Container(tem);
-                                          
+
                                           if(hijo2 == null){
                                             temp.tablaMain = hijo1.tablaMain;
                                           } else {
-                                            if(((Container)hijo2).nodo.tag.equals("tem")) {
+                                            if(((Container)hijo2).nodo.tag.equals(TagAbstract.TEM)) {
                                               for(int i = 0; i < ((Container)hijo2).nodo.hijos.size(); i++) {
                                                 tem.addHijo(((Container)hijo2).nodo.hijos.get(i));
                                               }
-                                              
+
                                               temp.tablaMain = hijo2.tablaMain;
                                               for (Simbolo sim : hijo1.tablaMain.tabla){
                                                 temp.tablaMain.addSymbol(sim);
                                               }
-                                              
+
                                             } else { //Viene de procedure o function
                                               System.out.println("Es funcion o procedimiento");
                                               System.out.println(((Container)hijo2).nodo.tag);
@@ -701,10 +701,10 @@ class CUP$parser$actions {
 		int hijo5right = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Container hijo5 = (Container)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		 /*procedure(G)*/
-                                          Nodo temporal = new Nodo("tem");
+                                          Nodo temporal = new Nodo(TagAbstract.TEM);
                                           Nodo nod = new Nodo(); // nodo para el procedimiento
 
-                                          nod.setTag("Procedure");
+                                          nod.setTag(TagAbstract.PROCEDURE);
                                           nod.addHijo(((Container)hijo1).nodo);
                                           if (hijo6 != null) {
                                             nod.addHijo(hijo6.nodo);
@@ -712,7 +712,7 @@ class CUP$parser$actions {
 
                                           Container temp = new Container(temporal);
                                           if(hijo2 != null){
-                                            if(((Container)hijo2).nodo.getInfo().equals("tem")){
+                                            if(((Container)hijo2).nodo.getInfo().equals(TagAbstract.TEM)){
                                               for(int i = 0; i < ((Container)hijo2).nodo.hijos.size();i++){
                                                 nod.addHijo(((Container)hijo2).nodo.hijos.get(i));
                                               }
@@ -727,7 +727,7 @@ class CUP$parser$actions {
 
                                           temporal.addHijo(nod);
                                           if (hijo5 != null) {
-                                            if (hijo5.nodo.getInfo().equals("tem")) {
+                                            if (hijo5.nodo.getInfo().equals(TagAbstract.TEM)) {
                                               for (int i = 0; i < hijo5.nodo.hijos.size(); i++) {
                                                 temporal.addHijo(hijo5.nodo.hijos.get(i));
                                               }
@@ -744,15 +744,15 @@ class CUP$parser$actions {
                                             TablaSimbolos padre = new TablaSimbolos();
                                             padre.addChild(temp.tablaMain);
                                           }
-                                          
+
                                           //temp.tablaMain = hijo2.tablaMain;
 
                                           Simbolo thisFunction = hijo1.tablaMain.tabla.get(0);
                                           thisFunction.setTipo(new TipoFuncion());
                                           //TODO:agregar composicion
                                           temp.tablaMain.addSymbolFirst(thisFunction);
-                                          
-                                          
+
+
                                           /*for(TablaSimbolos t: hijo5.tablaMain.children){
                                             temp.tablaMain.addChild(t);*/
 
@@ -787,19 +787,19 @@ class CUP$parser$actions {
 		int hijo5right = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Container hijo5 = (Container)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		/*result = function(X,return(Z),H)*/
-                                                      Nodo temporal = new Nodo("tem");// padre
+                                                      Nodo temporal = new Nodo(TagAbstract.TEM);// padre
                                                       Nodo tem = new Nodo(); //  tem para la funcion
-                                                      tem.setTag("Function");
+                                                      tem.setTag(TagAbstract.FUNCTION);
                                                       tem.addHijo(((Container)hijo1).nodo);
                                                       if (hijo6 != null) {
                                                         tem.addHijo(hijo6.nodo);
                                                       }
                                                       Nodo ret = new Nodo();
-                                                      ret.setTag("Return");
+                                                      ret.setTag(TagAbstract.RETURN);
                                                       ret.addHijo(((Container)hijo2).nodo);
                                                       tem.addHijo(ret);
                                                       if(hijo3 != null){
-                                                        if(((Container)hijo3).nodo.getInfo().equals("tem")){
+                                                        if(((Container)hijo3).nodo.getInfo().equals(TagAbstract.TEM)){
                                                           for(int i = 0; i < ((Container)hijo3).nodo.hijos.size();i++){
                                                             tem.addHijo(((Container)hijo3).nodo.hijos.get(i));
                                                           }
@@ -813,7 +813,7 @@ class CUP$parser$actions {
                                                       //tem.addHijo((Nodo)hijo3);
                                                       temporal.addHijo(tem);
                                                       if (hijo5 != null) {
-                                                        if (hijo5.nodo.getInfo().equals("tem")) {
+                                                        if (hijo5.nodo.getInfo().equals(TagAbstract.TEM)) {
                                                           for(int i = 0; i < hijo5.nodo.hijos.size();i++){
                                                             temporal.addHijo(hijo5.nodo.hijos.get(i));
                                                           }
@@ -873,7 +873,7 @@ class CUP$parser$actions {
 
                                            // System.out.println("++++++++++++++++++++++++++");
                                           Nodo tem = new Nodo();
-                                          tem.setTag("Cuerpo");
+                                          tem.setTag(TagAbstract.CUERPO);
                                           //tem.addHijo((Nodo)hijo1);
                                           if(hijo1 != null){
                                             for(int i=0; i < ((Container)hijo1).nodo.hijos.size();i++){
@@ -1080,7 +1080,7 @@ class CUP$parser$actions {
 		int iright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String i = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		 /* Result = ID(att:i) */
-                          Container temp = new Container(new Nodo("ID",i));
+                          Container temp = new Container(new Nodo(TagAbstract.ID,i));
                           temp.tablaMain.addSymbol(new Simbolo(i, false, null));
                           RESULT = temp;
                         
@@ -1104,7 +1104,7 @@ class CUP$parser$actions {
 
                                     tempN.addHijo(hijo1.nodo);
                                     tempN.addHijo(hijo2.nodo);
-                                    
+
                                     temp.tablaMain = hijo2.tablaMain;
                                     temp.tablaMain.addSymbol(hijo1.tablaMain.tabla.get(0));
                                     System.out.println("X2: " + temp.tablaMain.tabla.size());
@@ -1136,7 +1136,7 @@ class CUP$parser$actions {
 		int dtright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String dt = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		 /* result = dt; */
-                          RESULT = new Container(new Nodo("DATA TYPE",dt));
+                          RESULT = new Container(new Nodo(TagAbstract.DATATYPE,dt));
                         
               CUP$parser$result = parser.getSymbolFactory().newSymbol("Z",7, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -1193,7 +1193,7 @@ class CUP$parser$actions {
                                             tablaSimbolos.set(sim, new String[]{tablaSimbolos.get(sim)[0], hijo2.valor});
                                             sim--;
                                           }*/
-                                          if(((Container)hijo3).nodo.getInfo().equals("nulo")){
+                                          if(((Container)hijo3).nodo.getInfo().equals(TagAbstract.NULO)){
                                           }else{
                                             ((Container)hijo2).nodo.addHijo(((Container)hijo3).nodo);
                                           }
@@ -1221,7 +1221,7 @@ class CUP$parser$actions {
 		Container n = (Container)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		/*result = num*/
                           Nodo tem = new Nodo();
-                          tem.setTag("ASSIGN");
+                          tem.setTag(TagAbstract.ASSIGN);
                           tem.addHijo(((Container)n).nodo);
                           RESULT = new Container(tem);
                         
@@ -1234,7 +1234,7 @@ class CUP$parser$actions {
             {
               Container RESULT =null;
 		/*result = true*/
-                          RESULT = new Container(new Nodo("ASSIGN","TRUE"));
+                          RESULT = new Container(new Nodo(TagAbstract.ASSIGN,"TRUE"));
 
                         
               CUP$parser$result = parser.getSymbolFactory().newSymbol("ARG2",31, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -1246,7 +1246,7 @@ class CUP$parser$actions {
             {
               Container RESULT =null;
 		/*result = false*/
-                          RESULT = new Container(new Nodo("ASSIGN","FALSE"));
+                          RESULT = new Container(new Nodo(TagAbstract.ASSIGN,"FALSE"));
                         
               CUP$parser$result = parser.getSymbolFactory().newSymbol("ARG2",31, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -1256,7 +1256,7 @@ class CUP$parser$actions {
           case 31: // ARG2 ::= 
             {
               Container RESULT =null;
-		RESULT = new Container(new Nodo("nulo","0"));
+		RESULT = new Container(new Nodo(TagAbstract.NULO,"0"));
               CUP$parser$result = parser.getSymbolFactory().newSymbol("ARG2",31, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1276,7 +1276,7 @@ class CUP$parser$actions {
 		Container hijo3 = (Container)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		/*result = Z(X2,D)*/
                                           ((Container)hijo2).nodo.addHijo(((Container)hijo1).nodo);
-                                          if(((Container)hijo3).nodo.getInfo().equals("nulo")){
+                                          if(((Container)hijo3).nodo.getInfo().equals(TagAbstract.NULO)){
                                           }else{
                                             if (hijo3.nodo.hijos.size() != 0) {
                                               for (Nodo n: hijo3.nodo.hijos) {
@@ -1317,7 +1317,7 @@ class CUP$parser$actions {
 		Container n = (Container)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
 		/*result = num*/
                           Nodo tem = new Nodo();
-                          tem.setTag("ASSIGN");
+                          tem.setTag(TagAbstract.ASSIGN);
                           tem.addHijo(((Container)n).nodo);
                           RESULT = new Container(tem);
                         
@@ -1330,7 +1330,7 @@ class CUP$parser$actions {
             {
               Container RESULT =null;
 		/*result = true*/
-                          RESULT = new Container(new Nodo("ASSIGN","TRUE"));
+                          RESULT = new Container(new Nodo(TagAbstract.ASSIGN,"TRUE"));
 
                         
               CUP$parser$result = parser.getSymbolFactory().newSymbol("D",11, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -1342,7 +1342,7 @@ class CUP$parser$actions {
             {
               Container RESULT =null;
 		/*result = false*/
-                          RESULT = new Container(new Nodo("ASSIGN","FALSE"));
+                          RESULT = new Container(new Nodo(TagAbstract.ASSIGN,"FALSE"));
                         
               CUP$parser$result = parser.getSymbolFactory().newSymbol("D",11, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -1353,7 +1353,7 @@ class CUP$parser$actions {
             {
               Container RESULT =null;
 		/*result = null*/
-                          RESULT = new Container(new Nodo("nulo","-1"));
+                          RESULT = new Container(new Nodo(TagAbstract.NULO,"-1"));
                         
               CUP$parser$result = parser.getSymbolFactory().newSymbol("D",11, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -1374,7 +1374,7 @@ class CUP$parser$actions {
                                             tem.setTag("IF");
                                             tem.addHijo(((Container)hijo1).nodo);
                                             Nodo tem2 = new Nodo();
-                                            tem2.setTag("Cuerpo");
+                                            tem2.setTag(TagAbstract.CUERPO);
                                             if(hijo2 != null){
                                               for(int i=0; i < ((Container)hijo2).nodo.hijos.size();i++){
                                               tem2.addHijo(((Container)hijo2).nodo.hijos.get(i));
@@ -1541,9 +1541,9 @@ class CUP$parser$actions {
 		/**/
                                   Nodo tem = new Nodo();
                                   Nodo tem2 = new Nodo();
-                                  tem2.setTag("Else");
+                                  tem2.setTag(TagAbstract.ELSE);
                                   Nodo cuerpo = new Nodo();
-                                  cuerpo.setTag("Cuerpo");
+                                  cuerpo.setTag(TagAbstract.CUERPO);
                                   if(hijo != null){
                                     for(int i=0; i < ((Container)hijo).nodo.hijos.size();i++){
                                       cuerpo.addHijo(((Container)hijo).nodo.hijos.get(i));
@@ -1569,10 +1569,10 @@ class CUP$parser$actions {
 		Container hijo2 = (Container)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
                                 Nodo tem = new Nodo();
-                                tem.setTag("ELSIF");
+                                tem.setTag(TagAbstract.ELSEIF);
                                 tem.addHijo(((Container)hijo1).nodo);
                                 Nodo tem2 = new Nodo();
-                                tem2.setTag("Cuerpo");
+                                tem2.setTag(TagAbstract.CUERPO);
                                 if(hijo2 != null){
                                   for(int i=0; i < ((Container)hijo2).nodo.hijos.size();i++){
                                     tem2.addHijo(((Container)hijo2).nodo.hijos.get(i));
@@ -1760,7 +1760,7 @@ class CUP$parser$actions {
 		int hijo2right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		Container hijo2 = (Container)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
 		 /*result = asign(X, E2)*/
-                                                Nodo tem = new Nodo("Asignacion","::=");
+                                                Nodo tem = new Nodo(TagAbstract.ASSINGVALUE,"::=");
                                                 tem.addHijo(((Container)hijo1).nodo);
                                                 tem.addHijo(((Container)hijo2).nodo);
                                                 RESULT = new Container(tem);
@@ -1774,7 +1774,7 @@ class CUP$parser$actions {
             {
               Container RESULT =null;
 		 /*result = true*/
-                      RESULT = new Container(new Nodo("TRUE","1"));
+                      RESULT = new Container(new Nodo(TagAbstract.TRUE,"1"));
                       
               CUP$parser$result = parser.getSymbolFactory().newSymbol("E2",17, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
@@ -1784,7 +1784,7 @@ class CUP$parser$actions {
           case 56: // E2 ::= FALSE 
             {
               Container RESULT =null;
-		 /*result = false*/RESULT = new Container(new Nodo("FALSE","0")); 
+		 /*result = false*/RESULT = new Container(new Nodo(TagAbstract.FALSE,"0")); 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("E2",17, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -1813,7 +1813,7 @@ class CUP$parser$actions {
 		Container hijo2 = (Container)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		/*result = ejec(X, PA)*/
                                   Nodo tem = new Nodo();
-                                  tem.setTag("Ejecucion");
+                                  tem.setTag(TagAbstract.EJECUCION);
                                   tem.addHijo(((Container)hijo1).nodo);
                                   if (hijo2 != null) {
                                     tem.addHijo(((Container)hijo2).nodo);
@@ -1849,7 +1849,7 @@ class CUP$parser$actions {
 		int hijo2right = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Container hijo2 = (Container)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		 /*result = arreglo(L3+PA2)*/
-                                    Nodo tem = new Nodo("Argumentos","arg");
+                                    Nodo tem = new Nodo(TagAbstract.ARGUMENTOS,"arg");
                                     tem.addHijo(((Container)hijo1).nodo);
                                     if(hijo2 != null){
                                       for(int i=0; i < ((Container)hijo2).nodo.hijos.size();i++){
@@ -1902,7 +1902,7 @@ class CUP$parser$actions {
 		int hijo3right = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Container hijo3 = (Container)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		 /*result = E7.op(op(E6, E6),E7.E6) */
-                                            Nodo tem = new Nodo("OP",t);
+                                            Nodo tem = new Nodo(TagAbstract.OP,t);
                                             tem.addHijo(((Container)hijo1).nodo);
                                             tem.addHijo(((Container)hijo2).nodo);
                                             if(hijo3 == null){
@@ -1934,7 +1934,7 @@ class CUP$parser$actions {
 		int hijo3right = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Container hijo3 = (Container)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-                                            Nodo tem = new Nodo("MOD",t);
+                                            Nodo tem = new Nodo(TagAbstract.MOD,t);
                                             tem.addHijo(((Container)hijo1).nodo);
                                             tem.addHijo(((Container)hijo2).nodo);
                                             if(hijo3 == null){
@@ -2019,7 +2019,7 @@ class CUP$parser$actions {
 		int hijoright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Container hijo = (Container)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		 /*result = arreglo(op,E6)*/
-                                  Nodo tem = new Nodo("OP",t);
+                                  Nodo tem = new Nodo(TagAbstract.OP,t);
                                   tem.addHijo(((Container)hijo).nodo);
                                   RESULT = new Container(tem);
                                 
@@ -2038,7 +2038,7 @@ class CUP$parser$actions {
 		int hijoright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Container hijo = (Container)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		 /*result = arreglo(mod,E6)*/
-                                  Nodo tem = new Nodo("MOD",t);
+                                  Nodo tem = new Nodo(TagAbstract.MOD,t);
                                   tem.addHijo(((Container)hijo).nodo);
                                   RESULT = new Container(tem);
                                 
@@ -2063,7 +2063,7 @@ class CUP$parser$actions {
 		int hijoright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Container hijo = (Container)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-                                  Nodo tem = new Nodo("Return","0");
+                                  Nodo tem = new Nodo(TagAbstract.RETURN,"0");
                                   tem.addHijo(((Container)hijo).nodo);
                                   RESULT = new Container(tem);
                                 
@@ -2079,9 +2079,9 @@ class CUP$parser$actions {
 		int hijoright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).right;
 		Container hijo = (Container)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-3)).value;
 		
-                                              Nodo tem = new Nodo("Loop","0");
+                                              Nodo tem = new Nodo(TagAbstract.LOOP,"0");
                                               Nodo tem2 = new Nodo();
-                                              tem2.setTag("Cuerpo");
+                                              tem2.setTag(TagAbstract.CUERPO);
                                               for(int i=0; i < ((Container)hijo).nodo.hijos.size();i++){
                                                 tem2.addHijo(((Container)hijo).nodo.hijos.get(i));
                                               }
@@ -2106,10 +2106,10 @@ class CUP$parser$actions {
 		int hijo2right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).right;
 		Container hijo2 = (Container)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-3)).value;
 		
-                                                            Nodo tem = new Nodo("FOR","0");
+                                                            Nodo tem = new Nodo(TagAbstract.FOR,"0");
                                                             Nodo tem2 = new Nodo();
                                                             tem.addHijo(((Container)hijo1).nodo);
-                                                            tem2.setTag("Cuerpo");
+                                                            tem2.setTag(TagAbstract.CUERPO);
                                                             if(hijo2 != null){
                                                               for(int i=0; i < ((Container)hijo2).nodo.hijos.size();i++){
                                                                 tem2.addHijo(((Container)hijo2).nodo.hijos.get(i));
@@ -2135,10 +2135,10 @@ class CUP$parser$actions {
 		Container hijo2 = (Container)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-3)).value;
 		
                                                           Nodo tem = new Nodo();
-                                                          tem.setTag("WHILE");
+                                                          tem.setTag(TagAbstract.WHILE);
                                                           tem.addHijo(((Container)hijo1).nodo);
                                                           Nodo tem2 = new Nodo();
-                                                          tem2.setTag("Cuerpo");
+                                                          tem2.setTag(TagAbstract.CUERPO);
                                                           if(hijo2 != null){
                                                             for(int i=0; i < ((Container)hijo2).nodo.hijos.size();i++){
                                                               tem2.addHijo(((Container)hijo2).nodo.hijos.get(i));
@@ -2275,8 +2275,8 @@ class CUP$parser$actions {
 		Container hijo3 = (Container)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		 /* result = AND (OPREL(e5,e5), L1)*/
                                                       Nodo tem = new Nodo();
-                                                      tem.setTag("AND");
-                                                      Nodo tem2 = new Nodo("OPREL",t);
+                                                      tem.setTag(TagAbstract.AND);
+                                                      Nodo tem2 = new Nodo(TagAbstract.OPREL,t);
                                                       tem2.addHijo(((Container)hijo1).nodo);
                                                       tem2.addHijo(((Container)hijo2).nodo);
                                                       tem.addHijo((Nodo)tem2);
@@ -2307,7 +2307,7 @@ class CUP$parser$actions {
 		  /*result = OR (OPREL(e5,e5), L1)*/
                                                     Nodo tem = new Nodo();
                                                     tem.setTag("OR");
-                                                    Nodo tem2 = new Nodo("OPREL",t);
+                                                    Nodo tem2 = new Nodo(TagAbstract.OPREL,t);
                                                     tem2.addHijo(((Container)hijo1).nodo);
                                                     tem2.addHijo(((Container)hijo2).nodo);
                                                     tem.addHijo((Nodo)tem2);
@@ -2333,7 +2333,7 @@ class CUP$parser$actions {
 		int hijo2right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		Container hijo2 = (Container)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
 		  /* result = oprel(e5, e5)*/
-                                Nodo tem = new Nodo("OPREL",t);
+                                Nodo tem = new Nodo(TagAbstract.OPREL,t);
                                 tem.addHijo(((Container)hijo1).nodo);
                                 tem.addHijo(((Container)hijo2).nodo);
                                 RESULT = new Container(tem);
@@ -2384,7 +2384,7 @@ class CUP$parser$actions {
 		int hijo2right = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Container hijo2 = (Container)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-                                              Nodo tem2 = new Nodo("OPREL",t);
+                                              Nodo tem2 = new Nodo(TagAbstract.OPREL,t);
                                               tem2.addHijo(((Container)hijo1).nodo);
                                               tem2.addHijo(((Container)hijo2).nodo);
                                               RESULT = new Container(tem2);
@@ -2411,8 +2411,8 @@ class CUP$parser$actions {
 		Container hijo3 = (Container)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		 /*result = l1*/
                                                     Nodo tem = new Nodo();
-                                                    tem.setTag("AND");
-                                                    Nodo tem2 = new Nodo("OPREL",t);
+                                                    tem.setTag(TagAbstract.AND);
+                                                    Nodo tem2 = new Nodo(TagAbstract.OPREL,t);
                                                     tem2.addHijo(((Container)hijo1).nodo);
                                                     tem2.addHijo(((Container)hijo2).nodo);
                                                     tem.addHijo((Nodo)tem2);
@@ -2442,7 +2442,7 @@ class CUP$parser$actions {
 		 /*result = l1*/
                                                     Nodo tem = new Nodo();
                                                     tem.setTag("OR");
-                                                    Nodo tem2 = new Nodo("OPREL",t);
+                                                    Nodo tem2 = new Nodo(TagAbstract.OPREL,t);
                                                     tem2.addHijo(((Container)hijo1).nodo);
                                                     tem2.addHijo(((Container)hijo2).nodo);
                                                     tem.addHijo((Nodo)tem2);

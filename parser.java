@@ -733,7 +733,7 @@ class CUP$parser$actions {
                                               }
 
                                               for(Simbolo sim : hijo5.tablaMain.tabla){
-                                                temp.tablaMain.tabla.addSymbol(sim);
+                                                temp.tablaMain.addSymbol(sim);
                                               }
                                             } else {
                                               temporal.addHijo(hijo5.nodo);

@@ -28,17 +28,35 @@ public class TablaSimbolos {
         this.tabla = new LinkedList();
     }
     
-    public void addChild(TablaSimbolos child) { //TODO: agregar comprobacion
+    public void addChild(TablaSimbolos child) { 
         child.parent = this;
         this.children.add(child);
     }
 
-    public void addSymbol(Simbolo sym) {
+    public void addSymbol(Simbolo sym) { //TODO: agregar comprobacion
         this.tabla.addLast(sym);
     }
 
     public void addSymbolFirst(Simbolo sym) {
         this.tabla.addFirst(sym);
+    }
+
+    public void addAll(TablaSimbolos tab) {
+        for(Simbolo sim: tab.tabla){
+            this.addSymbol(sim);
+        }
+
+        this.children.addAll(tab.children);
+    }
+
+    public void addSymbols(TablaSimbolos tab){
+        for(Simbolo sim: tab.tabla){
+            this.addSymbol(sim);
+        }
+    }
+
+    public void addChildren(TablaSimbolos tab){
+        this.children.addAll(tab.children);
     }
 
     public boolean asignarTipo(String tipo) {

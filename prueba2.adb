@@ -1,7 +1,7 @@
 procedure prueba is
-  a:Integer;
+  x:Integer;
   
-  function Minimo2 (a, b: Integer) return Integer is
+  procedure Minimo2 (a, b: Integer) is
     ax,ay:boolean;
     az:Integer := 2.0;
     begin

@@ -789,13 +789,15 @@ class CUP$parser$actions {
 		/*result = function(X,return(Z),H)*/
                                                       Nodo temporal = new Nodo("tem");// padre
                                                       Nodo tem = new Nodo(); //  tem para la funcion
+                                                      Container temp = new Container(temporal);
+
                                                       tem.setTag("Function");
                                                       tem.addHijo(((Container)hijo1).nodo);
                                                       if (hijo6 != null) {
                                                         tem.addHijo(hijo6.nodo);
+                                                        temp.addAll(hijo6);
                                                       }
 
-                                                      Container temp = new Container(temporal);
                                                       Nodo ret = new Nodo();
                                                       ret.setTag("Return");
                                                       ret.addHijo(((Container)hijo2).nodo);
@@ -805,7 +807,7 @@ class CUP$parser$actions {
                                                           for(int i = 0; i < ((Container)hijo3).nodo.hijos.size();i++){
                                                             tem.addHijo(((Container)hijo3).nodo.hijos.get(i));
                                                           }
-                                                          temp.tablaMain = hijo3.tablaMain;
+                                                          temp.addAll(hijo6);
                                                         }else{
                                                         tem.addHijo(((Container)hijo3).nodo);
                                                         }
@@ -820,12 +822,13 @@ class CUP$parser$actions {
                                                           for(int i = 0; i < hijo5.nodo.hijos.size();i++){
                                                             temporal.addHijo(hijo5.nodo.hijos.get(i));
                                                           }
-                                                          for(TablaSimbolos t: hijo5.tablaMain.children){
-                                                            temp.tablaMain.addChild(t);
-                                                          }
+                                                          
+                                                          temp.addChildren(hijo5);
                                                         } else {
                                                           temporal.addHijo(hijo5.nodo);
                                                         }
+                                                      } else {
+                                                        //TODO: Copiar padre
                                                       }
 
                                                       
@@ -834,11 +837,7 @@ class CUP$parser$actions {
                                                       Simbolo thisFunction = hijo1.tablaMain.tabla.get(0);
                                                       thisFunction.setTipo(new TipoFuncion(hijo2.nodo.valor));
                                                       //TODO:agregar composicion
-                                                      temp.tablaMain.addSymbolFirst(thisFunction);
-                                                      
-                                                      
-                                                      System.out.println("G (function): " + temp.tablaMain.tabla.size());
-                                                      System.out.println("Size: " + temp.tablaMain.children.size());
+                                                      temp.addSymbolFirst(thisFunction);
                                                       RESULT = temp;
                                                     
               CUP$parser$result = parser.getSymbolFactory().newSymbol("G",2, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-8)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -1191,16 +1190,15 @@ class CUP$parser$actions {
 		Container hijo3 = (Container)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		/*result = Z(X2,D)*/
                                           ((Container)hijo2).nodo.addHijo(((Container)hijo1).nodo);
-
-                                          /*int sim = tablaSimbolos.size() - 1;
-                                          while(sim >= 0 && tablaSimbolos.get(sim)[1] == ""){
-                                            tablaSimbolos.set(sim, new String[]{tablaSimbolos.get(sim)[0], hijo2.valor});
-                                            sim--;
-                                          }*/
+                                          
                                           if(((Container)hijo3).nodo.getInfo().equals("nulo")){
                                           }else{
                                             ((Container)hijo2).nodo.addHijo(((Container)hijo3).nodo);
                                           }
+
+                                          hijo2.tablaMain = hijo1.tablaMain;
+                                          hijo2.tablaMain.asignarTipo(hijo2.nodo.valor);
+
                                           RESULT = (Container)hijo2;
                                         
               CUP$parser$result = parser.getSymbolFactory().newSymbol("ARG",12, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);

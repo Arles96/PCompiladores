@@ -1,9 +1,9 @@
 procedure prueba is
   x:Integer;
   
-  procedure Minimo2 (a, b: Integer) is
-    ax,ay:boolean;
-    az:Integer := 2.0;
+  function Minimo3 (a, b: Integer) return Integer is
+    azx,azy:boolean;
+    azz:Integer := 2.0;
     begin
       put(2);
     end prueba4;

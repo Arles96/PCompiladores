@@ -2306,7 +2306,7 @@ class CUP$parser$actions {
 		Container hijo3 = (Container)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		  /*result = OR (OPREL(e5,e5), L1)*/
                                                     Nodo tem = new Nodo();
-                                                    tem.setTag("OR");
+                                                    tem.setTag(TagAbstract.OR);
                                                     Nodo tem2 = new Nodo(TagAbstract.OPREL,t);
                                                     tem2.addHijo(((Container)hijo1).nodo);
                                                     tem2.addHijo(((Container)hijo2).nodo);
@@ -2441,7 +2441,7 @@ class CUP$parser$actions {
 		Container hijo3 = (Container)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		 /*result = l1*/
                                                     Nodo tem = new Nodo();
-                                                    tem.setTag("OR");
+                                                    tem.setTag(TagAbstract.OR);
                                                     Nodo tem2 = new Nodo(TagAbstract.OPREL,t);
                                                     tem2.addHijo(((Container)hijo1).nodo);
                                                     tem2.addHijo(((Container)hijo2).nodo);
@@ -2464,7 +2464,7 @@ class CUP$parser$actions {
 		int hijoright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
 		String hijo = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
 		
-                                      Nodo tem = new Nodo("Get",hijo);
+                                      Nodo tem = new Nodo(TagAbstract.GET,hijo);
                                       RESULT =  new Container(tem);
                                     
               CUP$parser$result = parser.getSymbolFactory().newSymbol("P",30, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -2485,7 +2485,7 @@ class CUP$parser$actions {
 		int hijoright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
 		Container hijo = (Container)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
 		
-                                      Nodo tem = new Nodo("Put", lp);
+                                      Nodo tem = new Nodo(TagAbstract.PUT, lp);
                                       tem.addHijo(((Container)hijo).nodo);
                                       RESULT = new Container(tem);
                                     
@@ -2512,7 +2512,7 @@ class CUP$parser$actions {
 		int ileft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int iright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String i = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		 RESULT = new Container(new Nodo("String",i)); 
+		 RESULT = new Container(new Nodo(TagAbstract.STRING,i)); 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("P2",32, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;

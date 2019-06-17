@@ -809,14 +809,20 @@ E6  ::= N:hijo                      {: /*result = l3*/ RESULT = (Container)hijo;
     |   LP E5:hijo RP               {: /*result = E5*/ RESULT = (Container)hijo;:}
     |   X:hijo                      {: /*result = E5*/ RESULT = (Container)hijo;:}
     ;
-E7  ::= OP:t E6:hijo            {: /*result = arreglo(op,E6)*/
+E7  ::= OP:t E6:hijo E7:hijo2   {: /*result = arreglo(op,E6)*/
                                   Nodo tem = new Nodo(TagAbstract.OP,t);
                                   tem.addHijo(((Container)hijo).nodo);
+                                  if (hijo2 != null) {
+                                    tem.addHijo(((Container)hijo2).nodo);
+                                  }
                                   RESULT = new Container(tem);
                                 :}
-    |   MOD:t E6:hijo           {: /*result = arreglo(mod,E6)*/
+    |   MOD:t E6:hijo E7:hijo2  {: /*result = arreglo(mod,E6)*/
                                   Nodo tem = new Nodo(TagAbstract.MOD,t);
                                   tem.addHijo(((Container)hijo).nodo);
+                                  if (hijo2 != null) {
+                                    tem.addHijo(((Container)hijo2).nodo);
+                                  }
                                   RESULT = new Container(tem);
                                 :}
     |                           {: /*result = null*/ RESULT = null;:}

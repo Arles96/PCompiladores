@@ -9,6 +9,7 @@ public class RowMip {
 
   public RowMip () {}
 
+  // constructor para la creacion general
   public RowMip (String token, String value1, String value2, String result) {
     this.token = token;
     this.value1 = value1;
@@ -16,11 +17,19 @@ public class RowMip {
     this.result = result;
   }
 
+  // constructor para la creación de etiquetas
   public RowMip (String token, String result) {
     this.token = token;
     this.result = result;
     this.value1 = "";
     this.value2 = "";
+  }
+
+  // constructor para la creacion de variables
+  public RowMip(String token, String value1, String result) {
+    this.token = token;
+    this.value1 = value1;
+    this.result = result;
   }
 
   // Getter y Setter
@@ -55,6 +64,10 @@ public class RowMip {
 
   public String getResult () {
     return this.result;
+  }
+
+  public String toString () {
+    return token + "|" + value1 + "|" + value2 + "|" + result;
   }
 
 }

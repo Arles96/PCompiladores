@@ -1,5 +1,6 @@
 import java.io.*;
 import Nodos.*;
+import Intermedio.Mips;
 
 public class Main {
   public static void main(String argv[]) {
@@ -8,6 +9,7 @@ public class Main {
       Ada95 lexico = new Ada95(new FileReader(argv[0]));
       parser p = new parser(lexico);
       p.parse();
+      System.out.println("Hola Mundo");
       if (p.msgErroresSintactico.size() > 0) {
         for(String errores : p.msgErroresSintactico){
           System.out.println(errores);
@@ -19,12 +21,15 @@ public class Main {
       } else {
         printTree(p.raiz, 0);
         printTabla(p.tablaFinal, 0);
+        /* Mips mips = new Mips();
+        mips.generateCode(p.raiz);
+        mips.printCode(); */
         //System.out.println("children: " + p.tablaFinal.children.size());
         /*System.out.println("Imprimiendo Tabla: ");
         for (Simbolo var : p.tablaFinal.tabla) {
-          System.out.println(var.id);  
+          System.out.println(var.id);
         }*/
-        
+
 
         /*System.out.println("Tabla de simbolos");
         for(int i = 0; i < p.tablaSimbolos.size(); i++){

@@ -8,6 +8,9 @@ public class TagAbstract {
   // tag de procedimiento
   public static final String PROCEDURE = "Procedure";
 
+  // tag para procedimientos anidados
+  public static final String SUBPROCEDURE = "SUBPROCEDURE";
+
   // tag de temporales
   public static final String TEM = "tem";
 

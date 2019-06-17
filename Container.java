@@ -21,4 +21,23 @@ class Container {
     this.tablaMain = tablaMain;
   }
 
+  public void addAll(Container con){
+    this.tablaMain.addAll(con.tablaMain);
+  }
+
+  public void addSymbols(Container con){
+    this.tablaMain.addSymbols(con.tablaMain);
+  }
+
+  public void addChildren(Container con){
+    this.tablaMain.addChildren(con.tablaMain);
+  }
+
+  public void addSymbol(Simbolo sim){
+    this.tablaMain.addSymbol(sim);
+  }
+
+  public void addSymbolFirst(Simbolo sim){
+    this.tablaMain.addSymbolFirst(sim);
+  }
 }

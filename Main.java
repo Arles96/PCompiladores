@@ -1,6 +1,6 @@
 import java.io.*;
 import Nodos.*;
-import Intermedio.Mips;
+import Intermedio.*;
 
 public class Main {
   public static void main(String argv[]) {
@@ -19,11 +19,12 @@ public class Main {
           System.out.println(errores);
         }
       } else {
+        System.out.println("Codigo intermedio \n\n");
         printTree(p.raiz, 0);
         printTabla(p.tablaFinal, 0);
-        /* Mips mips = new Mips();
+        Mips mips = new Mips();
         mips.generateCode(p.raiz);
-        mips.printCode(); */
+        mips.printCode();
         //System.out.println("children: " + p.tablaFinal.children.size());
         /*System.out.println("Imprimiendo Tabla: ");
         for (Simbolo var : p.tablaFinal.tabla) {

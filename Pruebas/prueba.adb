@@ -4,9 +4,12 @@ procedure Hello is
   Z,Y: Boolean := TRUE;
   A, B: Boolean;
 begin
-X := 2 + 2 + 3 + 4;
 Y := FALSE;
-if 2 < 3 Then
+X := 4 + 4 - 4;
+if Y < 3 OR X > 5 AND A = 1 OR A < 5 Then
   Z:= TRUE;
+end if;
+if Y < 3 Then
+ Z := FALSE;
 end if;
 end Hello;

@@ -1159,7 +1159,7 @@ class CUP$parser$actions {
 		int nleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int nright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String n = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		 /* RETURN = n; */ RESULT = new Container(new Nodo("NUM",n));
+		 /* RETURN = n; */ RESULT = new Container(new Nodo(TagAbstract.NUM,n));
               CUP$parser$result = parser.getSymbolFactory().newSymbol("N",8, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;

@@ -1,0 +1,25 @@
+V "GNAT Lib v7"
+M P W=b
+A -mtune=generic
+A -march=x86-64
+P ZX
+
+RN
+RV SPARK_05
+
+U prueba2%b		prueba2.adb		03558df6 NE OO SU IL
+
+D prueba2.adb		20190622195449 03558df6 prueba2%b
+D system.ads		20170510173650 4635ec04 system%s
+X 1 prueba2.adb
+1U11*prueba2 1b11 11l5 11t12
+2i3 x{integer} 10m3
+3U13 Minimo2 3b13 3>22 3>25 3>42 3>54 8l7 8t14
+3i22 a{integer}
+3i25 b{integer}
+3b42 c{boolean}
+3i54 d{integer}
+4b3 ax{boolean}
+4b6 ay{boolean}
+5i3 az{integer} 7m5
+

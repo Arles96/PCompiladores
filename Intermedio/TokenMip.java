@@ -11,6 +11,9 @@ public class TokenMip {
   // token de etiqueta
   public static final String ETIQ = "ETIQ";
 
+  // token de parametros
+  public static final String PARAM = "PARAM";
+
   // token de condicional menor igual que
   public static final String IFLE = "IF<=";
 
@@ -35,6 +38,18 @@ public class TokenMip {
   // token para restar
   public static final String SUBTRACT = "-";
 
+  // token para return
+  public static final String RETURN = "RET";
+
+  // token para funciones
+  public static final String FUNC = "FUC";
+
+  // token para put
+  public static final String PUT = "PUT";
+
+  // token para get
+  public static final String GET = "GET";
+
   // token para multiplicar
   public static final String MULTIPLY = "*";
 
@@ -44,10 +59,20 @@ public class TokenMip {
   // token para mod
   public static final String MOD = "MOD";
 
+  // token para ejecutar funcion
+  public static final String EXEC = "EXEC";
+
   // token de condicional and
   public static final String IFAND = "IFAND";
 
   // token de condicional or
   public static final String IFOR = "IFOR";
+
+  // token para indicar el main
+  public static final String MAIN = "MAIN";
+
+  public static final String AND = "AND";
+
+  public static final String OR = "OR";
 
 }

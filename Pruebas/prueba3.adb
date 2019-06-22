@@ -1,7 +1,9 @@
 procedure hola is
-  I : Integer;
+  I, X : Integer;
 begin
-  for I in 1..3 loop
-    put(i());
+  I := 1;
+  while I > 10 AND I = 1 loop
+    I := I + 1;
   end loop;
+  x := 4;
 end hola;

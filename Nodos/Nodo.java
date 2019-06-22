@@ -21,6 +21,7 @@ public class Nodo{
     }
 
     public void addHijo(Nodo n){
+        n.padre = this;
         hijos.add(n);
     }
 

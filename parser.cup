@@ -241,6 +241,7 @@ G   ::=  C:hijo1 G:hijo2                {:/*result = nodo(C, G)*/
                                           nod.setTag(TagAbstract.SUBPROCEDURE);
                                           nod.addHijo(((Container)hijo1).nodo);
                                           if (hijo6 != null) {
+                                            hijo6.nodo.setTag(TagAbstract.PARAM);
                                             nod.addHijo(hijo6.nodo);
                                             temp.addAll(hijo6);
 
@@ -297,6 +298,7 @@ G   ::=  C:hijo1 G:hijo2                {:/*result = nodo(C, G)*/
                                                       tem.setTag(TagAbstract.FUNCTION);
                                                       tem.addHijo(((Container)hijo1).nodo);
                                                       if (hijo6 != null) {
+                                                        hijo6.nodo.setTag(TagAbstract.PARAM);
                                                         tem.addHijo(hijo6.nodo);
                                                         temp.addAll(hijo6);
 
@@ -469,13 +471,13 @@ Z   ::=  DATATYPES:dt   {: /* result = dt; */
     ;
 
 /* Contenedores de valores */
-N   ::=  NUM:n          {: /* RETURN = n; */ RESULT = new Container(new Nodo("NUM",n));:}
+N   ::=  NUM:n          {: /* RETURN = n; */ RESULT = new Container(new Nodo(TagAbstract.NUM,n));:}
     ;
 N1  ::=  NUM:n1 DOUBD:t NUM:n2  {: /* result = range(att: num1, num2)*/ RESULT = new Container(new Nodo("Rango",n1 + t + n2));:}
     ;
 
 /* Declaración de Tipos */
-ARG::=  X2:hijo1 DOS Z:hijo2 ARG2:hijo3   {:/*result = Z(X2,D)*/
+ARG::=  X2:hijo1 DOS Z:hijo2 ARG2:hijo3 ARG:hijo4 {:/*result = Z(X2,D)*/
                                           ((Container)hijo2).nodo.addHijo(((Container)hijo1).nodo);
 
                                           if(((Container)hijo3).nodo.getInfo().equals(TagAbstract.NULO)){
@@ -483,11 +485,16 @@ ARG::=  X2:hijo1 DOS Z:hijo2 ARG2:hijo3   {:/*result = Z(X2,D)*/
                                             ((Container)hijo2).nodo.addHijo(((Container)hijo3).nodo);
                                           }
 
+                                          if (hijo4 != null) {
+                                            hijo2.nodo.addHijo(hijo4.nodo);
+                                          }
+
                                           hijo2.tablaMain = hijo1.tablaMain;
                                           hijo2.tablaMain.asignarTipo(hijo2.nodo.valor);
 
                                           RESULT = (Container)hijo2;
                                         :}
+        | PC  ARG:hijo4                  {: RESULT = hijo4; :}
         |                                {:RESULT = null;:}
     ;
 ARG2::=  ASSIGN N:n  {:/*result = num*/
@@ -847,6 +854,7 @@ M   ::=  LOOP M1:hijo END LOOP PC            {:
     |   FOR X:t IN N1:hijo1 LOOP M1:hijo2 END LOOP PC     {:
                                                             Nodo tem = new Nodo(TagAbstract.FOR,"0");
                                                             Nodo tem2 = new Nodo();
+                                                            tem.addHijo(((Container)t).nodo);
                                                             tem.addHijo(((Container)hijo1).nodo);
                                                             tem2.setTag(TagAbstract.CUERPO);
                                                             if(hijo2 != null){
@@ -985,8 +993,8 @@ L6  ::= E5:hijo1 OPREL:t E5:hijo2           {:
 
     ;
 /* Imprimir o leer valores */
-P   ::=  GET:g LP P1:hijo RP PC     {:
-                                      Nodo tem = new Nodo(TagAbstract.GET,hijo);
+P   ::=  GET:g LP X:hijo RP PC     {:
+                                      Nodo tem = new Nodo(TagAbstract.GET, hijo.nodo.valor);
                                       RESULT =  new Container(tem);
                                     :}
     |   PUT:p LP:lp P2:hijo RP PC      {:

@@ -5,6 +5,15 @@ public class TagAbstract {
   // tag de inicio
   public static final String INICIO = "Nodo de inicio";
 
+  // Tag de numero
+  public static final String NUM = "NUM";
+
+  // Tag de IF
+  public static final String IF = "IF";
+
+  // tag de parametros
+  public static final String PARAM = "PARAM";
+
   // tag de procedimiento
   public static final String PROCEDURE = "Procedure";
 
@@ -25,6 +34,9 @@ public class TagAbstract {
 
   // tag de id (variables)
   public static final String ID = "ID";
+
+  // tag de integer
+  public static final String INTEGER = "Integer";
 
   // tag de arreglo de declaración
   public static final String DECLARACION = "Declaracion";

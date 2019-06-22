@@ -55,14 +55,14 @@ public class Mips {
       t2 = getTempVar();
       incrementVar();
     }
-    if (hijo1.tag.equals(TagAbstract.NUM) && hijo2.tag.equals(TagAbstract.NUM)) {
+    if ((hijo1.tag.equals(TagAbstract.NUM) || hijo1.tag.equals(TagAbstract.ID)) && (hijo2.tag.equals(TagAbstract.NUM) || hijo1.tag.equals(TagAbstract.ID))) {
       if (n == 1) {
         addRow(new RowMip(nodo.valor, hijo1.valor, hijo2.valor, getTempVar()));
       } else {
         addRow(new RowMip(nodo.valor, hijo1.valor, hijo2.valor, id.valor));
       }
     }
-    if (hijo1.tag.equals(TagAbstract.OP) && hijo2.tag.equals(TagAbstract.NUM)) {
+    if (hijo1.tag.equals(TagAbstract.OP) && (hijo2.tag.equals(TagAbstract.NUM) || hijo1.tag.equals(TagAbstract.ID))) {
       genarateCodeOperation(id, hijo1, 1);
       t1 = getTempVar();
       incrementVar();
@@ -72,7 +72,7 @@ public class Mips {
       incrementVar();
 
     }
-    if (hijo1.tag.equals(TagAbstract.NUM) && hijo2.tag.equals(TagAbstract.OP)) {
+    if ((hijo1.tag.equals(TagAbstract.NUM) || hijo1.tag.equals(TagAbstract.ID)) && hijo2.tag.equals(TagAbstract.OP)) {
       genarateCodeOperation(id, hijo2, 1);
       t2 = getTempVar();
       incrementVar();
@@ -89,7 +89,8 @@ public class Mips {
       } else if (t1 != null && t2 == null) {
         addRow(new RowMip(nodo.valor, t1, id.valor));
       } else {
-        System.out.println("Error en la sección de operaciones aritmeticas");
+        /* System.out.println("Error en la sección de operaciones aritmeticas"); */
+        System.out.println(nodo.valor + "  id  " + id.valor);
       }
     }
   }
@@ -215,7 +216,7 @@ public class Mips {
         addRow(new RowMip("IF" + nodo.tag, t1, t2, getTempVar()));
         t1 = getTempVar();
         incrementVar();
-        if (n ==1) {
+        if (n == 1) {
           addRow(new RowMip(TokenMip.IFE, t1, "1", getTempEtiq()));
           etiq1 = getTempEtiq();
           incrementEt();
@@ -353,6 +354,24 @@ public class Mips {
       addRow(new RowMip(TokenMip.GOTO, begin));
       addRow(new RowMip(TokenMip.ETIQ, getTempEtiq()));
       incrementEt();
+    } else if (tree.tag.equals(TagAbstract.WHILE)) {
+      Nodo hijo1 = tree.hijos.get(0);
+      Nodo hijo2 = tree.hijos.get(1);
+      addRow(new RowMip(TokenMip.ETIQ, getTempEtiq()));
+      String begin = getTempEtiq();
+      incrementEt();
+      etiqTrue = getTempEtiq();
+      incrementEt();
+      etiqsFalse.push(getTempEtiq());
+      incrementEt();
+      generateCodeCond(hijo1, 0);
+      addRow(new RowMip(TokenMip.ETIQ, etiqTrue));
+      etiqTrue = null;
+      for (Nodo var : hijo2.hijos) {
+        generateCode(var);
+      }
+      addRow(new RowMip(TokenMip.GOTO, begin));
+      addRow(new RowMip(TokenMip.ETIQ, etiqsFalse.pop()));
     }
   }
 

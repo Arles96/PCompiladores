@@ -237,6 +237,17 @@ public class Mips {
     return "";
   }
 
+  // generar codigo intermedio de parametros
+  public void generateCodeParam (Nodo nodo) {
+    for (Nodo var : nodo.hijos) {
+      if (var.tag.equals(TagAbstract.DATATYPE)) {
+        generateCodeParam(var);
+      } else if (var.tag.equals(TagAbstract.ID)) {
+        addRow(new RowMip(TokenMip.PARAM, var.valor));
+      }
+    }
+  }
+
   // generar codigo intermedio total
   public void generateCode (Nodo tree) {
     if (tree.tag.equals(TagAbstract.INICIO)) {
@@ -291,7 +302,7 @@ public class Mips {
       } else {
         genarateCodeOperation(hijo1, hijo2, 0);
       }
-    } else if (tree.tag.equals(TagAbstract.IF) || tree.tag.equals(TagAbstract.ELSEIF)) {
+    } else if (tree.tag.equals(TagAbstract.IF) || tree.tag.equals(TagAbstract.ELSEIF)) { // condicionales
       Nodo hijo1 = tree.hijos.get(0);
       Nodo hijo2 = tree.hijos.get(1);
       etiqTrue = getTempEtiq();
@@ -315,7 +326,7 @@ public class Mips {
       for (Nodo nod : tree.hijos) {
         generateCode(nod);
       }
-    } else if (tree.tag.equals(TagAbstract.FOR)) {
+    } else if (tree.tag.equals(TagAbstract.FOR)) { // para el for
       Nodo hijo1 = tree.hijos.get(0);
       Nodo hijo2 = tree.hijos.get(1);
       Nodo hijo3 = tree.hijos.get(2);
@@ -354,7 +365,7 @@ public class Mips {
       addRow(new RowMip(TokenMip.GOTO, begin));
       addRow(new RowMip(TokenMip.ETIQ, getTempEtiq()));
       incrementEt();
-    } else if (tree.tag.equals(TagAbstract.WHILE)) {
+    } else if (tree.tag.equals(TagAbstract.WHILE)) { // para el while
       Nodo hijo1 = tree.hijos.get(0);
       Nodo hijo2 = tree.hijos.get(1);
       addRow(new RowMip(TokenMip.ETIQ, getTempEtiq()));
@@ -372,6 +383,31 @@ public class Mips {
       }
       addRow(new RowMip(TokenMip.GOTO, begin));
       addRow(new RowMip(TokenMip.ETIQ, etiqsFalse.pop()));
+    } else if (tree.tag.equals(TagAbstract.SUBPROCEDURE) || tree.tag.equals(TagAbstract.FUNCTION)) {
+      addRow(new RowMip(TokenMip.ETIQ, tree.hijos.get(0).valor));
+      for (Nodo var : tree.hijos) {
+        if (var.tag.equals(TagAbstract.PARAM)) { // si es parametros
+          Nodo hijo1 = var.hijos.get(0);
+          for (Nodo child : hijo1.hijos) {
+            if (child.tag.equals(TagAbstract.DECLARACION)) {
+              addRow(new RowMip(TokenMip.PARAM, child.valor));
+            } else if (child.tag.equals(TagAbstract.DATATYPE)) {
+              generateCodeParam(child);
+            }
+          }
+        } else if (var.tag.equals(TagAbstract.TEM)) { // declaracion de variables, funciones y procedimientos
+          for (Nodo child : var.hijos) {
+            generateCode(child);
+          }
+        } else if (var.tag.equals(TagAbstract.CUERPO)) { // cuerpo de la funcion o procedimiento
+          for (Nodo child : var.hijos) {
+            generateCode(child);
+          }
+        }
+      }
+    } else if (tree.tag.equals(TagAbstract.RETURN)) {
+      Nodo hijo1 = tree.hijos.get(0);
+      addRow(new RowMip(TokenMip.RETURN, hijo1.valor));
     }
   }
 

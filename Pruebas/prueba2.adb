@@ -1,12 +1,11 @@
-procedure prueba is
+procedure prueba2 is
   x:Integer;
-  
-  procedure Minimo2 (a, b: Integer) is
-    ax,ay:boolean;
-    az:Integer := 2.0;
-    begin
-      put(2);
-    end prueba4;
+  procedure Minimo2 (a, b: Integer; c: boolean) is
+  ax,ay:boolean;
+  az:Integer := 2;
+  begin
+    az := 12;
+  end Minimo2;
 begin
-  put(Minimo(1, 2));
-end prueba;
+  x := 1;
+end prueba2;

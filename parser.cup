@@ -242,6 +242,7 @@ G   ::=  C:hijo1 G:hijo2                {:/*result = nodo(C, G)*/
                                           nod.setTag(TagAbstract.SUBPROCEDURE);
                                           nod.addHijo(((Container)hijo1).nodo);
                                           if (hijo6 != null) {
+                                            hijo6.nodo.setTag(TagAbstract.PARAM);
                                             nod.addHijo(hijo6.nodo);
                                           }
 
@@ -303,6 +304,7 @@ G   ::=  C:hijo1 G:hijo2                {:/*result = nodo(C, G)*/
                                                       tem.setTag(TagAbstract.FUNCTION);
                                                       tem.addHijo(((Container)hijo1).nodo);
                                                       if (hijo6 != null) {
+                                                        hijo6.nodo.setTag(TagAbstract.PARAM);
                                                         tem.addHijo(hijo6.nodo);
                                                         temp.addAll(hijo6);
                                                       }
@@ -477,7 +479,7 @@ N1  ::=  NUM:n1 DOUBD:t NUM:n2  {: /* result = range(att: num1, num2)*/ RESULT =
     ;
 
 /* Declaración de Tipos */
-ARG::=  X2:hijo1 DOS Z:hijo2 ARG2:hijo3   {:/*result = Z(X2,D)*/
+ARG::=  X2:hijo1 DOS Z:hijo2 ARG2:hijo3 ARG:hijo4 {:/*result = Z(X2,D)*/
                                           ((Container)hijo2).nodo.addHijo(((Container)hijo1).nodo);
 
                                           if(((Container)hijo3).nodo.getInfo().equals(TagAbstract.NULO)){
@@ -485,11 +487,16 @@ ARG::=  X2:hijo1 DOS Z:hijo2 ARG2:hijo3   {:/*result = Z(X2,D)*/
                                             ((Container)hijo2).nodo.addHijo(((Container)hijo3).nodo);
                                           }
 
+                                          if (hijo4 != null) {
+                                            hijo2.nodo.addHijo(hijo4.nodo);
+                                          }
+
                                           hijo2.tablaMain = hijo1.tablaMain;
                                           hijo2.tablaMain.asignarTipo(hijo2.nodo.valor);
 
                                           RESULT = (Container)hijo2;
                                         :}
+        | PC  ARG:hijo4                  {: RESULT = hijo4; :}
         |                                {:RESULT = null;:}
     ;
 ARG2::=  ASSIGN N:n  {:/*result = num*/

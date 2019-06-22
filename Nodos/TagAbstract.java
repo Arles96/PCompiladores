@@ -9,8 +9,10 @@ public class TagAbstract {
   public static final String NUM = "NUM";
 
   // Tag de IF
-
   public static final String IF = "IF";
+
+  // tag de parametros
+  public static final String PARAM = "PARAM";
 
   // tag de procedimiento
   public static final String PROCEDURE = "Procedure";

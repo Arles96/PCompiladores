@@ -9,7 +9,7 @@ public class Main {
       Ada95 lexico = new Ada95(new FileReader(argv[0]));
       parser p = new parser(lexico);
       p.parse();
-      System.out.println("Hola Mundo");
+      /* System.out.println("Hola Mundo"); */
       if (p.msgErroresSintactico.size() > 0) {
         for(String errores : p.msgErroresSintactico){
           System.out.println(errores);

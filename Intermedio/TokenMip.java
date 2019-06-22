@@ -11,6 +11,9 @@ public class TokenMip {
   // token de etiqueta
   public static final String ETIQ = "ETIQ";
 
+  // token de parametros
+  public static final String PARAM = "PARAM";
+
   // token de condicional menor igual que
   public static final String IFLE = "IF<=";
 
@@ -34,6 +37,9 @@ public class TokenMip {
 
   // token para restar
   public static final String SUBTRACT = "-";
+
+  // token para return
+  public static final String RETURN = "RET";
 
   // token para multiplicar
   public static final String MULTIPLY = "*";

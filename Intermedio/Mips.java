@@ -9,6 +9,8 @@ public class Mips {
   public LinkedList <RowMip> initialVariables = new LinkedList<RowMip>();
   private int counterVar = 0;
   private int counterEt = 0;
+  private String etiqTrue = "";
+  private LinkedList <String> etiqsFalse = new LinkedList<String>();
 
   public Mips () {}
 
@@ -93,33 +95,102 @@ public class Mips {
   }
 
   // generar codigo para condicionales
-  public void generateCodeCond (Nodo nodo, int n) {
-    String t1 = null, t2 = null, etiq1 = null;
-    if (nodo.tag.equals(TagAbstract.AND) || nodo.tag.equals(TagAbstract.OR)) {
+  public String generateCodeCond (Nodo nodo, int n) {
+    String t1 = null, t2 = null, etiq1 = null, etiq2 = null;
+    if (nodo.tag.equals(TagAbstract.OR) || nodo.tag.equals(TagAbstract.AND)) {
       Nodo hijo1 = nodo.hijos.get(0);
       Nodo hijo2 = nodo.hijos.get(1);
-      /* if (hijo1.tag.equals(TagAbstract.AND) && hijo2.tag.equals(TagAbstract.OPREL)) {
+      if (hijo1.tag.equals(TagAbstract.AND) && hijo2.tag.equals(TagAbstract.OPREL)) {
         generateCodeCond(hijo1, 1);
         Nodo value1 = hijo2.hijos.get(0);
         Nodo value2 = hijo2.hijos.get(1);
-      } */
-      if (hijo1.tag.equals(TagAbstract.OPREL) && hijo2.tag.equals(TagAbstract.AND)) {
+      }
+      if (hijo1.tag.equals(TagAbstract.OPREL) && (hijo2.tag.equals(TagAbstract.OR) || hijo2.tag.equals(TagAbstract.AND))) {
         Nodo value1 = hijo1.hijos.get(0);
         Nodo value2 = hijo1.hijos.get(1);
+        // genero el condicional
         addRow(new RowMip("IF" + hijo1.valor, value1.valor, value2.valor, getTempEtiq()));
         etiq1 = getTempEtiq();
         incrementEt();
+        // asigno false a la variable
         addRow(new RowMip(TokenMip.ASSIGN, "0", getTempVar()));
         t1 = getTempVar();
         incrementVar();
         addRow(new RowMip(TokenMip.GOTO, getTempEtiq()));
+        etiq2 = getTempEtiq();
+        incrementEt();
+        // si es verdadero
         addRow(new RowMip(TokenMip.ETIQ, etiq1));
         addRow(new RowMip(TokenMip.ASSIGN, "1", t1));
-        generateCodeCond(hijo2, 1);
-      } else if (hijo1.tag.equals(TagAbstract.OPREL) && hijo2.tag.equals(TagAbstract.OR)) {
+        // genero la siguiente eiqueta
+        addRow(new RowMip(TokenMip.ETIQ, etiq2));
+        t2 = generateCodeCond(hijo2, 1);
+        // evalue con el padre
+        addRow(new RowMip("IF" + nodo.tag, t1, t2, getTempVar()));
+        t1 = getTempVar();
+        incrementVar();
 
+        if (n == 1) {
+          return t1;
+        }
       }
+      if (hijo1.tag.equals(TagAbstract.OPREL) && hijo2.tag.equals(TagAbstract.OPREL)) {
+        Nodo value1 = hijo1.hijos.get(0);
+        Nodo value2 = hijo1.hijos.get(1);
+        Nodo value3 = hijo2.hijos.get(0);
+        Nodo value4 = hijo2.hijos.get(1);
+        /* condicional del primer argumento */
+        // creacion del condicional
+        addRow(new RowMip("IF" + hijo1.valor, value1.valor, value2.valor, getTempEtiq()));
+        etiq1 = getTempEtiq();
+        incrementEt();
+        // asignacion de falso
+        addRow(new RowMip(TokenMip.ASSIGN, "0", getTempVar()));
+        t1 = getTempVar();
+        incrementVar();
+        addRow(new RowMip(TokenMip.GOTO, getTempEtiq()));
+        etiq2 = getTempEtiq();
+        incrementEt();
+        // si es verdadero
+        addRow(new RowMip(TokenMip.ETIQ, etiq1));
+        addRow(new RowMip(TokenMip.ASSIGN, "1", t1));
+        // creacion de la siguiente etiqueta
+        addRow(new RowMip(TokenMip.ETIQ, getTempEtiq()));
+
+        /* Condicional del segundo argumento */
+        addRow(new RowMip("IF" + hijo2.valor, value3.valor, value4.valor, getTempEtiq()));
+        etiq1 = getTempEtiq();
+        incrementEt();
+        // si el segundo argumento es falso
+        addRow(new RowMip(TokenMip.ASSIGN, "0", getTempVar()));
+        t2 = getTempVar();
+        incrementVar();
+        addRow(new RowMip(TokenMip.GOTO, getTempEtiq()));
+        etiq2 = getTempEtiq();
+        incrementEt();
+        // si el argumento es verdadero
+        addRow(new RowMip(TokenMip.ETIQ, etiq1));
+        addRow(new RowMip(TokenMip.ASSIGN, "1", t2));
+        // creación de la siguiente etiqueta
+        addRow(new RowMip(TokenMip.ETIQ, etiq2));
+
+        // operacion and u or
+        addRow(new RowMip("IF" + nodo.tag, t1, t2, getTempVar()));
+        if (n ==1) {
+          t1 = getTempVar();
+          incrementVar();
+          return t1;
+        }
+      }
+    } else {
+      Nodo hijo1 = nodo.hijos.get(0);
+      Nodo hijo2 = nodo.hijos.get(1);
+      addRow(new RowMip("IF" + nodo.valor, hijo1.valor, hijo2.valor, getTempEtiq()));
+      etiq1 = getTempEtiq();
+      incrementEt();
+
     }
+    return "";
   }
 
   // generar codigo intermedio total
@@ -176,7 +247,17 @@ public class Mips {
       } else {
         genarateCodeOperation(hijo1, hijo2, 0);
       }
-    }
+    } /* else if (tree.tag.equals(TagAbstract.IF)) {
+      Nodo hijo1 = tree.hijos.get(0);
+      Nodo hijo2 = tree.hijos.get(1);
+      addRow(new RowMip(TokenMip.ETIQ, getTempEtiq()));
+      etiqTrue = getTempEtiq();
+      incrementEt();
+      generateCodeCond(hijo1, 0);
+      for (Nodo nod : hijo2.hijos) {
+        generateCode(tree);
+      }
+    } */
   }
 
   public void printCode () {

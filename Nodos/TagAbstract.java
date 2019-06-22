@@ -5,7 +5,12 @@ public class TagAbstract {
   // tag de inicio
   public static final String INICIO = "Nodo de inicio";
 
+  // Tag de numero
   public static final String NUM = "NUM";
+
+  // Tag de IF
+
+  public static final String IF = "IF";
 
   // tag de procedimiento
   public static final String PROCEDURE = "Procedure";

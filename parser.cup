@@ -995,8 +995,8 @@ L6  ::= E5:hijo1 OPREL:t E5:hijo2           {:
 
     ;
 /* Imprimir o leer valores */
-P   ::=  GET:g LP P1:hijo RP PC     {:
-                                      Nodo tem = new Nodo(TagAbstract.GET,hijo);
+P   ::=  GET:g LP X:hijo RP PC     {:
+                                      Nodo tem = new Nodo(TagAbstract.GET, hijo.nodo.valor);
                                       RESULT =  new Container(tem);
                                     :}
     |   PUT:p LP:lp P2:hijo RP PC      {:

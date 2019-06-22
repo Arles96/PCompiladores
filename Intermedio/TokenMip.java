@@ -44,6 +44,12 @@ public class TokenMip {
   // token para funciones
   public static final String FUNC = "FUC";
 
+  // token para put
+  public static final String PUT = "PUT";
+
+  // token para get
+  public static final String GET = "GET";
+
   // token para multiplicar
   public static final String MULTIPLY = "*";
 

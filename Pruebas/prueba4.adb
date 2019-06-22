@@ -1,4 +1,5 @@
 procedure Hello is
+  x: Integer := 1;
 begin
-    put("Hello, World");
+    get(x);
 end Hello;

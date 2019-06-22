@@ -6,9 +6,11 @@ import Nodos.*;
 public class Mips {
 
   public LinkedList <RowMip> code = new LinkedList<RowMip>();
+  public LinkedList <RowMip> codeString = new LinkedList<RowMip>();
   public LinkedList <RowMip> initialVariables = new LinkedList<RowMip>();
   private int counterVar = 0;
   private int counterEt = 0;
+  private int counterString = 0;
   private String etiqTrue = "";
   private LinkedList <String> etiqsFalse = new LinkedList<String>();
 
@@ -18,8 +20,20 @@ public class Mips {
     code.add(r);
   }
 
+  public void addRowString (RowMip e) {
+    codeString.add(e);
+  }
+
   public void incrementVar () {
     counterVar++;
+  }
+
+  public void incrementString () {
+    counterString++;
+  }
+
+  public String getTempString () {
+    return "mgs" + 1;
   }
 
   public String getTempVar () {
@@ -408,13 +422,31 @@ public class Mips {
           }
         }
       }
-    } else if (tree.tag.equals(TagAbstract.RETURN)) {
+    } else if (tree.tag.equals(TagAbstract.RETURN)) { //  al retornar en una funcion
       Nodo hijo1 = tree.hijos.get(0);
       addRow(new RowMip(TokenMip.RETURN, hijo1.valor));
+    } else if (tree.tag.equals(TagAbstract.PUT)){ //  la funcion put
+      Nodo value = tree.hijos.get(0);
+      if (value.tag.equals(TagAbstract.STRING)) {
+        addRowString(new RowMip(TokenMip.ASSIGN, value.valor, getTempString()));
+        addRow(new RowMip(TokenMip.PUT, getTempString()));
+        incrementString();
+      } else if (value.tag.equals(TagAbstract.NUM)) {
+        addRow(new RowMip(TokenMip.ASSIGN, value.valor, getTempVar()));
+        addRow(new RowMip(TokenMip.PUT, getTempVar()));
+        incrementVar();
+      } else if (value.tag.equals(TagAbstract.ID)) {
+        addRow(new RowMip(TokenMip.PUT, value.valor));
+      }
+    } else if (tree.tag.equals(TagAbstract.GET)) { // la funcion get
+      addRow(new RowMip(TokenMip.GET, tree.valor));
     }
   }
 
   public void printCode () {
+    for (RowMip var : codeString) {
+      System.out.println(var.toString());
+    }
     for (RowMip row : code) {
       System.out.println(row.toString());
     }

@@ -343,6 +343,16 @@ public class Mips {
       addRow(new RowMip(TokenMip.GOTO, compare));
       // siguiente
       addRow(new RowMip(TokenMip.ETIQ, next));
+    } else if (tree.tag.equals(TagAbstract.LOOP)) {
+      addRow(new RowMip(TokenMip.ETIQ, getTempEtiq()));
+      String begin = getTempEtiq();
+      incrementEt();
+      for (Nodo var : tree.hijos) {
+        generateCode(var);
+      }
+      addRow(new RowMip(TokenMip.GOTO, begin));
+      addRow(new RowMip(TokenMip.ETIQ, getTempEtiq()));
+      incrementEt();
     }
   }
 

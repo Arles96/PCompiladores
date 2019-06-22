@@ -59,6 +59,9 @@ public class TokenMip {
   // token para mod
   public static final String MOD = "MOD";
 
+  // token para ejecutar funcion
+  public static final String EXEC = "EXEC";
+
   // token de condicional and
   public static final String IFAND = "IFAND";
 

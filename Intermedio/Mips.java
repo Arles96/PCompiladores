@@ -440,6 +440,17 @@ public class Mips {
       }
     } else if (tree.tag.equals(TagAbstract.GET)) { // la funcion get
       addRow(new RowMip(TokenMip.GET, tree.valor));
+    } else if (tree.tag.equals(TagAbstract.EJECUCION)) {
+      Nodo h1 = tree.hijos.get(0);
+      Nodo h2 = tree.hijos.get(1);
+      if (h2.tag.equals(TagAbstract.ID)) {
+        addRow(new RowMip(TokenMip.PARAM, h2.valor));
+      } else if (h2.tag.equals(TagAbstract.ARGUMENTOS)) {
+        for (Nodo var : h2.hijos) {
+          addRow(new RowMip(TokenMip.PARAM, var.valor));
+        }
+      }
+      addRow(new RowMip(TokenMip.EXEC, h1.valor));
     }
   }
 

@@ -19,10 +19,10 @@ public class Main {
           System.out.println(errores);
         }
       } else {
-        System.out.println("Codigo intermedio \n\n");
         printTree(p.raiz, 0);
         printTabla(p.tablaFinal, 0);
         Mips mips = new Mips();
+        System.out.println("\nCodigo intermedio \n\n");
         mips.generateCode(p.raiz);
         mips.printCode();
         //System.out.println("children: " + p.tablaFinal.children.size());

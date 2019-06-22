@@ -41,6 +41,9 @@ public class TokenMip {
   // token para return
   public static final String RETURN = "RET";
 
+  // token para funciones
+  public static final String FUNC = "FUC";
+
   // token para multiplicar
   public static final String MULTIPLY = "*";
 

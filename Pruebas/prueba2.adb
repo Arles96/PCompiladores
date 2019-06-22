@@ -1,5 +1,5 @@
 procedure prueba2 is
-  x:Integer;
+  x:Integer := 0;
   procedure Minimo2 (a, b: Integer; c: boolean) is
   ax,ay:boolean;
   az:Integer := 2;

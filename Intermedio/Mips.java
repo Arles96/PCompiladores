@@ -264,18 +264,18 @@ public class Mips {
       if (h1.tag.equals(TagAbstract.ID) && h2.tag.equals(TagAbstract.NULO)) { // declaracion de una variable sin asignacion
         if (tree.valor.equals("Boolean")) {
           addRow(new RowMip(TokenMip.ASSIGN, "FALSE", tree.hijos.get(0).valor));
-        } else if (tree.valor.equals("INTEGER")) {
+        } else if (tree.valor.equals(TagAbstract.INTEGER)) {
           addRow(new RowMip(TokenMip.ASSIGN, "0", tree.hijos.get(0).valor));
         }
       } else if (h1.tag.equals(TagAbstract.ID) && h2.tag.equals(TagAbstract.ASSIGN)) { // declaracion de una variable cons asignacion
-          Nodo value = tree.hijos.get(1);
+          Nodo value = h2.hijos.get(0);
           addRow(new RowMip(TokenMip.ASSIGN, value.valor, tree.hijos.get(0).valor));
       } else if (h1.tag.equals(TagAbstract.DECLARACION) && h2.tag.equals(TagAbstract.NULO)) { // declaracion de lista de variables sin asignacion
-        if (tree.valor.equals("Boolean")) {
+        if (tree.valor.equalsIgnoreCase("Boolean")) {
           for (Nodo var : h1.hijos) {
             addRow(new RowMip(TokenMip.ASSIGN, "FALSE", var.valor));
           }
-        } else if (tree.valor.equals("INTEGER")) {
+        } else if (tree.valor.equalsIgnoreCase("INTEGER")) {
           for (Nodo var : h1.hijos) {
             addRow(new RowMip(TokenMip.ASSIGN, "0", var.valor));
           }
@@ -286,7 +286,9 @@ public class Mips {
         }
       }
     } else if (tree.tag.equals(TagAbstract.CUERPO)) {
-      /* addRow(new RowMip(TokenMip.ETIQ, TokenMip.MAIN)); */
+      if (tree.padre.tag.equals(TagAbstract.PROCEDURE)) {
+        addRow(new RowMip(TokenMip.ETIQ, TokenMip.MAIN));
+      }
       for (Nodo nodo : tree.hijos) {
         generateCode(nodo);
       }
@@ -384,13 +386,14 @@ public class Mips {
       addRow(new RowMip(TokenMip.GOTO, begin));
       addRow(new RowMip(TokenMip.ETIQ, etiqsFalse.pop()));
     } else if (tree.tag.equals(TagAbstract.SUBPROCEDURE) || tree.tag.equals(TagAbstract.FUNCTION)) {
-      addRow(new RowMip(TokenMip.ETIQ, tree.hijos.get(0).valor));
+      addRow(new RowMip(TokenMip.FUNC, tree.hijos.get(0).valor));
       for (Nodo var : tree.hijos) {
         if (var.tag.equals(TagAbstract.PARAM)) { // si es parametros
-          Nodo hijo1 = var.hijos.get(0);
-          for (Nodo child : hijo1.hijos) {
+          for (Nodo child : var.hijos) {
             if (child.tag.equals(TagAbstract.DECLARACION)) {
-              addRow(new RowMip(TokenMip.PARAM, child.valor));
+              for (Nodo child2 : child.hijos) {
+                addRow(new RowMip(TokenMip.PARAM, child2.valor));
+              }
             } else if (child.tag.equals(TagAbstract.DATATYPE)) {
               generateCodeParam(child);
             }

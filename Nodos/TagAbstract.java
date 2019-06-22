@@ -35,6 +35,9 @@ public class TagAbstract {
   // tag de id (variables)
   public static final String ID = "ID";
 
+  // tag de integer
+  public static final String INTEGER = "Integer";
+
   // tag de arreglo de declaración
   public static final String DECLARACION = "Declaracion";
 

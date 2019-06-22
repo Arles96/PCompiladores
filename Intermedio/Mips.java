@@ -314,6 +314,35 @@ public class Mips {
       for (Nodo nod : tree.hijos) {
         generateCode(nod);
       }
+    } else if (tree.tag.equals(TagAbstract.FOR)) {
+      Nodo hijo1 = tree.hijos.get(0);
+      Nodo hijo2 = tree.hijos.get(1);
+      Nodo hijo3 = tree.hijos.get(2);
+      String firstValue = "" + hijo2.valor.charAt(0);
+      String endValue = "" + hijo2.valor.charAt(hijo2.valor.length() - 1);
+      // asignar los valores
+      addRow(new RowMip(TokenMip.ASSIGN, firstValue, hijo1.valor));
+      addRow(new RowMip(TokenMip.ASSIGN, endValue, getTempVar()));
+      String limit = getTempVar();
+      incrementVar();
+      // comparacion
+      addRow(new RowMip(TokenMip.ETIQ, getTempEtiq()));
+      String compare = getTempEtiq();
+      incrementEt();
+      addRow(new RowMip(TokenMip.IFLE, hijo1.valor, limit, getTempEtiq()));
+      String body = getTempEtiq();
+      incrementEt();
+      addRow(new RowMip(TokenMip.GOTO, getTempEtiq()));
+      String next = getTempEtiq();
+      // cuerpo
+      addRow(new RowMip(TokenMip.ETIQ, body));
+      for (Nodo nod : hijo3.hijos) {
+        generateCode(nod);
+      }
+      addRow(new RowMip(TokenMip.ADD, hijo1.valor, "1", hijo1.valor));
+      addRow(new RowMip(TokenMip.GOTO, compare));
+      // siguiente
+      addRow(new RowMip(TokenMip.ETIQ, next));
     }
   }
 

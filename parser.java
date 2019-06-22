@@ -2129,6 +2129,7 @@ class CUP$parser$actions {
 		
                                                             Nodo tem = new Nodo(TagAbstract.FOR,"0");
                                                             Nodo tem2 = new Nodo();
+                                                            tem.addHijo(((Container)t).nodo);
                                                             tem.addHijo(((Container)hijo1).nodo);
                                                             tem2.setTag(TagAbstract.CUERPO);
                                                             if(hijo2 != null){

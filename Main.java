@@ -1,6 +1,7 @@
 import java.io.*;
 import Nodos.*;
 import Intermedio.*;
+import Final.*;
 
 public class Main {
   public static void main(String argv[]) {
@@ -25,6 +26,10 @@ public class Main {
         System.out.println("\nCodigo intermedio \n\n");
         mips.generateCode(p.raiz);
         mips.printCode();
+        System.out.println("\nCodigo Final \n\n");
+        Binary bn = new Binary(mips);
+        bn.generateCode();
+        bn.printCode();
         //System.out.println("children: " + p.tablaFinal.children.size());
         /*System.out.println("Imprimiendo Tabla: ");
         for (Simbolo var : p.tablaFinal.tabla) {

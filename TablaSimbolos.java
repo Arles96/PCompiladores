@@ -56,7 +56,9 @@ public class TablaSimbolos {
     }
 
     public void addChildren(TablaSimbolos tab){
-        this.children.addAll(tab.children);
+        for (TablaSimbolos tSim : tab.children) {
+            this.addChild(tSim);           
+        }
     }
 
     public boolean asignarTipo(String tipo) {

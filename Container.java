@@ -53,6 +53,6 @@ class Container {
   }
 
   public void adoptChildren(Container con){
-
+    this.tablaMain.addChildren(con.tablaMain);
   }
 }

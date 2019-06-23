@@ -14,6 +14,7 @@ public class Binary {
   public LinkedList<TempVar> $t = new LinkedList<TempVar>();
   public LinkedList<TempVar> $a = new LinkedList<TempVar>();
   public LinkedList<TempVar> $s = new LinkedList<TempVar>();
+
   private int limitT = 8;
   private int limitA = 4;
   private int limitS = 8;
@@ -110,6 +111,14 @@ public class Binary {
         addLine("li " + var.getTemp() + ", " + value);
         addLine("sw " + var.getTemp() + ", _" + line.getResult());
         clearVar(line.getResult());
+      }
+    }
+  }
+
+  public void generateCodeOperator (RowMip line) {
+    if (line.getToken().equals(TokenMip.ADD)) {
+      if (line.getValue1().charAt(0) != 't' && line.getToken().charAt(0) != 't') {
+
       }
     }
   }

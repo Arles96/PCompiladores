@@ -69,7 +69,7 @@ public class Mips {
       t2 = getTempVar();
       incrementVar();
     }
-    if ((hijo1.tag.equals(TagAbstract.NUM) || hijo1.tag.equals(TagAbstract.ID)) && (hijo2.tag.equals(TagAbstract.NUM) || hijo1.tag.equals(TagAbstract.ID))) {
+    if ((hijo1.tag.equals(TagAbstract.NUM) || hijo1.tag.equals(TagAbstract.ID)) && (hijo2.tag.equals(TagAbstract.NUM) || hijo2.tag.equals(TagAbstract.ID))) {
       if (n == 1) {
         addRow(new RowMip(nodo.valor, hijo1.valor, hijo2.valor, getTempVar()));
       } else {

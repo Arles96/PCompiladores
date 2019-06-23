@@ -1,6 +1,7 @@
 import java.io.*;
 import Nodos.*;
 import Intermedio.*;
+import Tabla.*;
 import Final.*;
 
 public class Main {

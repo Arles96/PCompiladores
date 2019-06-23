@@ -1,4 +1,4 @@
-
+package Tabla;
 import java.util.LinkedList;
 
 /**
@@ -15,7 +15,7 @@ public class TablaSimbolos {
         this.children = new LinkedList();
         this.tabla = new LinkedList();
     }
-    
+
     public TablaSimbolos(TablaSimbolos padre) {
         this.parent = padre;
         this.children = new LinkedList();
@@ -27,8 +27,8 @@ public class TablaSimbolos {
         this.children = hijos;
         this.tabla = new LinkedList();
     }
-    
-    public void addChild(TablaSimbolos child) { 
+
+    public void addChild(TablaSimbolos child) {
         child.parent = this;
         this.children.add(child);
     }
@@ -71,7 +71,7 @@ public class TablaSimbolos {
                     tabla.get(i).tipo = new TipoDouble();*/
                 else if(tipo.compareToIgnoreCase("boolean") == 0)
                     tabla.get(i).tipo = new TipoBoolean();
-                else 
+                else
                     return false;
             }
         }

@@ -1,3 +1,4 @@
+package Tabla;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -45,7 +46,7 @@ public abstract class Tipo {
     public void setComposicion(LinkedList<Simbolo> composicion) {
         this.composicion = composicion;
     }
-    
+
     public void addComposicion(Simbolo composicion) {
         this.composicion.add(composicion);
     }

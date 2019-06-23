@@ -6,6 +6,7 @@
 import java_cup.runtime.*;
 import java.util.*;
 import Nodos.*;
+import Tabla.*;
 import java_cup.runtime.XMLElement;
 
 /** CUP v0.11b 20160615 (GIT 4ac7450) generated parser.
@@ -670,7 +671,7 @@ class CUP$parser$actions {
                                               for(int i = 0; i < ((Container)hijo2).nodo.hijos.size(); i++) {
                                                 tem.addHijo(((Container)hijo2).nodo.hijos.get(i));
                                               }
-                                              
+
                                               temp.addAll(hijo2);
                                               temp.addSymbols(hijo1);
                                             } else { //Viene de procedure o function
@@ -727,7 +728,7 @@ class CUP$parser$actions {
                                             thisFunction.tipo.setComposicion(hijo6.tablaMain.tabla);
                                           }
 
-                                          
+
                                           if(hijo2 != null){
                                             if(((Container)hijo2).nodo.getInfo().equals(TagAbstract.TEM)){
                                               for(int i = 0; i < ((Container)hijo2).nodo.hijos.size();i++){

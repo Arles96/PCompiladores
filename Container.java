@@ -46,6 +46,9 @@ class Container {
   }
 
   public void addBrother(Container con){
+    if(con.tablaMain.parent == null){
+      con.tablaMain.parent = new TablaSimbolos();
+    }
     con.tablaMain.parent.addChild(this.tablaMain);
   }
 

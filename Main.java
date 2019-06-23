@@ -20,6 +20,7 @@ public class Main {
         }
       } else {
         printTree(p.raiz, 0);
+        System.out.println("\nTabla de simbolos \n\n");
         printTabla(p.tablaFinal, 0);
         Mips mips = new Mips();
         System.out.println("\nCodigo intermedio \n\n");

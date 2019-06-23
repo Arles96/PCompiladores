@@ -69,7 +69,7 @@ public class Mips {
       t2 = getTempVar();
       incrementVar();
     }
-    if ((hijo1.tag.equals(TagAbstract.NUM) || hijo1.tag.equals(TagAbstract.ID)) && (hijo2.tag.equals(TagAbstract.NUM) || hijo1.tag.equals(TagAbstract.ID))) {
+    if ((hijo1.tag.equals(TagAbstract.NUM) || hijo1.tag.equals(TagAbstract.ID)) && (hijo2.tag.equals(TagAbstract.NUM) || hijo2.tag.equals(TagAbstract.ID))) {
       if (n == 1) {
         addRow(new RowMip(nodo.valor, hijo1.valor, hijo2.valor, getTempVar()));
       } else {
@@ -99,9 +99,9 @@ public class Mips {
       if (t1 != null && t2 != null) {
         addRow(new RowMip(nodo.valor, t1, t2, id.valor));
       } else if (t1 == null && t2 != null) {
-        addRow(new RowMip(nodo.valor, t2, id.valor));
+        addRow(new RowMip(TokenMip.ASSIGN, t2, id.valor));
       } else if (t1 != null && t2 == null) {
-        addRow(new RowMip(nodo.valor, t1, id.valor));
+        addRow(new RowMip(TokenMip.ASSIGN, t1, id.valor));
       } else {
         /* System.out.println("Error en la sección de operaciones aritmeticas"); */
         System.out.println(nodo.valor + "  id  " + id.valor);

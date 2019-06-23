@@ -1,4 +1,4 @@
-
+package Tabla;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -8,7 +8,7 @@ import java.util.LinkedList;
  */
 public class TipoFuncion extends Tipo{
     public Tipo rango;
-    
+
     public TipoFuncion(){
         this.rango = null;
         this.size = 0;
@@ -34,7 +34,7 @@ public class TipoFuncion extends Tipo{
             this.rango = new TipoFloat();
         else if(rango.compareToIgnoreCase("boolean") == 0)
             this.rango = new TipoBoolean();
-                
+
     }
 
     public TipoFuncion(Tipo rango, LinkedList<Simbolo> composicion){

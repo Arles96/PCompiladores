@@ -1,6 +1,8 @@
 import java.io.*;
 import Nodos.*;
 import Intermedio.*;
+import Tabla.*;
+import Final.*;
 
 public class Main {
   public static void main(String argv[]) {
@@ -29,6 +31,13 @@ public class Main {
 
         //System.out.println("\n");
         //System.out.println(p.tablaFinal.buscarSimbolo("Minimo3", "y"));
+        
+        System.out.println("\nCodigo Final \n\n");
+        Binary bn = new Binary(mips);
+        bn.generateCode();
+        bn.printCode();
+        Nodo nodo = p.raiz.hijos.get(0).hijos.get(0);
+        bn.saveCodeFile(nodo.valor);
         //System.out.println("children: " + p.tablaFinal.children.size());
         /*System.out.println("Imprimiendo Tabla: ");
         for (Simbolo var : p.tablaFinal.tabla) {

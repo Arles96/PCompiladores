@@ -1,4 +1,5 @@
 import Nodos.*;
+import Tabla.*;
 
 class Container {
 

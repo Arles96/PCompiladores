@@ -1,4 +1,4 @@
-
+package Tabla;
 /**
  *
  * @author Dario Mendoza
@@ -11,7 +11,7 @@ public class Simbolo {
 
     public Simbolo() {
     }
-    
+
     public Simbolo(String id, boolean esConstante, Tipo tipo) {
         this.id = id;
         this.esConstante = esConstante;

@@ -7,6 +7,7 @@ public class Simbolo {
     public String id;
     public boolean esConstante;
     public Tipo tipo;
+    public int offset;
 
     public Simbolo() {
     }
@@ -42,6 +43,6 @@ public class Simbolo {
     }
 
     public String toString(){
-        return id + ": " + ((tipo == null)?"null":tipo);
+        return id + ": " + ((tipo == null)?"null":tipo) + " offset: " + offset;
     }
 }

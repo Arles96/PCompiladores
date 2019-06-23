@@ -150,13 +150,14 @@ non terminal Container CUERPO;
 non terminal Container ARGFUC;
 
 start with A;
-
+//TODO: arreglar hermanos(agregar hermanos a la tabla principal)
 /* Procedimientos y Funciones */
 A   ::=  F:hijo                         {:/*A.root = F*/
                                           raiz = new Nodo();
                                           raiz.setTag(TagAbstract.INICIO);
                                           raiz.addHijo(((Container)hijo).nodo);
                                           tablaFinal = hijo.tablaMain;
+                                          tablaFinal.calcularOffset(tablaFinal, 0);
                                         :}
     ;
 F   ::=  PROCEDURE X:hijo1 IS G:hijo2  CUERPO:hijo3 {: /*procedure(G)*/

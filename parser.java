@@ -573,6 +573,7 @@ class CUP$parser$actions {
                                           raiz.setTag(TagAbstract.INICIO);
                                           raiz.addHijo(((Container)hijo).nodo);
                                           tablaFinal = hijo.tablaMain;
+                                          tablaFinal.calcularOffset(tablaFinal, 0);
                                         
               CUP$parser$result = parser.getSymbolFactory().newSymbol("A",0, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }

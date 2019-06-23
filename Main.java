@@ -26,6 +26,9 @@ public class Main {
         System.out.println("\nCodigo intermedio \n\n");
         mips.generateCode(p.raiz);
         mips.printCode();
+
+        System.out.println("\n");
+        System.out.println(p.tablaFinal.buscarSimbolo("Minimo3", "y"));
         //System.out.println("children: " + p.tablaFinal.children.size());
         /*System.out.println("Imprimiendo Tabla: ");
         for (Simbolo var : p.tablaFinal.tabla) {

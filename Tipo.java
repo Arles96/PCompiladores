@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 /**
  *
@@ -7,18 +8,18 @@ import java.util.ArrayList;
 public abstract class Tipo {
     public String nombre;
     public int size;
-    public ArrayList<Tipo> composicion;
+    public LinkedList<Simbolo> composicion;
 
     public Tipo() {
         this.nombre = "";
         this.size = 0;
-        this.composicion = new ArrayList();
+        this.composicion = new LinkedList();
     }
 
     public Tipo(String nombre, int size) {
         this.nombre = nombre;
         this.size = size;
-        this.composicion = new ArrayList();
+        this.composicion = new LinkedList();
     }
 
     public String getNombre() {
@@ -37,15 +38,15 @@ public abstract class Tipo {
         this.size = size;
     }
 
-    public ArrayList<Tipo> getComposicion() {
+    public LinkedList<Simbolo> getComposicion() {
         return composicion;
     }
 
-    public void setComposicion(ArrayList<Tipo> composicion) {
+    public void setComposicion(LinkedList<Simbolo> composicion) {
         this.composicion = composicion;
     }
     
-    public void addComposicion(Tipo composicion) {
+    public void addComposicion(Simbolo composicion) {
         this.composicion.add(composicion);
     }
 

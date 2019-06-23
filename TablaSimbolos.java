@@ -77,4 +77,32 @@ public class TablaSimbolos {
         }
         return true;
     }
+
+    public void calcularOffset(TablaSimbolos head, int offset) {
+        if(head.tabla != null)
+        for (Simbolo sim : head.tabla) {
+            sim.offset = offset;
+            if(sim.tipo != null || sim.tipo instanceof TipoFuncion)
+            offset += sim.tipo.size;
+        }
+        if(head.children != null)
+        for (TablaSimbolos tSim : head.children) {
+            calcularOffset(tSim, offset);
+        }
+    }
+
+    public Simbolo buscarSimbolo(String padre, String nombre){
+        if(tabla.get(0).id.compareToIgnoreCase(padre) == 0){
+            for (Simbolo sim : this.tabla) {
+                if(sim.id.compareToIgnoreCase(nombre) == 0){
+                    return sim;
+                }
+            }
+        }else{
+            for (TablaSimbolos child : children) {
+                return child.buscarSimbolo(padre, nombre);
+            }
+        }
+        return null;
+    }
 }

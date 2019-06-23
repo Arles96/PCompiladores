@@ -1,5 +1,7 @@
 package Final;
 
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.util.LinkedList;
 
 import Intermedio.Mips;
@@ -114,8 +116,13 @@ public class Binary {
 
   // funcion para la impresión de codigo
   private void generateCodePut (RowMip line) {
-    addLine("li $v0, 4");
-    addLine("la $a0, _" + line.getResult());
+    if (line.getResult().charAt(0) == 'm') {
+      addLine("li $v0, 4");
+      addLine("la $a0, " + line.getResult());
+    } else {
+      addLine("li $v0, 1");
+      addLine("lw $a0, _" + line.getResult());
+    }
     addLine("syscall");
   }
 
@@ -123,7 +130,7 @@ public class Binary {
     addLine(".data");
     // generando las declaraciones de los strings
     for (RowMip line : mips.codeString) {
-      String code = "_" + line.getResult() + ": .asciiz " + line.getValue1();
+      String code = "" + line.getResult() + ": .asciiz " + line.getValue1();
       addLine(code);
     }
     // generando todo el codigo
@@ -155,8 +162,20 @@ public class Binary {
     }
   }
 
-  public void saveCodeFile () {
-
+  public void saveCodeFile (String name) {
+    FileWriter fw = null;
+    PrintWriter pw = null;
+    try {
+      fw = new FileWriter("./Ejecutables/" + name + ".asm");
+      pw = new PrintWriter(fw);
+      for (String line : this.lineCode) {
+        pw.println(line);
+      }
+      System.out.println("\nSe ha creado el ejecutable\n");
+      fw.close();
+    } catch (Exception e) {
+      System.out.println("Ocurrio un error al crear el ejecutable");
+    }
   }
 
   public void printCode () {

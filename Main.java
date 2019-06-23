@@ -31,6 +31,8 @@ public class Main {
         Binary bn = new Binary(mips);
         bn.generateCode();
         bn.printCode();
+        Nodo nodo = p.raiz.hijos.get(0).hijos.get(0);
+        bn.saveCodeFile(nodo.valor);
         //System.out.println("children: " + p.tablaFinal.children.size());
         /*System.out.println("Imprimiendo Tabla: ");
         for (Simbolo var : p.tablaFinal.tabla) {

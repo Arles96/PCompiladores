@@ -33,11 +33,23 @@ class Container {
     this.tablaMain.addChildren(con.tablaMain);
   }
 
+  public void addChild(Container con){
+    this.tablaMain.addChild(con.tablaMain);
+  }
+
   public void addSymbol(Simbolo sim){
     this.tablaMain.addSymbol(sim);
   }
 
   public void addSymbolFirst(Simbolo sim){
     this.tablaMain.addSymbolFirst(sim);
+  }
+
+  public void addBrother(Container con){
+    con.tablaMain.parent.addChild(this.tablaMain);
+  }
+
+  public void adoptChildren(Container con){
+
   }
 }

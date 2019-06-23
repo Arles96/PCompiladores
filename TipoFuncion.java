@@ -1,5 +1,6 @@
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 /**
  *
@@ -36,7 +37,7 @@ public class TipoFuncion extends Tipo{
                 
     }
 
-    public TipoFuncion(Tipo rango, ArrayList<Tipo> composicion){
+    public TipoFuncion(Tipo rango, LinkedList<Simbolo> composicion){
         this.composicion = composicion;
         this.rango = rango;
         //this.width=range.width;
@@ -44,7 +45,7 @@ public class TipoFuncion extends Tipo{
         this.nombre = "function";
     }
 
-    public TipoFuncion(ArrayList<Tipo> composicion){
+    public TipoFuncion(LinkedList<Simbolo> composicion){
         this.composicion = composicion;
         this.size = 0;
         this.rango = null;//Should I create a void class?

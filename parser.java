@@ -679,7 +679,7 @@ class CUP$parser$actions {
 
                                               hijo2.addBrother(temp);
                                             }
-                                            System.out.println((hijo2.parent == null)?"null p":"not null");
+                                            System.out.println((hijo2.tablaMain.parent == null)?"null p":"not null");
                                           }
 
                                           RESULT = temp;
@@ -723,7 +723,7 @@ class CUP$parser$actions {
 
                                             //Se crea el tipo del procedimiento
                                             thisFunction.setTipo(new TipoFuncion(hijo2.nodo.valor));
-                                            thisFunction.setComposicion(hijo6.tablaMain.tabla);
+                                            thisFunction.tipo.setComposicion(hijo6.tablaMain.tabla);
                                           }
 
                                           
@@ -806,7 +806,7 @@ class CUP$parser$actions {
 
                                                         //Se crea el tipo de la funcion
                                                         thisFunction.setTipo(new TipoFuncion(hijo2.nodo.valor));
-                                                        thisFunction.setComposicion(hijo6.tablaMain.tabla);
+                                                        thisFunction.tipo.setComposicion(hijo6.tablaMain.tabla);
                                                       }
 
                                                       Nodo ret = new Nodo();

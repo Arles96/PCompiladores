@@ -9,15 +9,45 @@ import Intermedio.TokenMip;
 public class Binary {
 
   public LinkedList<String> lineCode = new LinkedList<String>();
+  public LinkedList<TempVar> $t = new LinkedList<TempVar>();
+  public LinkedList<TempVar> $a = new LinkedList<TempVar>();
+  public LinkedList<TempVar> $s = new LinkedList<TempVar>();
+  private int limitT = 8;
+  private int limitA = 4;
+  private int limitS = 8;
   private Mips mips;
   private boolean initialVars = true;
 
   // constructores
 
-  public Binary () {}
+  public Binary () {
+    for (int i = 0; i < limitT; i++) {
+      $t.add(new TempVar("$t" + i));
+    }
+    // temporal $a
+    for (int i = 0; i < limitA; i++) {
+      $a.add(new TempVar("$a" + i));
+    }
+    // temporal $s
+    for (int i = 0; i < limitS; i++) {
+      $s.add(new TempVar("$s" + i));
+    }
+  }
 
   public Binary (Mips mips) {
     this.mips = mips;
+    // temporals $t
+    for (int i = 0; i < limitT; i++) {
+      $t.add(new TempVar("$t" + i));
+    }
+    // temporal $a
+    for (int i = 0; i < limitA; i++) {
+      $a.add(new TempVar("$a" + i));
+    }
+    // temporal $s
+    for (int i = 0; i < limitS; i++) {
+      $s.add(new TempVar("$s" + i));
+    }
   }
 
   // getters and setters
@@ -30,9 +60,56 @@ public class Binary {
     return mips;
   }
 
+  // funcion para llenar una variable temporal
+  public TempVar addVar (String temp) {
+    for (TempVar var : $t) {
+      if (var.getEmpty()) {
+        var.addVar(temp);
+        return var;
+      }
+    }
+    return null;
+  }
+
+  // funcion para obtener la variable temporal
+  public TempVar getVar (String temp) {
+    for (TempVar var : $t) {
+      if (var.getVar().equals(temp)) {
+        return var;
+      }
+    }
+    return null;
+  }
+
+  // funcion para limpiar una variable temporal
+  public boolean clearVar (String temp) {
+    for (TempVar var : $t) {
+      if (var.getVar().equals(temp)) {
+        var.clearVar();
+        return true;
+      }
+    }
+    return false;
+  }
+
   // funcion para agregar lineas de codigo
   private void addLine (String line) {
     lineCode.add(line);
+  }
+
+  // funcion para generar codigo final en asignar
+  public void generaCodeAssing (RowMip line) {
+    if (initialVars == true) { // generando variables globales
+      addLine("_" + line.getResult() + ": .word " + line.getValue1());
+    } else {
+      String value = line.getValue1();
+      if (line.getValue2() == null && value.charAt(0) != 't') { //  si es asignacion
+        TempVar var = addVar(line.getResult());
+        addLine("li " + var.getTemp() + ", " + value);
+        addLine("sw " + var.getTemp() + ", _" + line.getResult());
+        clearVar(line.getResult());
+      }
+    }
   }
 
   // funcion para la impresión de codigo
@@ -52,9 +129,10 @@ public class Binary {
     // generando todo el codigo
     for (RowMip line : mips.code) {
       // codigo de variables globales o iniciales
-      if (line.getToken().equals(TokenMip.ASSIGN) && initialVars == true) { // generando variables globales
-        addLine("_" + line.getResult() + ": .word " + line.getValue1());
-      } else if (!line.getToken().equals(TokenMip.ASSIGN) && initialVars == true) { // generando el codigo administrativo
+      if (line.getToken().equals(TokenMip.ASSIGN)) {
+        generaCodeAssing(line);
+      }
+      if (!line.getToken().equals(TokenMip.ASSIGN) && initialVars == true) { // generando el codigo administrativo
         initialVars = false;
         String code1 = ".text";
         addLine(code1);
@@ -64,8 +142,7 @@ public class Binary {
       // generacion de etiquetas
       if (line.getToken().equals(TokenMip.ETIQ)) {
         if (line.getResult().equals(TokenMip.MAIN)) {
-          String code = line.getResult() + ":";
-          addLine(code);
+          addLine("main:");
         } else {
           String code = "_" + line.getResult() + ":";
           addLine(code);

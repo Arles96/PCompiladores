@@ -99,9 +99,9 @@ public class Mips {
       if (t1 != null && t2 != null) {
         addRow(new RowMip(nodo.valor, t1, t2, id.valor));
       } else if (t1 == null && t2 != null) {
-        addRow(new RowMip(nodo.valor, t2, id.valor));
+        addRow(new RowMip(TokenMip.ASSIGN, t2, id.valor));
       } else if (t1 != null && t2 == null) {
-        addRow(new RowMip(nodo.valor, t1, id.valor));
+        addRow(new RowMip(TokenMip.ASSIGN, t1, id.valor));
       } else {
         /* System.out.println("Error en la sección de operaciones aritmeticas"); */
         System.out.println(nodo.valor + "  id  " + id.valor);

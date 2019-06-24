@@ -107,7 +107,7 @@ public class Binary {
   }
 
   // funcion para generar codigo final en asignar
-  public void generaCodeAssing (RowMip line) {
+  private void generaCodeAssing (RowMip line) {
     if (initialVars == true) { // generando variables globales
       addLine("_" + line.getResult() + ": .word " + line.getValue1());
     } else {
@@ -144,7 +144,7 @@ public class Binary {
   }
 
   // funcion de operaciones aritmeticas
-  public void generateCodeOperator (RowMip line) {
+  private void generateCodeOperator (RowMip line) {
     if (line.getToken().equals(TokenMip.ADD)) { // suma
       Simbolo value1 = this.table.buscarSimbolo(procedure, line.getValue1());
       Simbolo value2 = this.table.buscarSimbolo(procedure, line.getValue2());
@@ -450,7 +450,7 @@ public class Binary {
   }
 
   // funciones para las condicionales
-  public void generateCodeCond (RowMip line) {
+  private void generateCodeCond (RowMip line) {
     Simbolo value1 = table.buscarSimbolo(procedure, line.getValue1());
     Simbolo value2 = table.buscarSimbolo(procedure, line.getValue1());
     if (line.getToken().equals(TokenMip.IFAND)) { //  OPERADOR AND
@@ -645,6 +645,13 @@ public class Binary {
     addLine("syscall");
   }
 
+  // funcion para obtener un dato
+  private void generateCodeGet (RowMip line) {
+    addLine("li $v0, 5");
+    addLine("syscall");
+    addLine("sw $v0, " + line.getResult());
+  }
+
   public void generateCode () {
     addLine(".data");
     // generando las declaraciones de los strings
@@ -691,6 +698,10 @@ public class Binary {
           line.getToken().equals(TokenMip.IFLE) || line.getToken().equals(TokenMip.IFOR) ||
           line.getToken().equals(TokenMip.GOTO)) {
         generateCodeCond(line);
+      }
+      // generacion de codigo para el token get
+      if (line.getToken().equals(TokenMip.GET)) {
+        generateCodeGet(line);
       }
     }
   }

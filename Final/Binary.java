@@ -113,11 +113,9 @@ public class Binary {
     } else {
       Simbolo value = this.table.buscarSimbolo(procedure, line.getValue1());
       if (value == null) {
-        if (line.getValue1().charAt(0) != 't') { //  si es asignacion
+        if (line.getValue1().charAt(0) != 't') { //  si es asignacion de variable temporal
           TempVar var = addVar(line.getResult());
           addLine("li " + var.getTemp() + ", " + line.getValue1());
-          addLine("sw " + var.getTemp() + ", _" + line.getResult());
-          clearVar(line.getResult());
         } else {
           TempVar var = getVar(line.getValue1());
           addLine("sw " + var.getTemp() + ", _" + line.getResult());
@@ -132,6 +130,7 @@ public class Binary {
     }
   }
 
+  // funcion de operaciones aritmeticas
   public void generateCodeOperator (RowMip line) {
     if (line.getToken().equals(TokenMip.ADD)) { // suma
       Simbolo value1 = this.table.buscarSimbolo(procedure, line.getValue1());
@@ -434,6 +433,176 @@ public class Binary {
         clearVar(value1.id);
         clearVar(value2.id);
       }
+    }
+  }
+
+  // funciones para las condicionales
+
+  public void generateCodeCond (RowMip line) {
+    Simbolo value1 = table.buscarSimbolo(procedure, line.getValue1());
+    Simbolo value2 = table.buscarSimbolo(procedure, line.getValue1());
+    if (line.getToken().equals(TokenMip.IFAND)) { //  OPERADOR AND
+
+    } else if (line.getToken().equals(TokenMip.IFD)) { // Diferente
+      if (value1 != null && value2 != null) {
+        TempVar val1 = addVar(value1.id);
+        TempVar val2 = addVar(value2.id);
+        addLine("lw " + val1.getTemp() + ", _" + value1.id);
+        addLine("lw " + val2.getTemp() + ", _" + value2.id);
+        addLine("bne " + val1.getTemp() + ", " + val2.getTemp() + ", _" + line.getResult());
+        clearVar(value1.id);
+        clearVar(value2.id);
+      } else if (value1 == null && value2 != null) {
+        TempVar val1 = addVar("1");
+        TempVar val2 = addVar(value2.id);
+        addLine("li " + val1.getTemp() + ", " + line.getResult());
+        addLine("lw " + val2.getTemp() + ", _" + value2.id);
+        addLine("bne " + val1.getTemp() + ", " + val2.getTemp() + ", _" + line.getResult());
+        clearVar("1");
+        clearVar(value2.id);
+      } else if (value1 != null && value2 == null) {
+        TempVar val1 = addVar(value1.id);
+        TempVar val2 = addVar("1");
+        addLine("lw " + val1.getTemp() + ", " + value1.id);
+        addLine("li " + val2.getTemp() + ", " + line.getValue2());
+        addLine("bne " + val1.getTemp() + ", " + val2.getTemp() + ", _" + line.getResult());
+        clearVar("1");
+        clearVar(value1.id);
+      }
+    } else if (line.getToken().equals(TokenMip.IFE)) { // igual
+      if (value1 != null && value2 != null) {
+        TempVar val1 = addVar(value1.id);
+        TempVar val2 = addVar(value2.id);
+        addLine("lw " + val1.getTemp() + ", _" + value1.id);
+        addLine("lw " + val2.getTemp() + ", _" + value2.id);
+        addLine("beq " + val1.getTemp() + ", " + val2.getTemp() + ", _" + line.getResult());
+        clearVar(value1.id);
+        clearVar(value2.id);
+      } else if (value1 == null && value2 != null) {
+        TempVar val1 = addVar("1");
+        TempVar val2 = addVar(value2.id);
+        addLine("li " + val1.getTemp() + ", " + line.getResult());
+        addLine("lw " + val2.getTemp() + ", _" + value2.id);
+        addLine("beq " + val1.getTemp() + ", " + val2.getTemp() + ", _" + line.getResult());
+        clearVar("1");
+        clearVar(value2.id);
+      } else if (value1 != null && value2 == null) {
+        TempVar val1 = addVar(value1.id);
+        TempVar val2 = addVar("1");
+        addLine("lw " + val1.getTemp() + ", " + value1.id);
+        addLine("li " + val2.getTemp() + ", " + line.getValue2());
+        addLine("beq " + val1.getTemp() + ", " + val2.getTemp() + ", _" + line.getResult());
+        clearVar("1");
+        clearVar(value1.id);
+      }
+    } else if (line.getToken().equals(TokenMip.IFH)) { // mayor que
+      if (value1 != null && value2 != null) {
+        TempVar val1 = addVar(value1.id);
+        TempVar val2 = addVar(value2.id);
+        addLine("lw " + val1.getTemp() + ", _" + value1.id);
+        addLine("lw " + val2.getTemp() + ", _" + value2.id);
+        addLine("bgt " + val1.getTemp() + ", " + val2.getTemp() + ", _" + line.getResult());
+        clearVar(value1.id);
+        clearVar(value2.id);
+      } else if (value1 == null && value2 != null) {
+        TempVar val1 = addVar("1");
+        TempVar val2 = addVar(value2.id);
+        addLine("li " + val1.getTemp() + ", " + line.getResult());
+        addLine("lw " + val2.getTemp() + ", _" + value2.id);
+        addLine("bgt " + val1.getTemp() + ", " + val2.getTemp() + ", _" + line.getResult());
+        clearVar("1");
+        clearVar(value2.id);
+      } else if (value1 != null && value2 == null) {
+        TempVar val1 = addVar(value1.id);
+        TempVar val2 = addVar("1");
+        addLine("lw " + val1.getTemp() + ", " + value1.id);
+        addLine("li " + val2.getTemp() + ", " + line.getValue2());
+        addLine("bgt " + val1.getTemp() + ", " + val2.getTemp() + ", _" + line.getResult());
+        clearVar("1");
+        clearVar(value1.id);
+      }
+    } else if (line.getToken().equals(TokenMip.IFHE)) { // mayor o igual que
+      if (value1 != null && value2 != null) {
+        TempVar val1 = addVar(value1.id);
+        TempVar val2 = addVar(value2.id);
+        addLine("lw " + val1.getTemp() + ", _" + value1.id);
+        addLine("lw " + val2.getTemp() + ", _" + value2.id);
+        addLine("bge " + val1.getTemp() + ", " + val2.getTemp() + ", _" + line.getResult());
+        clearVar(value1.id);
+        clearVar(value2.id);
+      } else if (value1 == null && value2 != null) {
+        TempVar val1 = addVar("1");
+        TempVar val2 = addVar(value2.id);
+        addLine("li " + val1.getTemp() + ", " + line.getResult());
+        addLine("lw " + val2.getTemp() + ", _" + value2.id);
+        addLine("bge " + val1.getTemp() + ", " + val2.getTemp() + ", _" + line.getResult());
+        clearVar("1");
+        clearVar(value2.id);
+      } else if (value1 != null && value2 == null) {
+        TempVar val1 = addVar(value1.id);
+        TempVar val2 = addVar("1");
+        addLine("lw " + val1.getTemp() + ", " + value1.id);
+        addLine("li " + val2.getTemp() + ", " + line.getValue2());
+        addLine("bge " + val1.getTemp() + ", " + val2.getTemp() + ", _" + line.getResult());
+        clearVar("1");
+        clearVar(value1.id);
+      }
+    } else if (line.getToken().equals(TokenMip.IFL)) { // menor que
+      if (value1 != null && value2 != null) {
+        TempVar val1 = addVar(value1.id);
+        TempVar val2 = addVar(value2.id);
+        addLine("lw " + val1.getTemp() + ", _" + value1.id);
+        addLine("lw " + val2.getTemp() + ", _" + value2.id);
+        addLine("blt " + val1.getTemp() + ", " + val2.getTemp() + ", _" + line.getResult());
+        clearVar(value1.id);
+        clearVar(value2.id);
+      } else if (value1 == null && value2 != null) {
+        TempVar val1 = addVar("1");
+        TempVar val2 = addVar(value2.id);
+        addLine("li " + val1.getTemp() + ", " + line.getResult());
+        addLine("lw " + val2.getTemp() + ", _" + value2.id);
+        addLine("blt " + val1.getTemp() + ", " + val2.getTemp() + ", _" + line.getResult());
+        clearVar("1");
+        clearVar(value2.id);
+      } else if (value1 != null && value2 == null) {
+        TempVar val1 = addVar(value1.id);
+        TempVar val2 = addVar("1");
+        addLine("lw " + val1.getTemp() + ", " + value1.id);
+        addLine("li " + val2.getTemp() + ", " + line.getValue2());
+        addLine("blt " + val1.getTemp() + ", " + val2.getTemp() + ", _" + line.getResult());
+        clearVar("1");
+        clearVar(value1.id);
+      }
+    } else if (line.getToken().equals(TokenMip.IFLE)) { // menor o igual que
+      if (value1 != null && value2 != null) {
+        TempVar val1 = addVar(value1.id);
+        TempVar val2 = addVar(value2.id);
+        addLine("lw " + val1.getTemp() + ", _" + value1.id);
+        addLine("lw " + val2.getTemp() + ", _" + value2.id);
+        addLine("ble " + val1.getTemp() + ", " + val2.getTemp() + ", _" + line.getResult());
+        clearVar(value1.id);
+        clearVar(value2.id);
+      } else if (value1 == null && value2 != null) {
+        TempVar val1 = addVar("1");
+        TempVar val2 = addVar(value2.id);
+        addLine("li " + val1.getTemp() + ", " + line.getResult());
+        addLine("lw " + val2.getTemp() + ", _" + value2.id);
+        addLine("ble " + val1.getTemp() + ", " + val2.getTemp() + ", _" + line.getResult());
+        clearVar("1");
+        clearVar(value2.id);
+      } else if (value1 != null && value2 == null) {
+        TempVar val1 = addVar(value1.id);
+        TempVar val2 = addVar("1");
+        addLine("lw " + val1.getTemp() + ", " + value1.id);
+        addLine("li " + val2.getTemp() + ", " + line.getValue2());
+        addLine("ble " + val1.getTemp() + ", " + val2.getTemp() + ", _" + line.getResult());
+        clearVar("1");
+        clearVar(value1.id);
+      }
+    } else if (line.getToken().equals(TokenMip.IFOR)) { // OPERADOR OR
+
+    } else { // GOTO
+      addLine("b _" + line.getResult());
     }
   }
 

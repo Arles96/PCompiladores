@@ -296,7 +296,7 @@ public class Mips {
         }
       } else if (h1.tag.equals(TagAbstract.DECLARACION) && h2.tag.equals(TagAbstract.ASSIGN)) { // declaracion de lista de variables con asignacion
         for (Nodo var : h1.hijos) {
-          addRow(new RowMip(TokenMip.ASSIGN, h2.valor, var.valor));
+          addRow(new RowMip(TokenMip.ASSIGN, h2.hijos.get(0).valor, var.valor));
         }
       }
     } else if (tree.tag.equals(TagAbstract.CUERPO)) {

@@ -135,10 +135,16 @@ public class Binary {
           }
         }
       } else {
-        TempVar var = addVar(value.id);
-        addLine("lw " + var.getTemp() + ", _" + value.id);
-        addLine("sw " + var.getTemp() + ", _" + line.getResult());
-        clearVar(value.id);
+        Simbolo result = this.table.buscarSimbolo(procedure, line.getResult());
+        if (result != null) {
+          TempVar var = addVar(value.id);
+          addLine("lw " + var.getTemp() + ", _" + value.id);
+          addLine("sw " + var.getTemp() + ", _" + line.getResult());
+          clearVar(value.id);
+        } else {
+          TempVar res = addVar(line.getResult());
+          addLine("lw " + res.getTemp() + ", _" + line.getValue1());
+        }
       }
     }
   }
@@ -452,7 +458,7 @@ public class Binary {
   // funciones para las condicionales
   private void generateCodeCond (RowMip line) {
     Simbolo value1 = table.buscarSimbolo(procedure, line.getValue1());
-    Simbolo value2 = table.buscarSimbolo(procedure, line.getValue1());
+    Simbolo value2 = table.buscarSimbolo(procedure, line.getValue2());
     if (line.getToken().equals(TokenMip.IFAND)) { //  OPERADOR AND
       TempVar val1 = getVar(line.getValue1());
       TempVar val2 = getVar(line.getValue2());
@@ -472,7 +478,7 @@ public class Binary {
       } else if (value1 == null && value2 != null) {
         TempVar val1 = addVar("1");
         TempVar val2 = addVar(value2.id);
-        addLine("li " + val1.getTemp() + ", " + line.getResult());
+        addLine("li " + val1.getTemp() + ", _" + line.getValue1());
         addLine("lw " + val2.getTemp() + ", _" + value2.id);
         addLine("bne " + val1.getTemp() + ", " + val2.getTemp() + ", _" + line.getResult());
         clearVar("1");
@@ -480,7 +486,7 @@ public class Binary {
       } else if (value1 != null && value2 == null) {
         TempVar val1 = addVar(value1.id);
         TempVar val2 = addVar("1");
-        addLine("lw " + val1.getTemp() + ", " + value1.id);
+        addLine("lw " + val1.getTemp() + ", _" + value1.id);
         addLine("li " + val2.getTemp() + ", " + line.getValue2());
         addLine("bne " + val1.getTemp() + ", " + val2.getTemp() + ", _" + line.getResult());
         clearVar("1");
@@ -498,7 +504,7 @@ public class Binary {
       } else if (value1 == null && value2 != null) {
         TempVar val1 = addVar("1");
         TempVar val2 = addVar(value2.id);
-        addLine("li " + val1.getTemp() + ", " + line.getResult());
+        addLine("li " + val1.getTemp() + ", " + line.getValue1());
         addLine("lw " + val2.getTemp() + ", _" + value2.id);
         addLine("beq " + val1.getTemp() + ", " + val2.getTemp() + ", _" + line.getResult());
         clearVar("1");
@@ -506,7 +512,7 @@ public class Binary {
       } else if (value1 != null && value2 == null) {
         TempVar val1 = addVar(value1.id);
         TempVar val2 = addVar("1");
-        addLine("lw " + val1.getTemp() + ", " + value1.id);
+        addLine("lw " + val1.getTemp() + ", _" + value1.id);
         addLine("li " + val2.getTemp() + ", " + line.getValue2());
         addLine("beq " + val1.getTemp() + ", " + val2.getTemp() + ", _" + line.getResult());
         clearVar("1");
@@ -528,7 +534,7 @@ public class Binary {
       } else if (value1 == null && value2 != null) {
         TempVar val1 = addVar("1");
         TempVar val2 = addVar(value2.id);
-        addLine("li " + val1.getTemp() + ", " + line.getResult());
+        addLine("li " + val1.getTemp() + ", " + line.getValue1());
         addLine("lw " + val2.getTemp() + ", _" + value2.id);
         addLine("bgt " + val1.getTemp() + ", " + val2.getTemp() + ", _" + line.getResult());
         clearVar("1");
@@ -536,7 +542,7 @@ public class Binary {
       } else if (value1 != null && value2 == null) {
         TempVar val1 = addVar(value1.id);
         TempVar val2 = addVar("1");
-        addLine("lw " + val1.getTemp() + ", " + value1.id);
+        addLine("lw " + val1.getTemp() + ", _" + value1.id);
         addLine("li " + val2.getTemp() + ", " + line.getValue2());
         addLine("bgt " + val1.getTemp() + ", " + val2.getTemp() + ", _" + line.getResult());
         clearVar("1");
@@ -554,7 +560,7 @@ public class Binary {
       } else if (value1 == null && value2 != null) {
         TempVar val1 = addVar("1");
         TempVar val2 = addVar(value2.id);
-        addLine("li " + val1.getTemp() + ", " + line.getResult());
+        addLine("li " + val1.getTemp() + ", " + line.getValue1());
         addLine("lw " + val2.getTemp() + ", _" + value2.id);
         addLine("bge " + val1.getTemp() + ", " + val2.getTemp() + ", _" + line.getResult());
         clearVar("1");
@@ -562,7 +568,7 @@ public class Binary {
       } else if (value1 != null && value2 == null) {
         TempVar val1 = addVar(value1.id);
         TempVar val2 = addVar("1");
-        addLine("lw " + val1.getTemp() + ", " + value1.id);
+        addLine("lw " + val1.getTemp() + ", _" + value1.id);
         addLine("li " + val2.getTemp() + ", " + line.getValue2());
         addLine("bge " + val1.getTemp() + ", " + val2.getTemp() + ", _" + line.getResult());
         clearVar("1");
@@ -580,7 +586,7 @@ public class Binary {
       } else if (value1 == null && value2 != null) {
         TempVar val1 = addVar("1");
         TempVar val2 = addVar(value2.id);
-        addLine("li " + val1.getTemp() + ", " + line.getResult());
+        addLine("li " + val1.getTemp() + ", " + line.getValue1());
         addLine("lw " + val2.getTemp() + ", _" + value2.id);
         addLine("blt " + val1.getTemp() + ", " + val2.getTemp() + ", _" + line.getResult());
         clearVar("1");
@@ -588,7 +594,7 @@ public class Binary {
       } else if (value1 != null && value2 == null) {
         TempVar val1 = addVar(value1.id);
         TempVar val2 = addVar("1");
-        addLine("lw " + val1.getTemp() + ", " + value1.id);
+        addLine("lw " + val1.getTemp() + ", _" + value1.id);
         addLine("li " + val2.getTemp() + ", " + line.getValue2());
         addLine("blt " + val1.getTemp() + ", " + val2.getTemp() + ", _" + line.getResult());
         clearVar("1");
@@ -606,7 +612,7 @@ public class Binary {
       } else if (value1 == null && value2 != null) {
         TempVar val1 = addVar("1");
         TempVar val2 = addVar(value2.id);
-        addLine("li " + val1.getTemp() + ", " + line.getResult());
+        addLine("li " + val1.getTemp() + ", " + line.getValue1());
         addLine("lw " + val2.getTemp() + ", _" + value2.id);
         addLine("ble " + val1.getTemp() + ", " + val2.getTemp() + ", _" + line.getResult());
         clearVar("1");
@@ -614,7 +620,7 @@ public class Binary {
       } else if (value1 != null && value2 == null) {
         TempVar val1 = addVar(value1.id);
         TempVar val2 = addVar("1");
-        addLine("lw " + val1.getTemp() + ", " + value1.id);
+        addLine("lw " + val1.getTemp() + ", _" + value1.id);
         addLine("li " + val2.getTemp() + ", " + line.getValue2());
         addLine("ble " + val1.getTemp() + ", " + val2.getTemp() + ", _" + line.getResult());
         clearVar("1");

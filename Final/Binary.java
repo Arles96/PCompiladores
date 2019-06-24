@@ -133,7 +133,7 @@ public class Binary {
   }
 
   public void generateCodeOperator (RowMip line) {
-    if (line.getToken().equals(TokenMip.ADD)) {
+    if (line.getToken().equals(TokenMip.ADD)) { // suma
       Simbolo value1 = this.table.buscarSimbolo(procedure, line.getValue1());
       Simbolo value2 = this.table.buscarSimbolo(procedure, line.getValue2());
       if (value1 == null && value2 == null) { //  si ninguno es una variable existente
@@ -142,6 +142,10 @@ public class Binary {
           TempVar var1 = addVar("1");
           addLine("li " + var1.getTemp() + ", " + line.getValue1());
           addLine("add " + var.getTemp() + ", " + var1.getTemp() + ", " + line.getValue2());
+          if (this.table.buscarSimbolo(procedure, line.getResult()) != null) {
+            addLine("sw " + var.getTemp() + ", _" + line.getResult());
+            clearVar(line.getResult());
+          }
           clearVar("1");
         } else if (line.getValue1().charAt(0) == 't' && line.getValue2().charAt(0) != 't') {
           TempVar var = getVar(line.getValue1());
@@ -202,7 +206,7 @@ public class Binary {
         clearVar(value1.id);
         clearVar(value2.id);
       }
-    } else if (line.getToken().equals(TokenMip.SUBTRACT)) {
+    } else if (line.getToken().equals(TokenMip.SUBTRACT)) { // resta
       Simbolo value1 = this.table.buscarSimbolo(procedure, line.getValue1());
       Simbolo value2 = this.table.buscarSimbolo(procedure, line.getValue2());
       if (value1 == null && value2 == null) { //  si ninguno es una variable existente
@@ -211,6 +215,12 @@ public class Binary {
           TempVar val1 = addVar("2");
           addLine("li " + val1.getTemp() + ", " + line.getValue1());
           addLine("sub " + var.getTemp() + ", " + val1.getTemp() + ", " + line.getValue2());
+          addLine("sw " + var.getTemp() + ", _" + line.getResult());
+          if (this.table.buscarSimbolo(procedure, line.getResult()) != null) {
+            addLine("sw " + var.getTemp() + ", _" + line.getResult());
+            clearVar(line.getResult());
+          }
+          clearVar("2");
         } else if (line.getValue1().charAt(0) == 't' && line.getValue2().charAt(0) != 't') {
           TempVar var = getVar(line.getValue1());
           TempVar newVar = addVar(line.getResult());
@@ -220,8 +230,9 @@ public class Binary {
           TempVar var = getVar(line.getValue2());
           TempVar newVar = addVar(line.getResult());
           TempVar var1 = addVar("2");
+          System.out.println(line.getValue2());
           addLine("li " + var1.getTemp() + ", " + line.getValue1());
-          addLine("sub " + newVar.getTemp() + ", " + var.getTemp() + ", " + var.getTemp());
+          addLine("sub " + newVar.getTemp() + ", " + var1.getTemp() + ", " + var.getTemp());
           clearVar(line.getValue2());
           clearVar("2");
         } else {
@@ -322,7 +333,7 @@ public class Binary {
         generateCodePut(line);
       }
       // para operaciones
-      if (line.getToken().equals(TokenMip.ADD)) {
+      if (line.getToken().equals(TokenMip.ADD) || line.getToken().equals(TokenMip.SUBTRACT)) {
         generateCodeOperator(line);
       }
     }

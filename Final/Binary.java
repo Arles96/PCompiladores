@@ -655,7 +655,7 @@ public class Binary {
   private void generateCodeGet (RowMip line) {
     addLine("li $v0, 5");
     addLine("syscall");
-    addLine("sw $v0, " + line.getResult());
+    addLine("sw $v0, _" + line.getResult());
   }
 
   public void generateCode () {

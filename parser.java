@@ -854,7 +854,7 @@ class CUP$parser$actions {
 
                                                       //Agrega la funcion a la tabla de simbolos
                                                       temp.addSymbolFirst(thisFunction);
-                                                      
+
                                                       tablaFinal = temp.tablaMain;
                                                       RESULT = temp;
                                                     
@@ -1190,7 +1190,7 @@ class CUP$parser$actions {
 		int n2left = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int n2right = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String n2 = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		 /* result = range(att: num1, num2)*/ RESULT = new Container(new Nodo("Rango",n1 + t + n2));
+		 /* result = range(att: num1, num2)*/ RESULT = new Container(new Nodo("Rango",n1 + "-" + n2));
               CUP$parser$result = parser.getSymbolFactory().newSymbol("N1",9, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;

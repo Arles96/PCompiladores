@@ -113,13 +113,26 @@ public class Binary {
     } else {
       Simbolo value = this.table.buscarSimbolo(procedure, line.getValue1());
       if (value == null) {
-        if (line.getValue1().charAt(0) != 't') { //  si es asignacion de variable temporal
-          TempVar var = addVar(line.getResult());
-          addLine("li " + var.getTemp() + ", " + line.getValue1());
+        Simbolo result = this.table.buscarSimbolo(procedure, line.getResult());
+        if (result != null) {
+          if (line.getValue1().charAt(0) != 't') { //  si es asignacion de variable temporal
+            TempVar var = addVar(line.getResult());
+            addLine("li " + var.getTemp() + ", " + line.getValue1());
+            addLine("sw " + var.getTemp() + ", _" + line.getResult());
+            clearVar(line.getResult());
+          } else {
+            TempVar var = getVar(line.getValue1());
+            addLine("sw " + var.getTemp() + ", _" + line.getResult());
+            clearVar(line.getValue1());
+          }
         } else {
-          TempVar var = getVar(line.getValue1());
-          addLine("sw " + var.getTemp() + ", _" + line.getResult());
-          clearVar(line.getValue1());
+          TempVar temp = getVar(line.getResult());
+          if (temp == null) {
+            TempVar var = addVar(line.getResult());
+            addLine("li " + var.getTemp() + ", " + line.getValue1());
+          } else {
+            addLine("li " + temp.getTemp() + ", " + line.getValue1());
+          }
         }
       } else {
         TempVar var = addVar(value.id);
@@ -437,7 +450,6 @@ public class Binary {
   }
 
   // funciones para las condicionales
-
   public void generateCodeCond (RowMip line) {
     Simbolo value1 = table.buscarSimbolo(procedure, line.getValue1());
     Simbolo value2 = table.buscarSimbolo(procedure, line.getValue1());
@@ -446,8 +458,8 @@ public class Binary {
       TempVar val2 = getVar(line.getValue2());
       TempVar result = addVar(line.getResult());
       addLine("and " + result.getTemp() + ", " + val1.getTemp() + ", " + val2.getTemp());
-      clearVar(value1.id);
-      clearVar(value2.id);
+      clearVar(val1.getVar());
+      clearVar(val2.getVar());
     } else if (line.getToken().equals(TokenMip.IFD)) { // Diferente
       if (value1 != null && value2 != null) {
         TempVar val1 = addVar(value1.id);
@@ -613,8 +625,8 @@ public class Binary {
       TempVar val2 = getVar(line.getValue2());
       TempVar result = addVar(line.getResult());
       addLine("or " + result.getTemp() + ", " + val1.getTemp() + ", " + val2.getTemp());
-      clearVar(value1.id);
-      clearVar(value2.id);
+      clearVar(val1.getVar());
+      clearVar(val2.getVar());
     } else { // GOTO
       addLine("b _" + line.getResult());
     }
@@ -671,6 +683,14 @@ public class Binary {
       if (line.getToken().equals(TokenMip.ADD) || line.getToken().equals(TokenMip.SUBTRACT) ||
           line.getToken().equals(TokenMip.MULTIPLY) || line.getToken().equals(TokenMip.DIVIDE)) {
         generateCodeOperator(line);
+      }
+      // para condicionales
+      if (line.getToken().equals(TokenMip.IFAND) || line.getToken().equals(TokenMip.IFD) ||
+          line.getToken().equals(TokenMip.IFE) || line.getToken().equals(TokenMip.IFH) ||
+          line.getToken().equals(TokenMip.IFHE) || line.getToken().equals(TokenMip.IFL) ||
+          line.getToken().equals(TokenMip.IFLE) || line.getToken().equals(TokenMip.IFOR) ||
+          line.getToken().equals(TokenMip.GOTO)) {
+        generateCodeCond(line);
       }
     }
   }

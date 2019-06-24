@@ -6,18 +6,25 @@ _X: .word 0
 main:
 li $t0, 1
 sw $t0, _I
+lw $t0, _I
+lw $t1, _I
+beq $t0, $t1, _etiq2
 li $t0, 0
-sw $t0, _t0
+b _etiq3
 _etiq2:
 li $t0, 1
-sw $t0, _t0
 _etiq3:
-li $t0, 0
-sw $t0, _t1
+lw $t1, _I
+lw $t2, _I
+blt $t1, $t2, _etiq4
+li $t1, 0
+b _etiq5
 _etiq4:
-li $t0, 1
-sw $t0, _t1
+li $t1, 1
 _etiq5:
+and $t2, $t0, $t1
+beq $t2, 1, _etiq0
+b _etiq1
 _etiq0:
 li $t0, 4
 sw $t0, _X

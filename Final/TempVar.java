@@ -7,12 +7,15 @@ public class TempVar {
   private boolean empty;
 
   public TempVar () {
+    this.temp = "";
+    this.var = "";
     empty = true;
   }
 
   public TempVar (String temp) {
     this.temp = temp;
     this.empty = true;
+    this.var = "";
   }
 
   public TempVar (String temp, String var) {
@@ -49,7 +52,7 @@ public class TempVar {
 
   // funcion para limpiar el temporal
   public void clearVar () {
-    this.var = null;
+    this.var = "";
     this.empty = true;
   }
 
@@ -57,6 +60,11 @@ public class TempVar {
   public void addVar (String var) {
     this.var = var;
     this.empty = false;
+  }
+
+  @Override
+  public String toString() {
+    return temp + "|" + var;
   }
 
 }

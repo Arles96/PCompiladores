@@ -37,10 +37,10 @@ public class Main {
         //System.out.println(p.tablaFinal.buscarSimbolo("Minimo3", "y"));
 
         System.out.println("\nCodigo Final \n\n");
-        Binary bn = new Binary(mips);
+        Nodo nodo = p.raiz.hijos.get(0).hijos.get(0);
+        Binary bn = new Binary(mips, p.tablaFinal, nodo.valor);
         bn.generateCode();
         bn.printCode();
-        Nodo nodo = p.raiz.hijos.get(0).hijos.get(0);
         bn.saveCodeFile(nodo.valor);
         //System.out.println("children: " + p.tablaFinal.children.size());
         /*System.out.println("Imprimiendo Tabla: ");

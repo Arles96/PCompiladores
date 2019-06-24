@@ -1,9 +1,8 @@
 .data
-_C: .word 0
-_A: .word FALSE
-_B: .word FALSE
+_x: .word 1
 .text
 .globl main
 main:
-li $t0, 0
-sw $t0, _Y
+li $v0, 5
+syscall
+sw $v0, x

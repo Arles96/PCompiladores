@@ -16,6 +16,7 @@ public class Binary {
   public LinkedList<TempVar> $t = new LinkedList<TempVar>();
   public LinkedList<TempVar> $a = new LinkedList<TempVar>();
   public LinkedList<TempVar> $s = new LinkedList<TempVar>();
+  public LinkedList<TempVar> varFunction = new LinkedList<TempVar>();
   private boolean initialParam = false;
   private String mainProcedure;
   private String procedure;

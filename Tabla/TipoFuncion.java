@@ -34,6 +34,8 @@ public class TipoFuncion extends Tipo{
             this.rango = new TipoFloat();
         else if(rango.compareToIgnoreCase("boolean") == 0)
             this.rango = new TipoBoolean();
+        else if(rango.compareToIgnoreCase("0") == 0)
+            this.nombre = "procedure";
 
     }
 

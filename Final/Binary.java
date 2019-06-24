@@ -442,7 +442,12 @@ public class Binary {
     Simbolo value1 = table.buscarSimbolo(procedure, line.getValue1());
     Simbolo value2 = table.buscarSimbolo(procedure, line.getValue1());
     if (line.getToken().equals(TokenMip.IFAND)) { //  OPERADOR AND
-
+      TempVar val1 = getVar(line.getValue1());
+      TempVar val2 = getVar(line.getValue2());
+      TempVar result = addVar(line.getResult());
+      addLine("and " + result.getTemp() + ", " + val1.getTemp() + ", " + val2.getTemp());
+      clearVar(value1.id);
+      clearVar(value2.id);
     } else if (line.getToken().equals(TokenMip.IFD)) { // Diferente
       if (value1 != null && value2 != null) {
         TempVar val1 = addVar(value1.id);
@@ -494,6 +499,10 @@ public class Binary {
         addLine("beq " + val1.getTemp() + ", " + val2.getTemp() + ", _" + line.getResult());
         clearVar("1");
         clearVar(value1.id);
+      } else {
+        TempVar val1 = getVar(line.getValue1());
+        addLine("beq " + val1.getTemp() + ", " + line.getValue2() + ", _" + line.getResult());
+        clearVar(line.getValue1());
       }
     } else if (line.getToken().equals(TokenMip.IFH)) { // mayor que
       if (value1 != null && value2 != null) {
@@ -600,7 +609,12 @@ public class Binary {
         clearVar(value1.id);
       }
     } else if (line.getToken().equals(TokenMip.IFOR)) { // OPERADOR OR
-
+      TempVar val1 = getVar(line.getValue1());
+      TempVar val2 = getVar(line.getValue2());
+      TempVar result = addVar(line.getResult());
+      addLine("or " + result.getTemp() + ", " + val1.getTemp() + ", " + val2.getTemp());
+      clearVar(value1.id);
+      clearVar(value2.id);
     } else { // GOTO
       addLine("b _" + line.getResult());
     }

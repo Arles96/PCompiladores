@@ -4,9 +4,12 @@ _D: .asciiz "Hola"
 .text
 .globl main
 main:
-li $t0, 1
+li $t0, 0
 li $t1, 1
-and $t3, $t0, $t1
+or $t3, $t0, $t1
+li $v0, 1
+move 	$a0, $t3		# $a0 = $t3
+syscall
 beq		$t3, 1, etiq1	# if $t3 == 1 then etiq1
 b		etiq2	 # branch to etiq2
 etiq1:

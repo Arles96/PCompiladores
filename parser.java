@@ -510,12 +510,12 @@ public class parser extends java_cup.runtime.lr_parser {
     report_error(message, info);
   }
 
+  public void addErrorSemantico(String message){
+    msgErroresSemantico.add(message);
+  }
+
   public boolean isInteger (String value) {
-    if (value.indexOf(".") == 1) {
-      return false;
-    } else {
-      return true;
-    }
+    return (value.indexOf(".") == -1);
   }
 
   public Nodo raiz;
@@ -631,6 +631,7 @@ class CUP$parser$actions {
 
                                           nod.addHijo(((Container)hijo3).nodo);
 
+                                          tablaFinal = temp.tablaMain;
                                           RESULT = temp;
                                         
               CUP$parser$result = parser.getSymbolFactory().newSymbol("F",1, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -684,6 +685,7 @@ class CUP$parser$actions {
                                             System.out.println((hijo2.tablaMain.parent == null)?"null p":"not null");
                                           }
 
+                                          tablaFinal = temp.tablaMain;
                                           RESULT = temp;
                                         
               CUP$parser$result = parser.getSymbolFactory().newSymbol("G",2, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -765,6 +767,7 @@ class CUP$parser$actions {
                                           //Agrega el procedimiento a la tabla de simbolos
                                           temp.tablaMain.addSymbolFirst(thisFunction);
 
+                                          tablaFinal = temp.tablaMain;
                                           RESULT = temp;
                                         
               CUP$parser$result = parser.getSymbolFactory().newSymbol("G",2, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-6)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -851,7 +854,8 @@ class CUP$parser$actions {
 
                                                       //Agrega la funcion a la tabla de simbolos
                                                       temp.addSymbolFirst(thisFunction);
-
+                                                      
+                                                      tablaFinal = temp.tablaMain;
                                                       RESULT = temp;
                                                     
               CUP$parser$result = parser.getSymbolFactory().newSymbol("G",2, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-8)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -1152,6 +1156,9 @@ class CUP$parser$actions {
 		int dtright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String dt = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		 /* result = dt; */
+                          if(dt.compareToIgnoreCase("integer") != 0 && dt.compareToIgnoreCase("float") != 0 && dt.compareToIgnoreCase("boolean") != 0 )
+                            addErrorSemantico("Tipo no se encuentra: " + dt);
+
                           RESULT = new Container(new Nodo(TagAbstract.DATATYPE,dt));
                         
               CUP$parser$result = parser.getSymbolFactory().newSymbol("Z",7, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -1312,24 +1319,23 @@ class CUP$parser$actions {
                                           ((Container)hijo2).nodo.addHijo(((Container)hijo1).nodo);
                                           if(((Container)hijo3).nodo.getInfo().equals(TagAbstract.NULO)){
                                           }else{
-                                            if (hijo3.nodo.hijos.size() != 0) {
-                                              for (Nodo n: hijo3.nodo.hijos) {
-                                                for (int i = 0; i < tablaSimbolos.size(); i++) {
-                                                  String identificador = tablaSimbolos.get(i)[0];
-                                                  String tipo = tablaSimbolos.get(i)[1];
-                                                  if (identificador.equals(hijo1.nodo.valor)) {
-                                                    if (tipo.equalsIgnoreCase("Integer") && !isInteger(n.valor)) {
-                                                      System.out.println("Error Semantico");
-                                                    }
-                                                  }
-                                                }
-                                              }
-                                            }
                                             ((Container)hijo2).nodo.addHijo(((Container)hijo3).nodo);
                                           }
                                           hijo2.tablaMain = hijo1.tablaMain;
                                           hijo2.tablaMain.asignarTipo(hijo2.nodo.valor);
 
+                                          if(hijo3.nodo.valor != null){
+                                            if(hijo3.getValor().compareToIgnoreCase("TRUE") == 0 || hijo3.getValor().compareToIgnoreCase("FALSE") == 0){
+                                              if(!(hijo2.getValor().compareToIgnoreCase("boolean") == 0)){
+                                                addErrorSemantico("Tipo incompatible boolean a " + hijo2.getValor());
+                                              }
+                                            }
+                                          } else {
+                                            if((hijo2.getValor().compareToIgnoreCase("integer") == 0) && !isInteger(hijo3.nodo.extraData))
+                                              addErrorSemantico("Tipo incompatible float a integer");
+                                            if((hijo2.getValor().compareToIgnoreCase("float") == 0) && isInteger(hijo3.nodo.extraData))
+                                              addErrorSemantico("Tipo incompatible integer a float");
+                                          }
                                           /*System.out.println("Imprimiendo en C");
                                           for(Simbolo sim : hijo2.tablaMain.tabla){
                                             System.out.println(sim.id);
@@ -1353,6 +1359,7 @@ class CUP$parser$actions {
                           Nodo tem = new Nodo();
                           tem.setTag(TagAbstract.ASSIGN);
                           tem.addHijo(((Container)n).nodo);
+                          tem.extraData = n.nodo.valor;
                           RESULT = new Container(tem);
                         
               CUP$parser$result = parser.getSymbolFactory().newSymbol("D",11, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -1797,6 +1804,11 @@ class CUP$parser$actions {
                                                 Nodo tem = new Nodo(TagAbstract.ASSINGVALUE,"::=");
                                                 tem.addHijo(((Container)hijo1).nodo);
                                                 tem.addHijo(((Container)hijo2).nodo);
+
+                                                if(hijo2.nodo != null)
+                                                if((hijo2.nodo.valor.compareToIgnoreCase("1") == 0 || hijo2.nodo.valor.compareToIgnoreCase("0") == 0) && tablaFinal.buscarSimbolo(hijo1.nodo.valor).tipo.nombre.compareToIgnoreCase("boolean") == 0){
+                                                  addErrorSemantico("Tipo incompatible boolean a " + tablaFinal.buscarSimbolo(hijo1.nodo.valor).tipo.nombre);
+                                                }
                                                 RESULT = new Container(tem);
                                               
               CUP$parser$result = parser.getSymbolFactory().newSymbol("E",16, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);

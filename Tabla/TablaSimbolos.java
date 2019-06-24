@@ -56,7 +56,9 @@ public class TablaSimbolos {
     }
 
     public void addChildren(TablaSimbolos tab){
-        this.children.addAll(tab.children);
+        for (TablaSimbolos tSim : tab.children) {
+            this.addChild(tSim);           
+        }
     }
 
     public boolean asignarTipo(String tipo) {
@@ -102,6 +104,18 @@ public class TablaSimbolos {
             for (TablaSimbolos child : children) {
                 return child.buscarSimbolo(padre, nombre);
             }
+        }
+        return null;
+    }
+
+    public Simbolo buscarSimbolo(String nombre){
+        for (Simbolo sim : this.tabla) {
+            if(sim.id.compareToIgnoreCase(nombre) == 0){
+                return sim;
+            }
+        }
+        for (TablaSimbolos child : children) {
+            return child.buscarSimbolo(nombre);
         }
         return null;
     }

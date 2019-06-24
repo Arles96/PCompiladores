@@ -5,5 +5,5 @@ procedure Hello is
   A, B: Boolean;
 begin
 Y := FALSE;
-X := 4 + C;
+X := 4 + 4 + 5;
 end Hello;

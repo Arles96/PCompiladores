@@ -511,7 +511,7 @@ public class parser extends java_cup.runtime.lr_parser {
   }
 
   public void addErrorSemantico(String message){
-    msgErroresSemantico.add(message);
+    msgErroresSemantico.add("Error semantico: " + message);
   }
 
   public boolean isInteger (String value) {
@@ -624,6 +624,10 @@ class CUP$parser$actions {
                                             temp.adoptChildren(hijo2);
                                           }
 
+                                          if(hijo3.nodo.extraData.compareToIgnoreCase(hijo1.nodo.valor) != 0){
+                                            addErrorSemantico("Fin de funcion no encontrado: " + hijo1.nodo.valor);
+                                          }
+
                                           Simbolo thisFunction = hijo1.tablaMain.tabla.get(0);
                                           thisFunction.setTipo(new TipoFuncion());
                                           //TODO:agregar composicion
@@ -631,7 +635,7 @@ class CUP$parser$actions {
 
                                           nod.addHijo(((Container)hijo3).nodo);
 
-                                          tablaFinal = temp.tablaMain;
+                                          //tablaFinal = temp.tablaMain;
                                           RESULT = temp;
                                         
               CUP$parser$result = parser.getSymbolFactory().newSymbol("F",1, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -682,10 +686,10 @@ class CUP$parser$actions {
 
                                               hijo2.addBrother(temp);
                                             }
-                                            System.out.println((hijo2.tablaMain.parent == null)?"null p":"not null");
+                                            //System.out.println((hijo2.tablaMain.parent == null)?"null p":"not null");
                                           }
 
-                                          tablaFinal = temp.tablaMain;
+                                          //tablaFinal = temp.tablaMain;
                                           RESULT = temp;
                                         
               CUP$parser$result = parser.getSymbolFactory().newSymbol("G",2, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -716,7 +720,7 @@ class CUP$parser$actions {
                                           Nodo nod = new Nodo(); // nodo para el procedimiento
                                           Container temp = new Container(temporal);
                                           Simbolo thisFunction = hijo1.tablaMain.tabla.get(0);
-
+                                          thisFunction.setTipo(new TipoFuncion());
 
                                           nod.setTag(TagAbstract.SUBPROCEDURE);
                                           nod.addHijo(((Container)hijo1).nodo);
@@ -726,7 +730,6 @@ class CUP$parser$actions {
                                             temp.addAll(hijo6);
 
                                             //Se crea el tipo del procedimiento
-                                            thisFunction.setTipo(new TipoFuncion(hijo2.nodo.valor));
                                             thisFunction.tipo.setComposicion(hijo6.tablaMain.tabla);
                                           }
 
@@ -745,6 +748,10 @@ class CUP$parser$actions {
                                           }
                                           nod.addHijo(((Container)hijo3).nodo);
 
+                                          if(hijo3.nodo.extraData.compareToIgnoreCase(hijo1.nodo.valor) != 0){
+                                            addErrorSemantico("Fin de procedimiento no encontrado: " + hijo1.nodo.valor);
+                                          }
+                                          
                                           temporal.addHijo(nod);
                                           if (hijo5 != null) {
                                             if (hijo5.nodo.getInfo().equals(TagAbstract.TEM)) {
@@ -767,7 +774,7 @@ class CUP$parser$actions {
                                           //Agrega el procedimiento a la tabla de simbolos
                                           temp.tablaMain.addSymbolFirst(thisFunction);
 
-                                          tablaFinal = temp.tablaMain;
+                                          //tablaFinal = temp.tablaMain;
                                           RESULT = temp;
                                         
               CUP$parser$result = parser.getSymbolFactory().newSymbol("G",2, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-6)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -801,6 +808,7 @@ class CUP$parser$actions {
                                                       Nodo tem = new Nodo(); //  tem para la funcion
                                                       Container temp = new Container(temporal);
                                                       Simbolo thisFunction = hijo1.tablaMain.tabla.get(0);
+                                                      thisFunction.setTipo(new TipoFuncion(hijo2.nodo.valor));
 
                                                       tem.setTag(TagAbstract.FUNCTION);
                                                       tem.addHijo(((Container)hijo1).nodo);
@@ -810,7 +818,6 @@ class CUP$parser$actions {
                                                         temp.addAll(hijo6);
 
                                                         //Se crea el tipo de la funcion
-                                                        thisFunction.setTipo(new TipoFuncion(hijo2.nodo.valor));
                                                         thisFunction.tipo.setComposicion(hijo6.tablaMain.tabla);
                                                       }
 
@@ -832,6 +839,10 @@ class CUP$parser$actions {
                                                       }
 
                                                       tem.addHijo(((Container)hijo4).nodo);
+
+                                                      if(hijo4.nodo.extraData.compareToIgnoreCase(hijo1.nodo.valor) != 0){
+                                                        addErrorSemantico("Fin de funcion no encontrado: " + hijo1.nodo.valor);
+                                                      }
 
                                                       //tem.addHijo((Nodo)hijo3);
                                                       temporal.addHijo(tem);
@@ -855,7 +866,7 @@ class CUP$parser$actions {
                                                       //Agrega la funcion a la tabla de simbolos
                                                       temp.addSymbolFirst(thisFunction);
                                                       
-                                                      tablaFinal = temp.tablaMain;
+                                                      //tablaFinal = temp.tablaMain;
                                                       RESULT = temp;
                                                     
               CUP$parser$result = parser.getSymbolFactory().newSymbol("G",2, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-8)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -902,6 +913,7 @@ class CUP$parser$actions {
                                             }
                                           }
 
+                                          tem.extraData = hijo2.nodo.valor;
                                           RESULT = new Container(tem);
                                         
               CUP$parser$result = parser.getSymbolFactory().newSymbol("CUERPO",34, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
@@ -1805,10 +1817,10 @@ class CUP$parser$actions {
                                                 tem.addHijo(((Container)hijo1).nodo);
                                                 tem.addHijo(((Container)hijo2).nodo);
 
-                                                if(hijo2.nodo != null)
+                                                /*if(hijo2.nodo != null)
                                                 if((hijo2.nodo.valor.compareToIgnoreCase("1") == 0 || hijo2.nodo.valor.compareToIgnoreCase("0") == 0) && tablaFinal.buscarSimbolo(hijo1.nodo.valor).tipo.nombre.compareToIgnoreCase("boolean") == 0){
                                                   addErrorSemantico("Tipo incompatible boolean a " + tablaFinal.buscarSimbolo(hijo1.nodo.valor).tipo.nombre);
-                                                }
+                                                }*/
                                                 RESULT = new Container(tem);
                                               
               CUP$parser$result = parser.getSymbolFactory().newSymbol("E",16, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);

@@ -1,20 +1,20 @@
 procedure prueba2 is
-  x:Integer := 11.0;
+  x:Integer := 0;
   procedure Minimo2 () is
   y:Integer;
-    procedure Minimo3 () is
+    function Minimo (a, b: Integer) return Integer is
     yy:Integer;
     begin
       az := 12;
-    end Minimo3;
+    end Minimo;
   begin
-    yy := true;
+    az := 12;
   end Minimo2;
 
   procedure Minimo4 () is
-  y:Integer;
+  yt:Integer;
   begin
-    az := 3;
+    az := 12;
   end Minimo4;
 begin
   x := 1;

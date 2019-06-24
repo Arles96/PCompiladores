@@ -282,6 +282,158 @@ public class Binary {
         clearVar(value1.id);
         clearVar(value2.id);
       }
+    } else if (line.getToken().equals(TokenMip.MULTIPLY)) { // multiplicacion
+      Simbolo value1 = this.table.buscarSimbolo(procedure, line.getValue1());
+      Simbolo value2 = this.table.buscarSimbolo(procedure, line.getValue2());
+      if (value1 == null && value2 == null) { //  si ninguno es una variable existente
+        if (line.getValue1().charAt(0) != 't' && line.getValue2().charAt(0) != 't') {
+          TempVar var = addVar(line.getResult());
+          TempVar val1 = addVar("3");
+          addLine("li " + val1.getTemp() + ", " + line.getValue1());
+          addLine("mul " + var.getTemp() + ", " + val1.getTemp() + ", " + line.getValue2());
+          addLine("sw " + var.getTemp() + ", _" + line.getResult());
+          if (this.table.buscarSimbolo(procedure, line.getResult()) != null) {
+            addLine("sw " + var.getTemp() + ", _" + line.getResult());
+            clearVar(line.getResult());
+          }
+          clearVar("3");
+        } else if (line.getValue1().charAt(0) == 't' && line.getValue2().charAt(0) != 't') {
+          TempVar var = getVar(line.getValue1());
+          TempVar newVar = addVar(line.getResult());
+          addLine("mul " + newVar.getTemp() + ", " + var.getTemp() + ", " + line.getValue2());
+          clearVar(line.getValue1());
+        } else if (line.getValue1().charAt(0) != 't' && line.getValue2().charAt(0) == 't') {
+          TempVar var = getVar(line.getValue2());
+          TempVar newVar = addVar(line.getResult());
+          TempVar var1 = addVar("3");
+          System.out.println(line.getValue2());
+          addLine("li " + var1.getTemp() + ", " + line.getValue1());
+          addLine("mul " + newVar.getTemp() + ", " + var1.getTemp() + ", " + var.getTemp());
+          clearVar(line.getValue2());
+          clearVar("3");
+        } else {
+          TempVar var1 = getVar(line.getValue1());
+          TempVar var2 = getVar(line.getValue2());
+          TempVar newVar = addVar(line.getResult());
+          addLine("mul " + newVar.getTemp() + ", " + var1.getTemp() + ", " + var2.getTemp());
+          clearVar(line.getValue1());
+          clearVar(line.getValue2());
+        }
+      } else if (value1 != null && value2 == null) {
+        TempVar var = addVar(value1.id);
+        addLine("lw " + var.getTemp() + ", _" + value1.id);
+        if (line.getValue2().charAt(0) == 't') {
+          TempVar var2 = getVar(line.getValue2());
+          TempVar newVar = addVar(line.getResult());
+          addLine("mul " + newVar.getTemp() + ", " + var.getTemp() + ", " + var2.getTemp());
+          clearVar(line.getValue2());
+        } else {
+          TempVar newVar = addVar(line.getResult());
+          addLine("mul " + newVar.getTemp() + ", " + var.getTemp() + ", " + line.getValue2());
+        }
+        clearVar(value1.id);
+      } else if (value1 == null && value2 != null) {
+        TempVar var = addVar(value2.id);
+        addLine("lw " + var.getTemp() + ", _" + value2.id);
+        if (line.getValue1().charAt(0) == 't') {
+          TempVar var2 = getVar(line.getValue1());
+          TempVar newVar = addVar(line.getResult());
+          addLine("mul " + newVar.getTemp() + ", " + var2.getTemp() + ", " + var.getTemp());
+          clearVar(line.getValue1());
+        } else {
+          TempVar newVar = addVar(line.getResult());
+          TempVar val1 = addVar("3");
+          addLine("li " + val1.getTemp() + ", " + line.getValue1());
+          addLine("mul " + newVar.getTemp() + ", " + val1.getTemp() + ", " + var.getTemp());
+          clearVar("3");
+        }
+        clearVar(value2.id);
+      } else {
+        TempVar var1 = addVar(value1.id);
+        addLine("lw " + var1.getTemp() + ", _" + value1.id);
+        TempVar var2 = addVar(value2.id);
+        addLine("lw " + var2.getTemp() + ", _" + value2.id);
+        TempVar newVar = addVar(line.getResult());
+        addLine("mul " + newVar.getTemp() + ", " + var1.getTemp() + ", " + var2.getTemp());
+        clearVar(value1.id);
+        clearVar(value2.id);
+      }
+    } else {
+      Simbolo value1 = this.table.buscarSimbolo(procedure, line.getValue1());
+      Simbolo value2 = this.table.buscarSimbolo(procedure, line.getValue2());
+      if (value1 == null && value2 == null) { //  si ninguno es una variable existente
+        if (line.getValue1().charAt(0) != 't' && line.getValue2().charAt(0) != 't') {
+          TempVar var = addVar(line.getResult());
+          TempVar val1 = addVar("4");
+          addLine("li " + val1.getTemp() + ", " + line.getValue1());
+          addLine("div " + var.getTemp() + ", " + val1.getTemp() + ", " + line.getValue2());
+          addLine("sw " + var.getTemp() + ", _" + line.getResult());
+          if (this.table.buscarSimbolo(procedure, line.getResult()) != null) {
+            addLine("sw " + var.getTemp() + ", _" + line.getResult());
+            clearVar(line.getResult());
+          }
+          clearVar("4");
+        } else if (line.getValue1().charAt(0) == 't' && line.getValue2().charAt(0) != 't') {
+          TempVar var = getVar(line.getValue1());
+          TempVar newVar = addVar(line.getResult());
+          addLine("div " + newVar.getTemp() + ", " + var.getTemp() + ", " + line.getValue2());
+          clearVar(line.getValue1());
+        } else if (line.getValue1().charAt(0) != 't' && line.getValue2().charAt(0) == 't') {
+          TempVar var = getVar(line.getValue2());
+          TempVar newVar = addVar(line.getResult());
+          TempVar var1 = addVar("4");
+          System.out.println(line.getValue2());
+          addLine("li " + var1.getTemp() + ", " + line.getValue1());
+          addLine("div " + newVar.getTemp() + ", " + var1.getTemp() + ", " + var.getTemp());
+          clearVar(line.getValue2());
+          clearVar("4");
+        } else {
+          TempVar var1 = getVar(line.getValue1());
+          TempVar var2 = getVar(line.getValue2());
+          TempVar newVar = addVar(line.getResult());
+          addLine("div " + newVar.getTemp() + ", " + var1.getTemp() + ", " + var2.getTemp());
+          clearVar(line.getValue1());
+          clearVar(line.getValue2());
+        }
+      } else if (value1 != null && value2 == null) {
+        TempVar var = addVar(value1.id);
+        addLine("lw " + var.getTemp() + ", _" + value1.id);
+        if (line.getValue2().charAt(0) == 't') {
+          TempVar var2 = getVar(line.getValue2());
+          TempVar newVar = addVar(line.getResult());
+          addLine("div " + newVar.getTemp() + ", " + var.getTemp() + ", " + var2.getTemp());
+          clearVar(line.getValue2());
+        } else {
+          TempVar newVar = addVar(line.getResult());
+          addLine("div " + newVar.getTemp() + ", " + var.getTemp() + ", " + line.getValue2());
+        }
+        clearVar(value1.id);
+      } else if (value1 == null && value2 != null) {
+        TempVar var = addVar(value2.id);
+        addLine("lw " + var.getTemp() + ", _" + value2.id);
+        if (line.getValue1().charAt(0) == 't') {
+          TempVar var2 = getVar(line.getValue1());
+          TempVar newVar = addVar(line.getResult());
+          addLine("div " + newVar.getTemp() + ", " + var2.getTemp() + ", " + var.getTemp());
+          clearVar(line.getValue1());
+        } else {
+          TempVar newVar = addVar(line.getResult());
+          TempVar val1 = addVar("4");
+          addLine("li " + val1.getTemp() + ", " + line.getValue1());
+          addLine("div " + newVar.getTemp() + ", " + val1.getTemp() + ", " + var.getTemp());
+          clearVar("4");
+        }
+        clearVar(value2.id);
+      } else {
+        TempVar var1 = addVar(value1.id);
+        addLine("lw " + var1.getTemp() + ", _" + value1.id);
+        TempVar var2 = addVar(value2.id);
+        addLine("lw " + var2.getTemp() + ", _" + value2.id);
+        TempVar newVar = addVar(line.getResult());
+        addLine("div " + newVar.getTemp() + ", " + var1.getTemp() + ", " + var2.getTemp());
+        clearVar(value1.id);
+        clearVar(value2.id);
+      }
     }
   }
 
@@ -333,7 +485,8 @@ public class Binary {
         generateCodePut(line);
       }
       // para operaciones
-      if (line.getToken().equals(TokenMip.ADD) || line.getToken().equals(TokenMip.SUBTRACT)) {
+      if (line.getToken().equals(TokenMip.ADD) || line.getToken().equals(TokenMip.SUBTRACT) ||
+          line.getToken().equals(TokenMip.MULTIPLY) || line.getToken().equals(TokenMip.DIVIDE)) {
         generateCodeOperator(line);
       }
     }

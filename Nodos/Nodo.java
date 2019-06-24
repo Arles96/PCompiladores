@@ -7,7 +7,8 @@ public class Nodo{
     public String tag;
     public String valor;
     public Nodo padre;
-    public ArrayList<Nodo>hijos = new ArrayList<Nodo>();
+    public String extraData;
+    public ArrayList<Nodo> hijos = new ArrayList<Nodo>();
 
     public Nodo() {}
 

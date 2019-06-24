@@ -56,4 +56,8 @@ class Container {
   public void adoptChildren(Container con){
     this.tablaMain.addChildren(con.tablaMain);
   }
+
+  public String getValor(){
+    return (this.nodo.valor == null)?"":this.nodo.valor;
+  }
 }

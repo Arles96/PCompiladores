@@ -107,4 +107,16 @@ public class TablaSimbolos {
         }
         return null;
     }
+
+    public Simbolo buscarSimbolo(String nombre){
+        for (Simbolo sim : this.tabla) {
+            if(sim.id.compareToIgnoreCase(nombre) == 0){
+                return sim;
+            }
+        }
+        for (TablaSimbolos child : children) {
+            return child.buscarSimbolo(nombre);
+        }
+        return null;
+    }
 }

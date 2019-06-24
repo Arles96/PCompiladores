@@ -20,6 +20,10 @@ public class Main {
         for(String errores : lexico.msgErroresLexico){
           System.out.println(errores);
         }
+      } else if (p.msgErroresSemantico.size() > 0) {
+        for(String errores : p.msgErroresSemantico){
+          System.out.println(errores);
+        }
       } else {
         printTree(p.raiz, 0);
         System.out.println("\nTabla de simbolos \n\n");
@@ -31,7 +35,7 @@ public class Main {
 
         //System.out.println("\n");
         //System.out.println(p.tablaFinal.buscarSimbolo("Minimo3", "y"));
-        
+
         System.out.println("\nCodigo Final \n\n");
         Binary bn = new Binary(mips);
         bn.generateCode();

@@ -16,6 +16,8 @@ public class Binary {
   public LinkedList<TempVar> $t = new LinkedList<TempVar>();
   public LinkedList<TempVar> $a = new LinkedList<TempVar>();
   public LinkedList<TempVar> $s = new LinkedList<TempVar>();
+  public LinkedList<TempVar> varFunction = new LinkedList<TempVar>();
+  private boolean initialParam = false;
   private String mainProcedure;
   private String procedure;
   public TablaSimbolos table;
@@ -24,6 +26,7 @@ public class Binary {
   private int limitS = 8;
   private Mips mips;
   private boolean initialVars = true;
+  private int initialSpace = 8;
 
   // constructores
 
@@ -67,6 +70,45 @@ public class Binary {
 
   public Mips getMips () {
     return mips;
+  }
+
+  // funcion para llenar un parametro dentro de un funcion
+  private TempVar addParamFunc (String temp) {
+    for (TempVar var : $s) {
+      if (var.getEmpty()) {
+        var.addVar(temp);
+        return var;
+      }
+    }
+    return null;
+  }
+
+  // funcion para obtener un parametro
+  private TempVar getParamFunc (String temp) {
+    for (TempVar var : $s) {
+      if (var.getVar().equals(temp)) {
+        return var;
+      }
+    }
+    return null;
+  }
+
+  // funcion para limpiar un parametro en especifico
+  private boolean clearParam (String temp) {
+    for (TempVar var : $s) {
+      if (var.getVar().equals(temp)) {
+        var.clearVar();
+        return true;
+      }
+    }
+    return false;
+  }
+
+  // funcion para limpiar todos lo parametros
+  private void clearAllParams () {
+    for (TempVar var : $s) {
+      var.clearVar();
+    }
   }
 
   // funcion para llenar una variable temporal
@@ -658,6 +700,9 @@ public class Binary {
     addLine("sw $v0, _" + line.getResult());
   }
 
+
+  // function para el
+
   public void generateCode () {
     addLine(".data");
     // generando las declaraciones de los strings
@@ -668,10 +713,10 @@ public class Binary {
     // generando todo el codigo
     for (RowMip line : mips.code) {
       // codigo de variables globales o iniciales
-      if (line.getToken().equals(TokenMip.ASSIGN)) {
+      if (line.getToken().equals(TokenMip.ASSIGN) && !initialParam) {
         generaCodeAssing(line);
       }
-      if (!line.getToken().equals(TokenMip.ASSIGN) && initialVars == true) { // generando el codigo administrativo
+      if (!line.getToken().equals(TokenMip.ASSIGN) && initialVars) { // generando el codigo administrativo
         initialVars = false;
         String code1 = ".text";
         addLine(code1);
@@ -708,6 +753,34 @@ public class Binary {
       // generacion de codigo para el token get
       if (line.getToken().equals(TokenMip.GET)) {
         generateCodeGet(line);
+      }
+      if (line.getToken().equals(TokenMip.FUNC)) {
+        addLine("_" + line.getResult() + ":");
+        addLine("sw $fp, -4($sp)");
+        addLine("sw $ra, -8($sp)");
+        procedure = line.getResult();
+        initialParam = true;
+      }
+      if (line.getToken().equals(TokenMip.PARAM)) {
+        if (initialParam) {
+          TempVar param = addParamFunc(line.getResult());
+          initialSpace += 4;
+          addLine("sw " + param.getTemp() + ", -" + initialSpace + "($sp)");
+        }
+      } else {
+        if (line.getToken().equals(TokenMip.ASSIGN) && initialParam) {
+          initialSpace += 4;
+        }
+        if (!line.getToken().equals(TokenMip.ASSIGN) && initialParam) {
+          addLine("move $fp, $sp");
+          for (int i = 0; i < $s.size(); i++) {
+            TempVar var = $s.get(i);
+            if (!var.getEmpty()) {
+              addLine("move " + var.getTemp() + ", $a" + i);
+            }
+          }
+          addLine("sub $sp, $sp, " + initialSpace);
+        }
       }
     }
   }

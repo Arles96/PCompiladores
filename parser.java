@@ -612,8 +612,8 @@ class CUP$parser$actions {
                                               temp.addAll(hijo2);
                                               //temp.addChild(hijo2);
 
-                                              System.out.println("F (lista):");
-                                              System.out.println("Size: " + temp.tablaMain.children.size());
+                                              /* System.out.println("F (lista):");
+                                              System.out.println("Size: " + temp.tablaMain.children.size()); */
                                             }else{
                                               nod.addHijo(((Container)hijo2).nodo);
 

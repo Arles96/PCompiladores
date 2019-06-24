@@ -1,9 +1,7 @@
 procedure Hello is
-  X: INTEGER;
-  C: INTEGER := 0;
-  Z,Y: Boolean := TRUE;
-  A, B: Boolean;
+  C, D: INTEGER := 0;
 begin
-Y := FALSE;
-X := 4 + 4 + 5;
+  C := 1;
+  D := 4 + 4 + 5;
+  put(D);
 end Hello;

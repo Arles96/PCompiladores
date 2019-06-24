@@ -293,10 +293,10 @@ public class Mips {
           for (Nodo var : h1.hijos) {
             addRow(new RowMip(TokenMip.ASSIGN, "0", var.valor));
           }
-        } else if (h1.tag.equals(TagAbstract.DECLARACION) && h2.tag.equals(TagAbstract.ASSIGN)) { // declaracion de lista de variables con asignacion
-          for (Nodo var : h1.hijos) {
-            addRow(new RowMip(TokenMip.ASSIGN, h2.valor, var.valor));
-          }
+        }
+      } else if (h1.tag.equals(TagAbstract.DECLARACION) && h2.tag.equals(TagAbstract.ASSIGN)) { // declaracion de lista de variables con asignacion
+        for (Nodo var : h1.hijos) {
+          addRow(new RowMip(TokenMip.ASSIGN, h2.valor, var.valor));
         }
       }
     } else if (tree.tag.equals(TagAbstract.CUERPO)) {

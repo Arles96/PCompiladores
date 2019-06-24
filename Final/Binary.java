@@ -139,7 +139,10 @@ public class Binary {
       if (value1 == null && value2 == null) { //  si ninguno es una variable existente
         if (line.getValue1().charAt(0) != 't' && line.getValue2().charAt(0) != 't') {
           TempVar var = addVar(line.getResult());
-          addLine("add " + var.getTemp() + ", " + line.getValue1() + ", " + line.getValue2());
+          TempVar var1 = addVar("1");
+          addLine("li " + var1.getTemp() + ", " + line.getValue1());
+          addLine("add " + var.getTemp() + ", " + var1.getTemp() + ", " + line.getValue2());
+          clearVar("1");
         } else if (line.getValue1().charAt(0) == 't' && line.getValue2().charAt(0) != 't') {
           TempVar var = getVar(line.getValue1());
           TempVar newVar = addVar(line.getResult());
@@ -148,9 +151,11 @@ public class Binary {
         } else if (line.getValue1().charAt(0) != 't' && line.getValue2().charAt(0) == 't') {
           TempVar var = getVar(line.getValue2());
           TempVar newVar = addVar(line.getResult());
-          System.out.println("/* " + newVar.getVar() + ", " + newVar.getTemp());
-          addLine("add " + newVar.getTemp() + ", " + line.getValue1() + ", " + var.getTemp());
+          TempVar var1 = addVar("1");
+          addLine("li " + var1.getTemp() + ", " + line.getValue1());
+          addLine("add " + newVar.getTemp() + ", " + var1.getTemp() + ", " + var.getTemp());
           clearVar(line.getValue2());
+          clearVar("1");
         } else {
           TempVar var1 = getVar(line.getValue1());
           TempVar var2 = getVar(line.getValue2());
@@ -178,11 +183,13 @@ public class Binary {
         if (line.getValue1().charAt(0) == 't') {
           TempVar var2 = getVar(line.getValue1());
           TempVar newVar = addVar(line.getResult());
-          addLine("add " + newVar.getTemp() + ", " + var.getTemp() + ", " + var2.getTemp());
+          addLine("add " + newVar.getTemp() + ", " + var2.getTemp() + ", " + var.getTemp());
           clearVar(line.getValue1());
         } else {
           TempVar newVar = addVar(line.getResult());
-          addLine("add " + newVar.getTemp() + ", " + var.getTemp() + ", " + line.getValue1());
+          TempVar var1 = addVar("1");
+          addLine("add " + newVar.getTemp() + ", " + var1.getTemp() + ", " + var.getTemp());
+          clearVar("1");
         }
         clearVar(value2.id);
       } else {
@@ -201,7 +208,9 @@ public class Binary {
       if (value1 == null && value2 == null) { //  si ninguno es una variable existente
         if (line.getValue1().charAt(0) != 't' && line.getValue2().charAt(0) != 't') {
           TempVar var = addVar(line.getResult());
-          addLine("sub " + var.getTemp() + ", " + line.getValue1() + ", " + line.getValue2());
+          TempVar val1 = addVar("2");
+          addLine("li " + val1.getTemp() + ", " + line.getValue1());
+          addLine("sub " + var.getTemp() + ", " + val1.getTemp() + ", " + line.getValue2());
         } else if (line.getValue1().charAt(0) == 't' && line.getValue2().charAt(0) != 't') {
           TempVar var = getVar(line.getValue1());
           TempVar newVar = addVar(line.getResult());
@@ -210,8 +219,11 @@ public class Binary {
         } else if (line.getValue1().charAt(0) != 't' && line.getValue2().charAt(0) == 't') {
           TempVar var = getVar(line.getValue2());
           TempVar newVar = addVar(line.getResult());
-          addLine("sub " + newVar.getTemp() + ", " + line.getValue1() + ", " + var.getTemp());
+          TempVar var1 = addVar("2");
+          addLine("li " + var1.getTemp() + ", " + line.getValue1());
+          addLine("sub " + newVar.getTemp() + ", " + var.getTemp() + ", " + var.getTemp());
           clearVar(line.getValue2());
+          clearVar("2");
         } else {
           TempVar var1 = getVar(line.getValue1());
           TempVar var2 = getVar(line.getValue2());
@@ -239,11 +251,14 @@ public class Binary {
         if (line.getValue1().charAt(0) == 't') {
           TempVar var2 = getVar(line.getValue1());
           TempVar newVar = addVar(line.getResult());
-          addLine("sub " + newVar.getTemp() + ", " + var.getTemp() + ", " + var2.getTemp());
+          addLine("sub " + newVar.getTemp() + ", " + var2.getTemp() + ", " + var.getTemp());
           clearVar(line.getValue1());
         } else {
           TempVar newVar = addVar(line.getResult());
-          addLine("sub " + newVar.getTemp() + ", " + var.getTemp() + ", " + line.getValue1());
+          TempVar val1 = addVar("2");
+          addLine("li " + val1.getTemp() + ", " + line.getValue1());
+          addLine("sub " + newVar.getTemp() + ", " + val1.getTemp() + ", " + var.getTemp());
+          clearVar("2");
         }
         clearVar(value2.id);
       } else {
@@ -261,12 +276,13 @@ public class Binary {
 
   // funcion para la impresión de codigo
   private void generateCodePut (RowMip line) {
-    if (line.getResult().charAt(0) == 'm') {
-      addLine("li $v0, 4");
-      addLine("la $a0, " + line.getResult());
-    } else {
+    Simbolo value = this.table.buscarSimbolo(procedure, line.getResult());
+    if (value != null) {
       addLine("li $v0, 1");
       addLine("lw $a0, _" + line.getResult());
+    } else {
+      addLine("li $v0, 4");
+      addLine("la $a0, " + line.getResult());
     }
     addLine("syscall");
   }
@@ -307,7 +323,6 @@ public class Binary {
       }
       // para operaciones
       if (line.getToken().equals(TokenMip.ADD)) {
-        System.out.println(line.toString());
         generateCodeOperator(line);
       }
     }

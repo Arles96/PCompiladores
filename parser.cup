@@ -352,7 +352,7 @@ G   ::=  C:hijo1 G:hijo2                {:/*result = nodo(C, G)*/
 
                                                       //Agrega la funcion a la tabla de simbolos
                                                       temp.addSymbolFirst(thisFunction);
-                                                      
+
                                                       tablaFinal = temp.tablaMain;
                                                       RESULT = temp;
                                                     :}
@@ -482,7 +482,7 @@ Z   ::=  DATATYPES:dt   {: /* result = dt; */
 /* Contenedores de valores */
 N   ::=  NUM:n          {: /* RETURN = n; */ RESULT = new Container(new Nodo(TagAbstract.NUM,n));:}
     ;
-N1  ::=  NUM:n1 DOUBD:t NUM:n2  {: /* result = range(att: num1, num2)*/ RESULT = new Container(new Nodo("Rango",n1 + t + n2));:}
+N1  ::=  NUM:n1 DOUBD:t NUM:n2  {: /* result = range(att: num1, num2)*/ RESULT = new Container(new Nodo("Rango",n1 + "-" + n2));:}
     ;
 
 /* Declaración de Tipos */

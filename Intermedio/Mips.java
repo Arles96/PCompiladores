@@ -33,7 +33,7 @@ public class Mips {
   }
 
   public String getTempString () {
-    return "mgs" + 1;
+    return "mgs" + counterString;
   }
 
   public String getTempVar () {
@@ -71,26 +71,79 @@ public class Mips {
     }
     if ((hijo1.tag.equals(TagAbstract.NUM) || hijo1.tag.equals(TagAbstract.ID)) && (hijo2.tag.equals(TagAbstract.NUM) || hijo2.tag.equals(TagAbstract.ID))) {
       if (n == 1) {
-        addRow(new RowMip(nodo.valor, hijo1.valor, hijo2.valor, getTempVar()));
+        if (hijo1.tag.equals(TagAbstract.NUM) && hijo2.tag.equals(TagAbstract.NUM)) {
+          addRow(new RowMip(nodo.valor, hijo1.valor, hijo2.valor, getTempVar()));
+        } else if (hijo1.tag.equals(TagAbstract.ID) && hijo2.tag.equals(TagAbstract.NUM)) {
+          addRow(new RowMip(TokenMip.ASSIGN, hijo1.valor, getTempVar()));
+          String temp = getTempVar();
+          incrementVar();
+          addRow(new RowMip(nodo.valor, temp, hijo2.valor, getTempVar()));
+        } else if (hijo1.tag.equals(TagAbstract.NUM) && hijo2.tag.equals(TagAbstract.ID)) {
+          addRow(new RowMip(TokenMip.ASSIGN, hijo2.valor, getTempVar()));
+          String temp = getTempVar();
+          incrementVar();
+          addRow(new RowMip(nodo.valor, hijo2.valor, temp, getTempVar()));
+        } else {
+          addRow(new RowMip(TokenMip.ASSIGN, hijo1.valor, getTempVar()));
+          String temp1 = getTempVar();
+          incrementVar();
+          addRow(new RowMip(TokenMip.ASSIGN, hijo2.valor, getTempVar()));
+          String temp2 = getTempVar();
+          incrementVar();
+          addRow(new RowMip(nodo.valor, temp1, temp2, getTempVar()));
+        }
       } else {
-        addRow(new RowMip(nodo.valor, hijo1.valor, hijo2.valor, id.valor));
+        if (hijo1.tag.equals(TagAbstract.NUM) && hijo2.tag.equals(TagAbstract.NUM)) {
+          addRow(new RowMip(nodo.valor, hijo1.valor, hijo2.valor, getTempVar()));
+        } else if (hijo1.tag.equals(TagAbstract.ID) && hijo2.tag.equals(TagAbstract.NUM)) {
+          addRow(new RowMip(TokenMip.ASSIGN, hijo1.valor, getTempVar()));
+          String temp = getTempVar();
+          incrementVar();
+          addRow(new RowMip(nodo.valor, temp, hijo2.valor, getTempVar()));
+        } else if (hijo1.tag.equals(TagAbstract.NUM) && hijo2.tag.equals(TagAbstract.ID)) {
+          addRow(new RowMip(TokenMip.ASSIGN, hijo2.valor, getTempVar()));
+          String temp = getTempVar();
+          incrementVar();
+          addRow(new RowMip(nodo.valor, hijo2.valor, temp, getTempVar()));
+        } else {
+          addRow(new RowMip(TokenMip.ASSIGN, hijo1.valor, getTempVar()));
+          String temp1 = getTempVar();
+          incrementVar();
+          addRow(new RowMip(TokenMip.ASSIGN, hijo2.valor, getTempVar()));
+          String temp2 = getTempVar();
+          incrementVar();
+          addRow(new RowMip(nodo.valor, temp1, temp2, getTempVar()));
+        }
       }
     }
     if (hijo1.tag.equals(TagAbstract.OP) && (hijo2.tag.equals(TagAbstract.NUM) || hijo1.tag.equals(TagAbstract.ID))) {
       genarateCodeOperation(id, hijo1, 1);
       t1 = getTempVar();
       incrementVar();
-      addRow(new RowMip(nodo.valor, t1, hijo2.valor, getTempVar()));
+      if (hijo2.tag.equals(TagAbstract.NUM)) {
+        addRow(new RowMip(nodo.valor, t1, hijo2.valor, getTempVar()));
+      } else {
+        addRow(new RowMip(TokenMip.ASSIGN, hijo2.valor, getTempVar()));
+        String temp2 = getTempVar();
+        incrementVar();
+        addRow(new RowMip(nodo.valor, t1, temp2, getTempVar()));
+      }
       t1 = null;
       t2 = getTempVar();
       incrementVar();
-
     }
     if ((hijo1.tag.equals(TagAbstract.NUM) || hijo1.tag.equals(TagAbstract.ID)) && hijo2.tag.equals(TagAbstract.OP)) {
       genarateCodeOperation(id, hijo2, 1);
       t2 = getTempVar();
       incrementVar();
-      addRow(new RowMip(nodo.valor, hijo1.valor, t2, getTempVar()));
+      if (hijo1.tag.equals(TagAbstract.NUM)) {
+        addRow(new RowMip(nodo.valor, hijo1.valor, t2, getTempVar()));
+      } else {
+        addRow(new RowMip(TokenMip.ASSIGN, hijo1.valor, getTempVar()));
+        String temp1 = getTempVar();
+        incrementVar();
+        addRow(new RowMip(nodo.valor, temp1, t2, getTempVar()));
+      }
       t2 = null;
       t1 = getTempVar();
       incrementVar();
@@ -103,8 +156,8 @@ public class Mips {
       } else if (t1 != null && t2 == null) {
         addRow(new RowMip(TokenMip.ASSIGN, t1, id.valor));
       } else {
-        /* System.out.println("Error en la sección de operaciones aritmeticas"); */
-        System.out.println(nodo.valor + "  id  " + id.valor);
+        addRow(new RowMip(TokenMip.ASSIGN, getTempVar(), id.valor));
+        incrementVar();
       }
     }
   }
@@ -346,20 +399,19 @@ public class Mips {
       Nodo hijo1 = tree.hijos.get(0);
       Nodo hijo2 = tree.hijos.get(1);
       Nodo hijo3 = tree.hijos.get(2);
-      String [] values = hijo2.valor.split("...");
-      System.out.println("/* for = " +values[1]);
-      String firstValue = "" + hijo2.valor.charAt(0);
-      String endValue = "" + hijo2.valor.charAt(hijo2.valor.length() - 1);
+      String [] values = hijo2.valor.split("-");
+      String firstValue = values[0];
+      String endValue = values[1];
       // asignar los valores
       addRow(new RowMip(TokenMip.ASSIGN, firstValue, hijo1.valor));
-      addRow(new RowMip(TokenMip.ASSIGN, endValue, getTempVar()));
+      /* addRow(new RowMip(TokenMip.ASSIGN, endValue, getTempVar()));
       String limit = getTempVar();
-      incrementVar();
+      incrementVar(); */
       // comparacion
       addRow(new RowMip(TokenMip.ETIQ, getTempEtiq()));
       String compare = getTempEtiq();
       incrementEt();
-      addRow(new RowMip(TokenMip.IFLE, hijo1.valor, limit, getTempEtiq()));
+      addRow(new RowMip(TokenMip.IFLE, hijo1.valor, endValue, getTempEtiq()));
       String body = getTempEtiq();
       incrementEt();
       addRow(new RowMip(TokenMip.GOTO, getTempEtiq()));
@@ -369,7 +421,10 @@ public class Mips {
       for (Nodo nod : hijo3.hijos) {
         generateCode(nod);
       }
-      addRow(new RowMip(TokenMip.ADD, hijo1.valor, "1", hijo1.valor));
+      addRow(new RowMip(TokenMip.ADD, hijo1.valor, "1", getTempVar()));
+      String plus = getTempVar();
+      incrementVar();
+      addRow(new RowMip(TokenMip.ASSIGN, plus, hijo1.valor));
       addRow(new RowMip(TokenMip.GOTO, compare));
       // siguiente
       addRow(new RowMip(TokenMip.ETIQ, next));

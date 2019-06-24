@@ -2,7 +2,8 @@ procedure hola is
   I, X : Integer;
 begin
   I := 1;
-  while I <= 6 loop
+  X := 4;
+  while I <= 6 AND X = 4 loop
     put(I);
     I := I + 1;
   end loop;

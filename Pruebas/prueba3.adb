@@ -2,7 +2,7 @@ procedure hola is
   I, X : Integer;
 begin
   I := 1;
-  if I = X AND I < 2 then
+  for I in 1 ..25 loop
     X := 4;
-  end if;
+  end loop;
 end hola;

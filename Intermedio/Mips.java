@@ -346,6 +346,8 @@ public class Mips {
       Nodo hijo1 = tree.hijos.get(0);
       Nodo hijo2 = tree.hijos.get(1);
       Nodo hijo3 = tree.hijos.get(2);
+      String [] values = hijo2.valor.split("...");
+      System.out.println("/* for = " +values[1]);
       String firstValue = "" + hijo2.valor.charAt(0);
       String endValue = "" + hijo2.valor.charAt(hijo2.valor.length() - 1);
       // asignar los valores
